@@ -55,6 +55,7 @@ export default function LoginForm() {
                 placeholder="Input text"
                 labelMode="static"
                 stylingMode="outlined"
+                height={56}
               >
                 <Validator className="custom-validator">
                   <RequiredRule message="Email Address is required" />
@@ -68,6 +69,7 @@ export default function LoginForm() {
                 value={password ? password : ""}
                 mode={passwordMode}
                 labelMode="static"
+                height={56}
                 stylingMode="outlined"
               >
                 <TextBoxButton

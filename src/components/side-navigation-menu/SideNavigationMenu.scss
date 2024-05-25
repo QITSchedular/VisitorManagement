@@ -14,25 +14,32 @@
     flex: 1;
 
     .dx-treeview {
-      // ## Long text positioning
       white-space: nowrap;
-      // ##
 
-      // ## Icon width customization
       .dx-treeview-item {
         padding-left: 0;
         flex-direction: row-reverse;
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 8px;
 
         .dx-icon {
           width: $side-panel-min-width !important;
           margin: 0 !important;
         }
       }
-      // ##
-      
-      // ## Arrow customization
+
       .dx-treeview-node {
-        padding: 0 0 !important;
+        padding: 0 !important;
+
+        &[aria-level="1"] {
+          font-weight: normal;
+        }
+
+        &[aria-level="2"] .dx-treeview-item-content {
+          font-weight: normal;
+          padding: 0 $side-panel-min-width;
+        }
       }
 
       .dx-treeview-toggle-item-visibility {
@@ -44,51 +51,78 @@
         left: 10px;
         right: auto;
       }
-      // ##
 
-      // ## Item levels customization
-      .dx-treeview-node {
-        &[aria-level='1'] {
-          font-weight: bold;
-          border-bottom: 1px solid $base-border-color;
-        }
-  
-        &[aria-level='2'] .dx-treeview-item-content {
-          font-weight: normal;
-          padding: 0 $side-panel-min-width;
-        }
-      }
-      // ##
-    }
-
-    // ## Selected & Focuced items customization
-    .dx-treeview {
       .dx-treeview-node-container {
         .dx-treeview-node {
-          &.dx-state-selected:not(.dx-state-focused)> .dx-treeview-item {
-            background: transparent;
+          &.dx-state-selected:not(.dx-state-focused) > .dx-treeview-item {
+            // background: transparent;
+            background-color: #f9f5ff;
+            border-radius: 4px;
           }
 
-          &.dx-state-selected > .dx-treeview-item * {
-            color: $base-accent;
+          &.dx-state-selected > .dx-treeview-item {
+            // background-color: #f9f5ff;
+            color: #344450;
+
+            // padding: 10px 0;
           }
 
-          &:not(.dx-state-focused)>.dx-treeview-item.dx-state-hover {
-            background-color: lighten($base-bg, 4.00);
+          &:not(.dx-state-focused) > .dx-treeview-item.dx-state-hover {
+            // background-color: transparent;
+            background-color: #f9f5ff;
+            border-radius: 4px;
           }
         }
       }
-    }
 
-    .dx-theme-generic .dx-treeview {
-      .dx-treeview-node-container .dx-treeview-node.dx-state-selected.dx-state-focused > .dx-treeview-item * {
-        color: inherit;
+      .dx-theme-generic .dx-treeview {
+        .dx-treeview-node-container
+          .dx-treeview-node.dx-state-selected.dx-state-focused
+          > .dx-treeview-item
+          * {
+          color: inherit;
+        }
       }
     }
-    // ##
   }
 }
+.custom-icon {
+  font-size: 18px;
+  margin-right: 8px;
+  margin-left: 10px;
+  color: #4e5d6b;
+}
 
+.custom-text {
+  font-size: 14px;
+  font-weight: 500;
+  font-family: Inter;
+  color: #344450;
+}
+
+.search-box {
+  position: relative;
+  margin: 10px 10px 10px;
+}
+
+.search-box {
+  // .dx-swatch-additional.dx-texteditor.dx-editor-outlined {
+  //   // border: 1px solid rgba(78, 93, 107, 0.24) !important;
+  //   // box-shadow: inset 0 0 0 1px rgba(78, 93, 107, 0.24) !important;
+  // }
+  .dx-texteditor-input-container {
+    height: 40px;
+    border-radius: 4px;
+  }
+  .dx-icon.dx-icon-search {
+    position: absolute;
+    margin-left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    color: #687787;
+  }
+}
 .dx-drawer-overlap.pre-init-blink-fix {
   @import "../../utils/patches.scss";
   @include menu-pre-init-patch;

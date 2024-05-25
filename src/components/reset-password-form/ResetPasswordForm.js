@@ -37,6 +37,7 @@ export default function ResetPasswordForm() {
                 placeholder="Input text"
                 labelMode="static"
                 stylingMode="outlined"
+                height={56}
               >
                 <Validator className="custom-validator">
                   <RequiredRule message="Email Address is required" />

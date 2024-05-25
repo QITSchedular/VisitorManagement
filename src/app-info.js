@@ -1,5 +1,6 @@
+import siteLogo from "./assets/images/AawJO.png";
 const appInfo = {
-    title: 'Visitor Management'
+  title: siteLogo,
+  text: "Visitor Management",
 };
 export default appInfo;
-

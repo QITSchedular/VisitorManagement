@@ -35,6 +35,7 @@ export default function ChangePasswordForm() {
                 placeholder="Input text"
                 labelMode="static"
                 stylingMode="outlined"
+                height={56}
               >
                 <Validator className="custom-validator">
                   <RequiredRule message="Email Address is required" />
@@ -49,6 +50,7 @@ export default function ChangePasswordForm() {
                 mode={passwordMode}
                 labelMode="static"
                 stylingMode="outlined"
+                height={56}
               >
                 <TextBoxButton
                   name="password"

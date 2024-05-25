@@ -10,7 +10,7 @@
 // }
 
 .app {
-  background-color: #f9f9f9;
+  background-color: #fcfaff;
   display: flex;
   height: 100%;
   width: 100%;
@@ -38,12 +38,17 @@
   }
 
   .content-block {
-    margin-left: 40px;
-    margin-right: 40px;
+    margin-left: 16px;
+    margin-right: 16px;
     margin-top: 20px;
   }
 }
-
+.dx-card {
+  background-color: #fff;
+  box-shadow: none;
+  border: 1px solid #d9dde1;
+  padding: 24px 16px;
+}
 .side-nav-outer-toolbar .dx-drawer {
   height: calc(100% - 56px);
 }

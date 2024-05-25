@@ -35,6 +35,7 @@ const FillDetails = () => {
                 placeholder="Input text"
                 labelMode="static"
                 stylingMode="outlined"
+                height={56}
               >
                 <Validator className="custom-validator">
                   <RequiredRule message="Business Name is required" />
@@ -46,6 +47,7 @@ const FillDetails = () => {
                 label="Business Location"
                 placeholder="Input text"
                 labelMode="static"
+                height={56}
                 stylingMode="outlined"
               >
                 <Validator>

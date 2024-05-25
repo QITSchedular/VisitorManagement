@@ -1,0 +1,98 @@
+.navigation-header {
+  display: flex;
+  align-items: center;
+}
+.title-section {
+  flex: 1;
+}
+.title-section-btn {
+  .dx-button-mode-outlined {
+    font-size: 14px;
+    font-size: Inter;
+    color: #344450;
+    font-weight: 400;
+  }
+  .dx-button-text {
+    font-weight: 400;
+    white-space: nowrap;
+  }
+  .button-with-margin {
+    margin-left: 16px;
+  }
+}
+.data-grid {
+  .dx-toolbar-items-container {
+    margin-bottom: 16px;
+  }
+  .left-textbox {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+// add visitor
+// .personal-detail-form {
+//   display: flex;
+//   gap: 24px;
+//   .form-input {
+//     margin-top: 24px;
+//     .dx-texteditor-input-container {
+//       width: 468px;
+//       height: 56px;
+//     }
+//   }
+// }
+.personal-detail-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+
+  .form-input {
+    margin-top: 24px;
+    flex: 1 1 468px;
+    max-width: 468px;
+
+    .dx-texteditor-input-container {
+      width: 100%;
+      height: 56px;
+    }
+  }
+
+  .form-input.full-width {
+    flex: 1 1 100%;
+    // max-width: calc(2 * 510px + 24px);
+    max-width: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .form-input {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+
+    .form-input.full-width {
+      max-width: 100%;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .form-input {
+      flex: 1 1 calc(50% - 24px);
+      max-width: calc(50% - 24px);
+    }
+
+    .form-input.full-width {
+      max-width: 100%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .form-input {
+      flex: 1 1 calc(33.33% - 24px);
+      max-width: calc(33.33% - 24px);
+    }
+
+    .form-input.full-width {
+      max-width: calc(2 * 510px + 24px);
+    }
+  }
+}

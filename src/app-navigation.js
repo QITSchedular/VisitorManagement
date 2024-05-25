@@ -1,21 +1,22 @@
 export const navigation = [
   {
-    text: 'Home',
-    path: '/home',
-    icon: 'home'
+    text: "Visitors",
+    path: "/Visitors",
+    icon: "ri-user-add-line",
   },
   {
-    text: 'Examples',
-    icon: 'folder',
-    items: [
-      {
-        text: 'Profile',
-        path: '/profile'
-      },
-      {
-        text: 'Tasks',
-        path: '/tasks'
-      }
-    ]
-  }
-  ];
+    text: "Home",
+    path: "/home",
+    icon: "ri-home-line",
+  },
+  {
+    text: "Profile",
+    path: "/profile",
+    icon: "ri-user-line",
+  },
+  {
+    text: "Tasks",
+    path: "/tasks",
+    icon: "ri-file-list-line",
+  },
+];
