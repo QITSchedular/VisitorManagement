@@ -1,3 +1,5 @@
+@import "../../responsive.scss";
+
 .navigation-header {
   display: flex;
   align-items: center;
@@ -63,7 +65,7 @@
     max-width: 100%;
   }
 
-  @media (max-width: 767px) {
+  @include sm {
     .form-input {
       flex: 1 1 100%;
       max-width: 100%;
@@ -74,7 +76,7 @@
     }
   }
 
-  @media (min-width: 768px) and (max-width: 1023px) {
+  @include md {
     .form-input {
       flex: 1 1 calc(50% - 24px);
       max-width: calc(50% - 24px);
@@ -85,7 +87,7 @@
     }
   }
 
-  @media (min-width: 1024px) {
+  @include lg {
     .form-input {
       flex: 1 1 calc(33.33% - 24px);
       max-width: calc(33.33% - 24px);
