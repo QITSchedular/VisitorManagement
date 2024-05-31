@@ -5,6 +5,11 @@ export const navigation = [
     icon: "ri-user-add-line",
   },
   {
+    text: "Verify Visitors",
+    path: "/Verify-Visitor",
+    icon: "ri-user-add-line",
+  },
+  {
     text: "Home",
     path: "/home",
     icon: "ri-home-line",

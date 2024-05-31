@@ -1909,7 +1909,7 @@
 .dx-button-text {
   line-height: normal;
   /* text-transform: uppercase; */
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: .04em;
   font-size: 14px;
   font-family: Inter;
@@ -2709,7 +2709,9 @@
 .dx-checkbox.dx-checkbox-checked.dx-state-focused .dx-checkbox-icon::after,
 .dx-checkbox.dx-checkbox-indeterminate.dx-state-active .dx-checkbox-icon::after,
 .dx-checkbox.dx-checkbox-indeterminate.dx-state-focused .dx-checkbox-icon::after {
-  background-color: rgba(3,169,244,.1);
+  /* background-color: rgba(3,169,244,.1); */
+  background-color: rgba(127,86,217,.1);
+
   transform: scale(1);
 }
 .dx-checkbox.dx-checkbox-checked.dx-state-disabled .dx-checkbox-icon,
@@ -4088,6 +4090,7 @@
 .dx-texteditor.dx-state-focused .dx-texteditor-label {
   color: #344450;
   font-size: 12px;
+
 }
 .dx-texteditor.dx-state-focused.dx-invalid .dx-texteditor-label {
   color: #f44336;
@@ -4107,7 +4110,6 @@
 .dx-texteditor.dx-state-focused::before {
   /* border-bottom: 2px solid #03a9f4; */
   border: 1px solid rgba(0,0,0,.01);
-
   transform: scale(1);
   transition: transform .6s cubic-bezier(.4, 0, .02, 1);
 }
@@ -4166,6 +4168,7 @@
 }
 .dx-texteditor.dx-editor-filled::after {
   /* border-bottom: 1px solid rgba(0,0,0,.42); */
+  /* border:1px solid rgba(78,93,107,0.24); */
 }
 .dx-texteditor.dx-editor-filled.dx-state-hover {
   /* background-color: rgba(0,0,0,.07); */
@@ -4173,6 +4176,8 @@
 }
 .dx-texteditor.dx-editor-filled.dx-state-hover::after {
   border-bottom-color: rgba(0,0,0,.87);
+  /* border:1px solid rgba(78,93,107,0.24); */
+
 }
 .dx-texteditor.dx-editor-filled.dx-state-disabled,
 .dx-texteditor.dx-editor-filled.dx-state-readonly,
@@ -4227,6 +4232,7 @@
 }
 .dx-texteditor.dx-editor-outlined.dx-state-focused {
   /* box-shadow: inset 0 0 0 2px #03a9f4; */
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.87);
 }
 .dx-texteditor.dx-editor-outlined.dx-state-focused.dx-invalid {
   box-shadow: inset 0 0 0 2px #f44336;
@@ -8274,14 +8280,14 @@
 }
 .dx-popup-wrapper > .dx-overlay-content {
   background: #fff;
-  box-shadow: 0 11px 15px -7px rgba(0,0,0,.2),0 24px 38px 3px rgba(0,0,0,.14),0 9px 46px 8px rgba(0,0,0,.12);
+  /* box-shadow: 0 11px 15px -7px rgba(0,0,0,.2),0 24px 38px 3px rgba(0,0,0,.14),0 9px 46px 8px rgba(0,0,0,.12); */
   border-radius: 4px;
 }
 .dx-popup-wrapper > .dx-popup-fullscreen {
   border-radius: 0;
 }
 .dx-popup-wrapper .dx-state-focused.dx-overlay-content {
-  box-shadow: 0 8px 40px 6px rgba(0,0,0,.4);
+  /* box-shadow: 0 8px 40px 6px rgba(0,0,0,.4); */
 }
 .dx-popup-title {
   padding: 10px;
@@ -10127,7 +10133,8 @@
   -moz-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
-  padding: 13px 16px;
+  /* padding: 13px 16px; */
+  padding-top: 13px;
 }
 .dx-pager .dx-pages {
   white-space: nowrap;
@@ -10831,6 +10838,9 @@
 }
 .dx-datagrid-rowsview .dx-datagrid-content:not(.dx-datagrid-content-fixed) {
   min-height: 100%;
+  color: #525252;
+  font-size: 14px;
+  font-family: Inter;
 }
 .dx-datagrid-rowsview .dx-datagrid-content.dx-scrollable-container {
   width: auto;

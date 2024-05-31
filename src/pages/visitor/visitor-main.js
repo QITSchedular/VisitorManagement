@@ -3,7 +3,7 @@ import {
   HeaderText,
   SubText,
 } from "../../components/typographyText/TypograghyText";
-import { Button, SelectBox } from "devextreme-react";
+import { SelectBox, Button } from "devextreme-react";
 import "./visitor-main.scss";
 import Breadcrumbs from "../../components/breadcrumbs/BreadCrumbs";
 import { useNavigate } from "react-router-dom";
@@ -14,10 +14,23 @@ import DataGrid, {
   Toolbar,
   Item,
   Pager,
-  Scrolling,
-  LoadPanel,
   SearchPanel,
+  Button as ColumnButton,
 } from "devextreme-react/data-grid";
+import "remixicon/fonts/remixicon.css";
+import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+
+const getStatusColor = (status) => {
+  const statusColors = {
+    Approved: "#124d22",
+    Pending: "#934908",
+    Rejected: "#AD1820",
+    "Check in": "0D4D8B",
+    "Check Out": "#AD1820",
+  };
+
+  return statusColors[status];
+};
 
 const VisitorMain = () => {
   const navigate = useNavigate();
@@ -25,10 +38,14 @@ const VisitorMain = () => {
     navigate("/Visitors/Add-Visitors");
   };
 
+  const handlePopupIconClick = () => {
+    console.log("Popup icon clicked");
+  };
+
   return (
     <>
       <div className="content-block">
-        <div className="navigation-header">
+        <div className="navigation-header-main">
           <div className="title-section">
             <HeaderText text="Add Visitors" />
           </div>
@@ -73,11 +90,58 @@ const VisitorMain = () => {
             showNavigationButtons={true}
           />
           <Column dataField="VisitorName" />
-          <Column dataField="status" />
+          <Column type="buttons" width={50}>
+            <ColumnButton
+              onClick={(cellData) => handlePopupIconClick(cellData)}
+            >
+              <MoreHorizOutlinedIcon />
+            </ColumnButton>
+          </Column>
+          <Column
+            alignment={"center"}
+            // width={150}
+            dataField={"status"}
+            caption={"Status"}
+            cellRender={(data) => {
+              return (
+                <>
+                  <span className="col-main" data-type={data["value"]}>
+                    <span
+                      className="status-circle"
+                      style={{
+                        backgroundColor: getStatusColor(data["value"]),
+                      }}
+                    />
+                    <span data-type={data["value"]}>{data["value"]}</span>
+                  </span>
+                </>
+              );
+            }}
+          />
           <Column dataField="companyName" />
-          <Column dataField="State" />
-          <Column dataField="AddedBy" />
+          <Column
+            alignment={"center"}
+            // width={150}
+            dataField={"state"}
+            caption={"State"}
+            cellRender={(data) => {
+              return (
+                <>
+                  <span className="col-main" data-type={data["value"]}>
+                    <span
+                      className="status-circle"
+                      style={{
+                        backgroundColor: getStatusColor(data["value"]),
+                      }}
+                    />
+                    <span data-type={data["value"]}>{data["value"]}</span>
+                  </span>
+                </>
+              );
+            }}
+          />
 
+          <Column dataField="AddedBy" />
           <Toolbar className="toolbar-item">
             <Item location="before">
               <div className="informer">
@@ -87,22 +151,22 @@ const VisitorMain = () => {
             <Item name="searchPanel" />
             <Item location="after">
               <SelectBox
-                width={116}
-                height={44}
+                // width={116}
+                // height={44}
                 valueExpr="value"
                 displayExpr="text"
-                stylingMode="outlined"
+                // stylingMode="outlined"
                 className="left-textbox"
                 placeholder="Check In"
               />
             </Item>
             <Item location="after">
               <SelectBox
-                width={166}
-                height={44}
+                // width={166}
+                // height={44}
                 valueExpr="value"
                 displayExpr="text"
-                stylingMode="outlined"
+                // stylingMode="outlined"
                 placeholder="Pending Visitors"
               />
             </Item>

@@ -1,3 +1,5 @@
+@import "../../responsive.scss";
+
 .otp-terms {
   margin-top: 25px;
 }
@@ -30,5 +32,11 @@
   outline: none;
   &:focus {
     border-color: #6941c6;
+  }
+}
+@include sm {
+  .otp-input-box {
+    width: 42px;
+    height: 42px;
   }
 }

@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useCallback, useMemo } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import TreeView from "devextreme-react/tree-view";
 import { navigation } from "../../app-navigation";
 import { useNavigation } from "../../contexts/navigation";
@@ -6,12 +12,13 @@ import { useScreenSize } from "../../utils/media-query";
 import "./SideNavigationMenu.scss";
 import { Autocomplete, Button } from "devextreme-react";
 import "remixicon/fonts/remixicon.css";
-
 import * as events from "devextreme/events";
+import { useAuth } from "../../contexts/auth";
 
 export default function SideNavigationMenu(props) {
   const { children, selectedItemChanged, openMenu, compactMode, onMenuReady } =
     props;
+  const { user, signOut } = useAuth();
 
   const { isLarge } = useScreenSize();
   function normalizePath() {
@@ -64,34 +71,47 @@ export default function SideNavigationMenu(props) {
       treeView.collapseAll();
     }
   }, [currentPath, compactMode]);
+
   const itemRender = (item) => {
     return (
-      <>
+      <div className="treeview-item-content">
         <i className={`${item.icon} custom-icon`}></i>
         <span className="custom-text">{item.text}</span>
-      </>
+      </div>
     );
   };
-
   return (
     <div
-      className={"dx-swatch-additional side-navigation-menu"}
+      className={`dx-swatch-additional side-navigation-menu`}
       ref={getWrapperRef}
     >
       {children}
-      <div className="search-box">
-        <i className="dx-icon dx-icon-search"></i>
-        <Autocomplete
-          placeholder="Search modules"
-          stylingMode="outlined"
-          // showClearButton={true}
-          // displayExpr={(item) => item}
-          searchExpr="name"
-          className={"custom-search-box"}
-          // value={searchValue}
-          // onValueChanged={handleSearchValueChanged}
-        />
-      </div>
+      {compactMode && (
+        <div className="search-icon">
+          <i className="ri-search-line"></i>
+        </div>
+      )}
+      {!compactMode && (
+        <div className="logout-link" onClick={signOut}>
+          <i class="ri-logout-box-line"></i>
+          <span>Logout</span>
+        </div>
+      )}
+      {!compactMode && (
+        <div className="search-box">
+          <i className="ri-search-line"></i>
+          <Autocomplete
+            placeholder="Search modules"
+            stylingMode="outlined"
+            // showClearButton={true}
+            // displayExpr={(item) => item}
+            searchExpr="name"
+            // className={"custom-search-box"}
+            // value={searchValue}
+            // onValueChanged={handleSearchValueChanged}
+          />
+        </div>
+      )}
       <div className={"menu-container"}>
         <TreeView
           ref={treeViewRef}
