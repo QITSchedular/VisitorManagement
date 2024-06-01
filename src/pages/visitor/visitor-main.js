@@ -155,7 +155,7 @@ const VisitorMain = () => {
                 // height={44}
                 valueExpr="value"
                 displayExpr="text"
-                // stylingMode="outlined"
+                stylingMode="outlined"
                 className="left-textbox"
                 placeholder="Check In"
               />
@@ -166,7 +166,7 @@ const VisitorMain = () => {
                 // height={44}
                 valueExpr="value"
                 displayExpr="text"
-                // stylingMode="outlined"
+                stylingMode="outlined"
                 placeholder="Pending Visitors"
               />
             </Item>

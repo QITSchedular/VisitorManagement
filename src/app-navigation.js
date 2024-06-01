@@ -6,8 +6,8 @@ export const navigation = [
   },
   {
     text: "Verify Visitors",
-    path: "/Verify-Visitor",
-    icon: "ri-user-add-line",
+    path: "/Verify-Visitors",
+    icon: "ri-user-follow-line",
   },
   {
     text: "Home",

@@ -4,6 +4,8 @@ import {
   ProfilePage,
   VisitorMain,
   AddVisitor,
+  VerifyVisitorMain,
+  VistorsDetails,
 } from "./pages";
 import { withNavigationWatcher } from "./contexts/navigation";
 
@@ -27,6 +29,14 @@ const routes = [
   {
     path: "/Visitors/Add-Visitors",
     element: AddVisitor,
+  },
+  {
+    path: "/Verify-Visitors",
+    element: VerifyVisitorMain,
+  },
+  {
+    path: "/Verify-Visitors/Details-of-Visitor",
+    element: VistorsDetails,
   },
 ];
 

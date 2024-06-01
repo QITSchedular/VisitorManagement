@@ -1,35 +1,27 @@
-import { Button, Popup } from "devextreme-react";
+import { Button, Popup, TextBox } from "devextreme-react";
 import React from "react";
 import {
   PopupHeaderText,
   PopupSubText,
 } from "../typographyText/TypograghyText";
-import "./send-verification.scss";
 
-const SendVerification = ({
+const AllowEntryPopup = ({
   header,
-  subHeader,
-  approval,
-  discard,
-  saveFunction,
+  allowEntry,
   isVisible,
   onHide,
+  subHeader,
 }) => {
-  const handleSubmit = () => {
-    saveFunction();
-  };
-
   return (
     <>
       <Popup
         visible={isVisible}
         onHiding={onHide}
-        // width={"25%"}
+        // width={480}
         height={"auto"}
         showCloseButton={false}
         dragEnabled={false}
         showTitle={false}
-        className="responsive-popup"
       >
         <div className="verification-popup-main">
           <PopupHeaderText text={header} />
@@ -41,21 +33,23 @@ const SendVerification = ({
             <Button icon="close" onClick={onHide} />
           </div>
         </div>
-
-        <div className="verification-footer">
+        <div className="popup-input">
+          <div className="form-input">
+            <TextBox
+              label="Reason"
+              placeholder="Input"
+              labelMode="static"
+              stylingMode="outlined"
+              height={56}
+            />
+          </div>
+        </div>
+        <div className="popup-footer">
           <Button
-            text={discard}
-            width={216}
+            text={allowEntry}
             height={44}
             onClick={onHide}
-            stylingMode="outlined"
-          />
-          <Button
-            text={approval}
-            width={216}
-            height={44}
-            onClick={handleSubmit}
-            // disabled={isDisabled}
+            className="full-width-button"
           />
         </div>
       </Popup>
@@ -63,4 +57,4 @@ const SendVerification = ({
   );
 };
 
-export default SendVerification;
+export default AllowEntryPopup;
