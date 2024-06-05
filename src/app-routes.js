@@ -6,6 +6,9 @@ import {
   AddVisitor,
   VerifyVisitorMain,
   VistorsDetails,
+  VerifyVistorsDetails,
+  EditVisitorDetails,
+  VisitorDetails,
 } from "./pages";
 import { withNavigationWatcher } from "./contexts/navigation";
 
@@ -27,6 +30,15 @@ const routes = [
     element: VisitorMain,
   },
   {
+    path: "/Visitors/Details-of-Visitor",
+    element: VisitorDetails,
+  },
+  {
+    path: "/Visitors/Edit-Visitor-Details",
+    element: EditVisitorDetails,
+  },
+
+  {
     path: "/Visitors/Add-Visitors",
     element: AddVisitor,
   },
@@ -36,7 +48,7 @@ const routes = [
   },
   {
     path: "/Verify-Visitors/Details-of-Visitor",
-    element: VistorsDetails,
+    element: VerifyVistorsDetails,
   },
 ];
 

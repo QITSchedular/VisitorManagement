@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   HeaderText,
   SubText,
 } from "../../components/typographyText/TypograghyText";
-import { SelectBox, Button } from "devextreme-react";
+import { SelectBox, Button, Popup, ContextMenu } from "devextreme-react";
 import "./visitor-main.scss";
 import Breadcrumbs from "../../components/breadcrumbs/BreadCrumbs";
 import { useNavigate } from "react-router-dom";
@@ -15,10 +15,11 @@ import DataGrid, {
   Item,
   Pager,
   SearchPanel,
-  Button as ColumnButton,
 } from "devextreme-react/data-grid";
 import "remixicon/fonts/remixicon.css";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+import { useRecoilState } from "recoil";
+import { addedByAtom, stateAtom, statusAtom } from "../../contexts/atom";
 
 const getStatusColor = (status) => {
   const statusColors = {
@@ -31,15 +32,91 @@ const getStatusColor = (status) => {
 
   return statusColors[status];
 };
-
+const sanitizeClassName = (str) => {
+  return String(str).replace(/[^a-zA-Z0-9_-]/g, "");
+};
 const VisitorMain = () => {
   const navigate = useNavigate();
   const handleClick = () => {
     navigate("/Visitors/Add-Visitors");
   };
+  let dataGrid;
+  const [clickedRowData, setClickedRowData] = useState(null);
+  const [status, setStatus] = useRecoilState(statusAtom);
+  const [state, setState] = useRecoilState(stateAtom);
+  const [addedby, setAddedby] = useRecoilState(addedByAtom);
 
-  const handlePopupIconClick = () => {
-    console.log("Popup icon clicked");
+  // const handlePopupIconClick = (cellData) => {
+  //   const selectedRow = cellData.row.data;
+  //   setClickedRowData(selectedRow);
+  //   // setIsAdditionalCardVisible(true);
+  //   setStates(selectedRow.state);
+  //   setStatus(selectedRow.status);
+  //   setAddedby(selectedRow.AddedBy);
+  //   if (
+  //     selectedRow.status === "none" &&
+  //     selectedRow.state === "Rejected" &&
+  //     selectedRow.AddedBy === "Company"
+  //   ) {
+  //     navigate("/Visitors/Edit-Visitor-Details");
+  //   } else {
+  //     navigate("/Visitors/Details-of-Visitor");
+  //   }
+  // };
+
+  const handlePopupIconClick = (rowData) => {
+    setClickedRowData(rowData);
+    setState(rowData.state);
+    setStatus(rowData.status);
+    setAddedby(rowData.AddedBy);
+  };
+
+  const handleMenuClick = (e, rowData) => {
+    handlePopupIconClick(rowData);
+    console.log("row data", rowData);
+    if (e.itemData.text === "View Details") {
+      if (
+        rowData.status === "none" &&
+        rowData.state === "Rejected" &&
+        rowData.AddedBy === "Company"
+      ) {
+        navigate("/Visitors/Edit-Visitor-Details");
+      } else {
+        navigate("/Visitors/Details-of-Visitor");
+      }
+    }
+  };
+
+  const actionTemplate = (cellData) => {
+    const actionMenuItems = [
+      {
+        text: "Check Out",
+      },
+      {
+        text: "View Details",
+      },
+    ];
+
+    const sanitizedClassName = `actionbtn-${sanitizeClassName(
+      cellData.data.ID
+    )}`;
+
+    return (
+      <>
+        <div className="actionDetails">
+          <Button stylingMode="outlined" className={sanitizedClassName}>
+            <MoreHorizOutlinedIcon />
+          </Button>
+        </div>
+        <ContextMenu
+          items={actionMenuItems}
+          target={`.${sanitizedClassName}`}
+          showEvent={"dxclick"}
+          cssClass={"actionMenu"}
+          onItemClick={(e) => handleMenuClick(e, cellData.data)}
+        />
+      </>
+    );
   };
 
   return (
@@ -76,6 +153,10 @@ const VisitorMain = () => {
           }}
           className="data-grid"
           hoverStateEnabled={true}
+          columnAutoWidth={true}
+          ref={(ref) => {
+            dataGrid = ref;
+          }}
         >
           <SearchPanel
             visible={true}
@@ -89,14 +170,16 @@ const VisitorMain = () => {
             displayMode="compact"
             showNavigationButtons={true}
           />
+          <Column dataField="ID" visible={false} />
           <Column dataField="VisitorName" />
-          <Column type="buttons" width={50}>
+          {/* <Column type="buttons" cellRender={actionTemplate}>
             <ColumnButton
               onClick={(cellData) => handlePopupIconClick(cellData)}
             >
               <MoreHorizOutlinedIcon />
             </ColumnButton>
-          </Column>
+          </Column> */}
+          <Column cellRender={actionTemplate} allowSorting={false} />
           <Column
             alignment={"center"}
             // width={150}

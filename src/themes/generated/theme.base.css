@@ -7516,7 +7516,8 @@
 }
 .dx-menu-item.dx-state-focused,
 .dx-menu-item.dx-state-hover {
-  background-color: rgba(0,0,0,.04);
+  background-color: #F9F5FF;
+  border-left: 1px solid #7F56D9;
 }
 .dx-menu-item-selected {
   background-color: rgba(224,224,224,.87);
@@ -15697,7 +15698,7 @@ input.dx-hidden {
 .dx-context-menu .dx-submenu {
   background-color: #fff;
   border-radius: 4px;
-  box-shadow: 0 2px 7px rgba(0,0,0,.2);
+  box-shadow: 0px 0px 1px rgba(0,0,0,.1);
 }
 .dx-context-menu .dx-menu-separator {
   height: 1px;

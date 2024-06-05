@@ -162,8 +162,8 @@
     }
   }
 }
-.header-status {
-  margin-left: 10px;
+.header-state {
+  // margin-left: 10px;
   background-color: rgba(18, 77, 34, 0.08);
   border-radius: 16px;
   padding: 4px 8px 4px 8px;
@@ -192,7 +192,7 @@
       margin-left: 18px;
     }
 
-    &[data-type="Pending"] {
+    &[data-type="Check in"] {
       .status-circle {
         background-color: #06548b;
       }
@@ -206,6 +206,77 @@
       margin-left: 18px;
     }
     &[data-type="Rejected"] {
+      .status-circle {
+        background-color: #ad1820;
+      }
+
+      color: #ad1820;
+      font-family: Inter;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 21px;
+      margin-left: 18px;
+    }
+    &[data-type="Check Out"] {
+      .status-circle {
+        background-color: #ad1820;
+      }
+
+      color: #ad1820;
+      font-family: Inter;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 21px;
+      margin-left: 18px;
+    }
+    &[data-type="Pending"] {
+      .status-circle {
+        background-color: #934908;
+      }
+
+      color: #934908;
+      font-family: Inter;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 21px;
+      margin-left: 18px;
+    }
+  }
+}
+.header-status {
+  margin-left: 10px;
+  background-color: rgba(18, 77, 34, 0.08);
+  border-radius: 16px;
+  padding: 4px 8px 4px 8px;
+
+  .status-circle {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: -13px;
+    margin-bottom: 2px;
+  }
+
+  span {
+    &[data-type="Check in"] {
+      .status-circle {
+        background-color: #06548b;
+      }
+
+      color: #06548b;
+      font-family: Inter;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 21px;
+      margin-left: 18px;
+    }
+
+    &[data-type="Check Out"] {
       .status-circle {
         background-color: #ad1820;
       }
@@ -323,5 +394,10 @@
         margin-left: 18px;
       }
     }
+  }
+}
+.actionDetails {
+  .dx-button-mode-outlined {
+    border: none !important;
   }
 }

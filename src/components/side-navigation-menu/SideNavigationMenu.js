@@ -19,8 +19,10 @@ export default function SideNavigationMenu(props) {
   const { children, selectedItemChanged, openMenu, compactMode, onMenuReady } =
     props;
   const { user, signOut } = useAuth();
-
   const { isLarge } = useScreenSize();
+
+  const [searchValue, setSearchValue] = useState("");
+
   function normalizePath() {
     return navigation.map((item) => ({
       ...item,
@@ -29,11 +31,7 @@ export default function SideNavigationMenu(props) {
     }));
   }
 
-  const items = useMemo(
-    normalizePath,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  const items = useMemo(normalizePath, [isLarge]);
 
   const {
     navigationData: { currentPath },
@@ -80,6 +78,19 @@ export default function SideNavigationMenu(props) {
       </div>
     );
   };
+
+  // Handle search input change
+  const handleSearchValueChanged = (e) => {
+    setSearchValue(e.value);
+  };
+
+  // Filter items based on search input
+  const filteredItems = items.filter((item) =>
+    searchValue
+      ? item.text.toLowerCase().includes(searchValue.toLowerCase())
+      : true
+  );
+
   return (
     <div
       className={`dx-swatch-additional side-navigation-menu`}
@@ -93,7 +104,7 @@ export default function SideNavigationMenu(props) {
       )}
       {!compactMode && (
         <div className="logout-link" onClick={signOut}>
-          <i class="ri-logout-box-line"></i>
+          <i className="ri-logout-box-line"></i>
           <span>Logout</span>
         </div>
       )}
@@ -103,19 +114,18 @@ export default function SideNavigationMenu(props) {
           <Autocomplete
             placeholder="Search modules"
             stylingMode="outlined"
-            // showClearButton={true}
-            // displayExpr={(item) => item}
-            searchExpr="name"
-            // className={"custom-search-box"}
-            // value={searchValue}
-            // onValueChanged={handleSearchValueChanged}
+            showClearButton={true}
+            displayExpr={(item) => item.text}
+            valueExpr="text"
+            value={searchValue}
+            onValueChanged={handleSearchValueChanged}
           />
         </div>
       )}
       <div className={"menu-container"}>
         <TreeView
           ref={treeViewRef}
-          items={items}
+          items={filteredItems}
           keyExpr={"path"}
           selectionMode={"single"}
           focusStateEnabled={false}
