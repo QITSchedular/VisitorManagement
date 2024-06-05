@@ -9,6 +9,7 @@ import {
   VerifyVistorsDetails,
   EditVisitorDetails,
   VisitorDetails,
+  UserSettingsMain,
 } from "./pages";
 import { withNavigationWatcher } from "./contexts/navigation";
 
@@ -49,6 +50,10 @@ const routes = [
   {
     path: "/Verify-Visitors/Details-of-Visitor",
     element: VerifyVistorsDetails,
+  },
+  {
+    path: "/Users-Settings",
+    element: UserSettingsMain,
   },
 ];
 

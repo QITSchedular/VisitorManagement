@@ -10,6 +10,11 @@ export const navigation = [
     icon: "ri-user-follow-line",
   },
   {
+    text: "User's Settings",
+    path: "/Users-Settings",
+    icon: "ri-user-settings-line",
+  },
+  {
     text: "Home",
     path: "/home",
     icon: "ri-home-line",

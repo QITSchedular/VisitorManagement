@@ -7,3 +7,4 @@ export { default as VerifyVisitorMain } from "./verify-visitor/verify-main";
 export { default as VerifyVistorsDetails } from "./verify-visitor/details-visitor";
 export { default as VisitorDetails } from "./visitor/state-pages/visitor-details";
 export { default as EditVisitorDetails } from "./visitor/state-pages/edit-state-page";
+export { default as UserSettingsMain } from "./user-configurations/user-settings-main";
