@@ -2988,7 +2988,7 @@
 }
 .dx-tabs {
   padding: 0;
-  background-color: #fff;
+  background-color: transparent;
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
@@ -3050,7 +3050,7 @@
 .dx-tabs-styling-mode-primary.dx-tab-indicator-position-bottom .dx-tab-selected::after {
   content: "";
   position: absolute;
-  background-color: #03a9f4;
+  background-color: #6941C6;
   right: 0;
   bottom: 0;
   left: 0;
@@ -3771,15 +3771,19 @@
 .dx-tab {
   gap: 4px;
   padding: 12px 16px;
-  background-color: #fff;
+  background-color: transparent;
   color: rgba(0,0,0,.54);
 }
 .dx-tab.dx-state-hover {
-  background-color: rgba(3,169,244,.08);
+  /* background-color: rgba(3,169,244,.08); */
+  background-color: #F9F5FF;
 }
 .dx-tab.dx-tab-selected,
 .dx-tab.dx-tab-selected .dx-icon {
-  color: #03a9f4;
+  /* color: #03a9f4; */
+  color: #6941C6;
+;
+
 }
 .dx-tab.dx-state-disabled,
 .dx-tab.dx-state-disabled .dx-icon {
@@ -3787,14 +3791,19 @@
 }
 .dx-tab.dx-state-active,
 .dx-tab.dx-state-active .dx-inkripple-wave {
-  background-color: rgba(3,169,244,.16);
+  /* background-color: rgba(3,169,244,.16); */
+  background-color: #F9F5FF;
 }
 .dx-tab .dx-tab-text {
   -moz-column-gap: 8px;
   column-gap: 8px;
   line-height: 1.714286;
   font-weight: 500;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
+  text-transform: none;
+  font-size: 14px;
+  font-family: Inter;
+
 }
 .dx-tab .dx-tab-text .dx-tab-text-span-pseudo {
   display: none;
@@ -3814,7 +3823,9 @@
   align-self: center;
 }
 .dx-tabs.dx-state-focused .dx-tab.dx-state-focused {
-  background-color: rgba(3,169,244,.12);
+  /* background-color: rgba(3,169,244,.12); */
+  background-color: #F9F5FF;
+
 }
 .dx-tabs-nav-button {
   border: none;
@@ -4108,7 +4119,7 @@
 }
 .dx-texteditor.dx-state-active::before,
 .dx-texteditor.dx-state-focused::before {
-  /* border-bottom: 2px solid #03a9f4; */
+  /* border-bottom: 1px solid #03a9f4; */
   border: 1px solid rgba(0,0,0,.01);
   transform: scale(1);
   transition: transform .6s cubic-bezier(.4, 0, .02, 1);
@@ -10607,6 +10618,7 @@
 .dx-datagrid-content .dx-datagrid-table .dx-row .dx-editor-cell .dx-texteditor-container {
   border: 0;
   margin: 0;
+  /* border-bottom: 1px solid #7F56D9; */
 }
 .dx-datagrid-content .dx-datagrid-table .dx-row .dx-command-select {
   padding: 0;

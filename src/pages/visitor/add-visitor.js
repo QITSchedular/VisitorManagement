@@ -17,12 +17,13 @@ const AddVisitor = () => {
   const handleClosePopup = () => {
     setIsPopupVisible(false);
   };
-  const handleCloseOtpPopup = () => {
-    setIsOtpPopupVisible(false);
-  };
   const handleOpenPopup = () => {
     setIsPopupVisible(true);
   };
+  const handleCloseOtpPopup = () => {
+    setIsOtpPopupVisible(false);
+  };
+
   const mobileOption = {
     icon: PopUpIcon,
     onClick: () => {

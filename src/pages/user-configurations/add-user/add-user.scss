@@ -1,0 +1,15 @@
+.add-user-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+
+  .form-input {
+    margin-top: 24px;
+    flex: 1;
+
+    .dx-texteditor-input-container {
+      width: 100%;
+      height: 56px;
+    }
+  }
+}

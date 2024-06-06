@@ -191,7 +191,6 @@
       line-height: 21px;
       margin-left: 18px;
     }
-
     &[data-type="Check in"] {
       .status-circle {
         background-color: #06548b;
@@ -297,7 +296,9 @@
       &[data-type="Approved"] {
         background-color: rgba(18, 77, 34, 0.06);
       }
-
+      &[data-type="Changed"] {
+        background-color: rgba(18, 77, 34, 0.06);
+      }
       &[data-type="Check in"] {
         background-color: rgba(6, 84, 139, 0.06);
       }
@@ -340,7 +341,19 @@
         line-height: 21px;
         margin-left: 18px;
       }
+      &[data-type="Changed"] {
+        .status-circle {
+          background-color: #124d22;
+        }
 
+        color: #124d22;
+        font-family: Inter;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 21px;
+        margin-left: 18px;
+      }
       &[data-type="Pending"] {
         .status-circle {
           background-color: #934908;
