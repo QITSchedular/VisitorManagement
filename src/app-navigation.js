@@ -14,15 +14,21 @@ export const navigation = [
     path: "/Users-Settings",
     icon: "ri-user-settings-line",
   },
+
   {
-    text: "Home",
-    path: "/home",
-    icon: "ri-home-line",
+    text: "Notification",
+    path: "/notification",
+    icon: "ri-notification-4-line",
   },
   {
     text: "Profile",
     path: "/profile",
     icon: "ri-user-line",
+  },
+  {
+    text: "General Setting",
+    path: "/generalsettings",
+    icon: "ri-settings-4-line",
   },
   {
     text: "Tasks",

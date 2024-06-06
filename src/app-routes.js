@@ -12,6 +12,8 @@ import {
   UserSettingsMain,
 } from "./pages";
 import { withNavigationWatcher } from "./contexts/navigation";
+import Notification from "./pages/Notification/Notification";
+import GeneralSetting from "./pages/generalSetting/GeneralSetting";
 
 const routes = [
   {
@@ -54,6 +56,17 @@ const routes = [
   {
     path: "/Users-Settings",
     element: UserSettingsMain,
+  },
+
+  //Notification 
+  {
+    path: "/notification",
+    element: Notification,
+  },
+  //General Setting
+  {
+    path: "/generalsettings",
+    element: GeneralSetting,
   },
 ];
 
