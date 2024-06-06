@@ -2797,8 +2797,8 @@
   user-select: text;
   margin: 0;
   background-color: transparent;
-  color: rgba(0,0,0,.87);
-  font-size: 16px;
+  color: #344450;
+  font-size: 14px;
 }
 .dx-swatch-additional .dx-texteditor-input:-webkit-autofill + .dx-placeholder {
   display: none!important;
@@ -2985,9 +2985,13 @@
   border-bottom-color: rgba(244,67,54,.4);
 }
 .dx-swatch-additional .dx-texteditor.dx-editor-outlined {
-  background-color: transparent;
+  /* background-color: transparent;
+  border-radius: 4px; */
+  /* box-shadow: inset 0 0 0 1px rgba(78, 93, 107, 0.24); */
+  background: #fff;
+  border: 1px solid #c6c6c6;
   border-radius: 4px;
-  box-shadow: inset 0 0 0 1px rgba(78, 93, 107, 0.24);
+  box-shadow: none;
 }
 .dx-swatch-additional .dx-texteditor.dx-editor-outlined::before {
   display: none;
@@ -3001,10 +3005,15 @@
   color: rgba(0,0,0,.38);
 }
 .dx-swatch-additional .dx-texteditor.dx-editor-outlined.dx-state-hover {
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.87);
+  /* box-shadow: inset 0 0 0 1px rgba(0,0,0,.87); */
+  border: 1px solid rgba(0,0,0,.87);
+
 }
 .dx-swatch-additional .dx-texteditor.dx-editor-outlined.dx-state-focused {
-  /* box-shadow: inset 0 0 0 2px #03a9f4; */
+  /* box-shadow: inset 0 0 0 1px rgba(0,0,0,.87); */
+  border: 1px solid rgba(0,0,0,.87);
+
+  border-radius: 4px;
 }
 .dx-swatch-additional .dx-texteditor.dx-editor-outlined.dx-state-focused.dx-invalid {
   box-shadow: inset 0 0 0 2px #f44336;

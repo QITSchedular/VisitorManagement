@@ -1,0 +1,77 @@
+@import "../../responsive.scss";
+.box {
+  position: relative;
+}
+.title-section-btn {
+  i {
+    position: absolute;
+    margin-left: 10px;
+    top: 35%;
+    transform: translateY(-20%);
+    color: #565656;
+    z-index: 1;
+    font-size: 18px;
+    color: #687787;
+  }
+}
+.title-section-btn {
+  .dx-placeholder {
+    margin-left: 15px;
+    font-size: 14px;
+    color: #687787;
+    font-family: Inter;
+  }
+}
+.title-section-btn .dx-widget input,
+.dx-widget textarea {
+  margin-left: 15px;
+}
+
+.highlight {
+  font-weight: 500;
+  padding: 0px 1px;
+  margin: 0px 1px;
+  background-color: #7f56d9;
+  color: #fff;
+}
+
+.visitor-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+}
+.visitor-personal-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+
+  .visitor-personal-data {
+    margin-top: 24px;
+    flex: 1 1 468px;
+    max-width: 468px;
+
+    .visitor-header {
+      font-size: 14px;
+      font-family: Inter;
+      color: #344450;
+    }
+    .visitor-sub-header {
+      font-size: 16px;
+      font-family: Inter;
+      color: #344450;
+      margin-top: 8px;
+    }
+  }
+}
+@include sm {
+  .visitor-personal-detail {
+    gap: 0px;
+  }
+}
+@include md {
+  .visitor-personal-detail {
+    gap: 0px;
+  }
+}

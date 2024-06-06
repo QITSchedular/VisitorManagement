@@ -4,6 +4,12 @@ import {
   ProfilePage,
   VisitorMain,
   AddVisitor,
+  VerifyVisitorMain,
+  VistorsDetails,
+  VerifyVistorsDetails,
+  EditVisitorDetails,
+  VisitorDetails,
+  UserSettingsMain,
 } from "./pages";
 import { withNavigationWatcher } from "./contexts/navigation";
 
@@ -25,8 +31,29 @@ const routes = [
     element: VisitorMain,
   },
   {
+    path: "/Visitors/Details-of-Visitor",
+    element: VisitorDetails,
+  },
+  {
+    path: "/Visitors/Edit-Visitor-Details",
+    element: EditVisitorDetails,
+  },
+
+  {
     path: "/Visitors/Add-Visitors",
     element: AddVisitor,
+  },
+  {
+    path: "/Verify-Visitors",
+    element: VerifyVisitorMain,
+  },
+  {
+    path: "/Verify-Visitors/Details-of-Visitor",
+    element: VerifyVistorsDetails,
+  },
+  {
+    path: "/Users-Settings",
+    element: UserSettingsMain,
   },
 ];
 

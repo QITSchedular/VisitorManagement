@@ -78,7 +78,9 @@ export default function SideNavInnerToolbar({ title, children }) {
         template={"menu"}
       >
         <div className={"container"}>
-          <Header menuToggleEnabled={isXSmall} toggleMenu={toggleMenu} />
+          {isXSmall && (
+            <Header menuToggleEnabled={isXSmall} toggleMenu={toggleMenu} />
+          )}
           <ScrollView ref={scrollViewRef} className={"layout-body with-footer"}>
             <div className={"content"}>
               {React.Children.map(children, (item) => {
