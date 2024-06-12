@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./checkinotp.scss";
 
 export const CheckInOtp = () => {
@@ -7,6 +7,7 @@ export const CheckInOtp = () => {
   const length = 6;
   const [timer, setTimer] = useState(60);
   const inputRefs = useRef([]);
+  const navigate = useNavigate();
 
   const handleChange = (index, e) => {
     const value = e.target.value;
@@ -69,13 +70,21 @@ export const CheckInOtp = () => {
     };
   }, [timer]);
 
+  const handlePreviousBtn = () => {
+    navigate("/welcomevisitor");
+  };
+
   const minutes = Math.floor(timer / 60);
   const seconds = timer % 60;
   return (
     <>
       <div className="login-container main-form-container">
         <div className="backbtn">
-          <i class="ri-arrow-left-line" style={{ fontSize: "20px" }}></i>
+          <i
+            class="ri-arrow-left-line"
+            style={{ fontSize: "20px" }}
+            onClick={handlePreviousBtn}
+          ></i>
         </div>
         <div className="login-container-left form-conatiner">
           <div className="login-form ">

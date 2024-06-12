@@ -1,9 +1,9 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { TextBox, Button as TextBoxButton } from "devextreme-react/text-box";
 import notify from "devextreme/ui/notify";
 import { useAuth } from "../../contexts/auth";
-import { Button, CheckBox } from "devextreme-react";
+import { Button } from "devextreme-react";
 import { eyeopen, eyeclose } from "../../assets/icon";
 import { Validator, RequiredRule } from "devextreme-react/validator";
 import "./LoginForm.scss";
@@ -13,15 +13,40 @@ export default function LoginForm() {
   const navigate = useNavigate();
   const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);
-  const formData = useRef({ email: "", password: "" });
   const [showpwd, setShowPwd] = useState(false);
   const [passwordMode, setPasswordMode] = useState("password");
-  const [password, setpassword] = useState(null);
-  const [passwordError, setpasswordError] = useState(false);
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [email, setEmail] = useState("");
 
   const handlePWDChange = (e) => {
-    setpassword(e.value);
-    return setpasswordError(false);
+    setPassword(e.value);
+    setPasswordError(false);
+  };
+
+  const handleUserLogin = async () => {
+    setLoading(true);
+    try {
+      const response = await signIn(email, password);
+      // Handle successful login here
+      console.log("response 2 :  ", response);
+      notify("Login successful", "success", 2000);
+      navigate("/dashboard");
+    } catch (error) {
+      // Handle login error here
+      console.log("error handling : ", error);
+      notify("Login failed", "error", 2000);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEmail = (event) => {
+    setEmail(event.value);
+  };
+
+  const handlePassword = (event) => {
+    setPassword(event.value);
   };
 
   const onCreateAccountClick = useCallback(() => {
@@ -56,6 +81,7 @@ export default function LoginForm() {
                 labelMode="static"
                 stylingMode="outlined"
                 height={56}
+                onValueChanged={handleEmail}
               >
                 <Validator className="custom-validator">
                   <RequiredRule message="Email Address is required" />
@@ -66,11 +92,12 @@ export default function LoginForm() {
               <TextBox
                 label="Password"
                 placeholder="Input text"
-                value={password ? password : ""}
+                value={password}
                 mode={passwordMode}
                 labelMode="static"
                 height={56}
                 stylingMode="outlined"
+                onValueChanged={handlePassword}
               >
                 <TextBoxButton
                   name="password"
@@ -101,8 +128,9 @@ export default function LoginForm() {
               text="Continue"
               width={"100%"}
               height={"48px"}
-              // stylingMode="default"
               useSubmitBehavior={true}
+              onClick={handleUserLogin}
+              disabled={loading}
             />
           </div>
           <div className="terms-condition">

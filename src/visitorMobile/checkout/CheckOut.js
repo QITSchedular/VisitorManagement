@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export const CheckOut = () => {
   const navigate = useNavigate();
   const handlePreviousBtn = () => {
-    navigate("/welcomevistor");
+    navigate("/welcomevisitor");
   };
   return (
     <div className="Checkout">

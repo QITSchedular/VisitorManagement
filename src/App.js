@@ -13,13 +13,15 @@ import UnauthenticatedContent from "./UnauthenticatedContent";
 import { RecoilRoot } from "recoil";
 
 function App() {
-  const { user, loading } = useAuth();
+  const { user, loading, authRuleContext } = useAuth();
 
   if (loading) {
     return <LoadPanel visible={true} />;
   }
-
+  console.log("user value 1 : ", user);
+  console.log("Auth Rule : ", authRuleContext);
   if (user) {
+    console.log("user value : ", user);
     return <Content />;
   }
 

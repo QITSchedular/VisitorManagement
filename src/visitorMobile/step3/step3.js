@@ -1,8 +1,10 @@
 import React, { useState, useRef } from "react";
 import "./step3.scss";
 import { Button } from "devextreme-react";
+import { useNavigate } from "react-router-dom";
 
 export const Step3 = () => {
+  const navigate = useNavigate();
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [imageSrcBase, setImageSrcBase] = useState(null);
   const videoRef = useRef(null);
@@ -49,10 +51,18 @@ export const Step3 = () => {
     setImageSrcBase(imageSrc);
   };
 
+  const handlePreviousBtn = () => {
+    navigate("/welcomevisitor");
+  };
+
   return (
     <div className="step3">
       <div className="backbtn">
-        <i className="ri-arrow-left-line" style={{ fontSize: "20px" }}></i>
+        <i
+          class="ri-arrow-left-line"
+          style={{ fontSize: "20px" }}
+          onClick={handlePreviousBtn}
+        ></i>
       </div>
       <div className="header-step">
         <div className="step-number">

@@ -1,19 +1,19 @@
-.profile{
+@import "../../responsive.scss";
+.profile {
   font-family: inter;
   .content-block.dx-card {
     padding: 0;
     padding-top: 24px;
     min-height: 70vh;
   }
-  .upper-section{
+  .upper-section {
     margin-left: 16px;
     margin-right: 16px;
     padding-bottom: 24px;
-    border-bottom: 1px solid #D9DDE1;
+    border-bottom: 1px solid #d9dde1;
     .form-avatar {
       float: left;
       height: 104px;
-    
       margin-right: 24px;
       background-size: contain;
       background-repeat: no-repeat;
@@ -27,19 +27,17 @@
         display: block;
         margin: 0 auto;
       }
-    
     }
-    .about-profile{
-
+    .about-profile {
       height: 104px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-    
-      .portal-name{
+
+      .portal-name {
         font-size: 14px;
       }
-      .name-address{
+      .name-address {
         display: flex;
         gap: 5px;
         align-items: center;
@@ -47,42 +45,47 @@
           font-size: 20px;
           font-weight: 600;
           color: #344450;
+
+          @include sm {
+            font-size: 16px;
+          }
         }
-        :nth-child(2){
+        :nth-child(2) {
           font-size: 20px;
-      
+
           color: #344450;
         }
-        :last-child{
+        :last-child {
           font-size: 16px;
           font-weight: 400;
           color: #344450;
+          @include sm {
+            font-size: 14px;
+          }
         }
       }
-      .forget-pass{
-        color: #6941C6;
+      .forget-pass {
+        color: #6941c6;
         font-weight: 500;
-    
       }
-    
     }
-  
   }
-  .edit-profile-section{
+  .edit-profile-section {
     margin-left: 16px;
     margin-right: 16px;
     height: 132px;
     margin-top: 24px;
-    .profile-section-header{
+    .profile-section-header {
       font-size: 20px;
       font-weight: 500;
-      margin-bottom:24px ;
+      margin-bottom: 24px;
     }
-    .profile-section-editor{
+    .profile-section-editor {
       display: flex;
       gap: 24px;
+      @include sm {
+        flex-wrap: wrap;
+      }
     }
   }
 }
-
-

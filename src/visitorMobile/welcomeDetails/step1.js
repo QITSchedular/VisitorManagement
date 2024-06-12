@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 export const Step1 = () => {
   const navigate = useNavigate();
   const handlePreviousBtn = () => {
-    navigate("/welcomevistor");
+    navigate("/welcomevisitor");
   };
   const hanldeOnContinue = () => {
     navigate("/checkinotp");

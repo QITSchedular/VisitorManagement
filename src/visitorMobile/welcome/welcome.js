@@ -37,7 +37,7 @@ export const Welcome = () => {
           />
           <div className="welcome-footer">
             <span>Already applied?</span>
-            <span>Check Status</span>
+            <span className="check-status">Check Status</span>
           </div>
         </div>
       </div>
