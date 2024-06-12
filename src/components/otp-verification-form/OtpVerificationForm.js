@@ -3,12 +3,18 @@ import "./OtpVerificationForm.scss";
 import { Button } from "devextreme-react";
 import { LoginImage, LoginLogo } from "../../assets";
 import { Link, useNavigate } from "react-router-dom";
+import { VerifyOtp } from "../../api/registorApi";
+import { useRegisterState } from "../../Atoms/customHook";
 
 const OtpVerificationForm = () => {
   const [otp, setOtp] = useState(Array(6).fill(""));
   const length = 6;
   const [timer, setTimer] = useState(60);
   const inputRefs = useRef([]);
+
+  const navigate = useNavigate();
+
+  const [registerUser] = useRegisterState();
 
   const handleChange = (index, e) => {
     const value = e.target.value;
@@ -46,9 +52,18 @@ const OtpVerificationForm = () => {
     }
   };
 
-  const onOtpSubmit = (combinedOtp) => {
-    console.log("hii");
+  const onOtpSubmit = async (combinedOtp) => {
+    const email = registerUser.e_mail;
+    const role = "company";
+    console.log(" otp : ", combinedOtp);
     // Add your logic here after OTP submission
+    const verifyMyOtp = await VerifyOtp(email, combinedOtp, role);
+    if (verifyMyOtp.response.Status === 200) {
+      console.log("Otp Verified ");
+      return navigate("/fill-details");
+    }
+
+    console.log("Wrong Otp");
   };
 
   const handleResendOtp = () => {

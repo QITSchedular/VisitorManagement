@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { TextBox, Button as TextBoxButton } from "devextreme-react/text-box";
 import notify from "devextreme/ui/notify";
@@ -8,8 +8,10 @@ import { eyeopen, eyeclose } from "../../assets/icon";
 import { Validator, RequiredRule } from "devextreme-react/validator";
 import { LoginImage, LoginLogo } from "../../assets";
 import { createAccount } from "../../api/auth";
-
 import "./CreateAccountForm.scss";
+import { useRegisterState } from "../../Atoms/customHook";
+import { requestOtp } from "../../api/registorApi";
+import { toast } from "react-toastify";
 
 export default function CreateAccountForm() {
   const navigate = useNavigate();
@@ -18,9 +20,31 @@ export default function CreateAccountForm() {
   const [passwordMode, setPasswordMode] = useState("password");
   const [password, setpassword] = useState(null);
 
-  const handleSubmit = () => {
-    navigate("/otp-verification");
+  const [registerUser, setRegisterUser] = useRegisterState();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setRegisterUser((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
+
+  const handleSubmit = async () => {
+    const userEmail = registerUser.e_mail;
+    const role = "company";
+    const getOtp = await requestOtp(userEmail, role);
+    console.log("getotp : ", getOtp);
+    if (getOtp.response.Status !== 200) {
+      return console.log("Error in generating Otp");
+    } else {
+      navigate("/otp-verification");
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log("This is my state : ", registerUser.e_mail);
+  // }, [registerUser]);
 
   return (
     <div className="login-container">
@@ -38,7 +62,6 @@ export default function CreateAccountForm() {
               <div>
                 Already have an account?
                 <span className="create-account">
-                  {" "}
                   <Link to={"/login"}>Log in</Link>
                 </span>
               </div>
@@ -52,6 +75,9 @@ export default function CreateAccountForm() {
                 labelMode="static"
                 stylingMode="outlined"
                 height={56}
+                onValueChanged={(e) =>
+                  handleChange({ target: { name: "e_mail", value: e.value } })
+                }
               >
                 <Validator className="custom-validator">
                   <RequiredRule message="Email Address is required" />
@@ -67,6 +93,9 @@ export default function CreateAccountForm() {
                 labelMode="static"
                 stylingMode="outlined"
                 height={56}
+                onValueChanged={(e) =>
+                  handleChange({ target: { name: "password", value: e.value } })
+                }
               >
                 <TextBoxButton
                   name="password"

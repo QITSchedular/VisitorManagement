@@ -1,0 +1,28 @@
+.CheckStatus {
+  width: 100%;
+  padding: 8px 16px;
+  .backbtn {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .inner-container {
+    height: 119px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 40px;
+
+    .upper {
+      height: 30px;
+      :first-child {
+        font-size: 20px;
+        color: #344450;
+      }
+      :nth-child(2) {
+        font-size: 16px;
+      }
+    }
+  }
+}
