@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   HeaderText,
   SubText,
@@ -7,7 +7,7 @@ import { SelectBox, Button, Popup, ContextMenu } from "devextreme-react";
 import "./visitor-main.scss";
 import Breadcrumbs from "../../components/breadcrumbs/BreadCrumbs";
 import { useNavigate } from "react-router-dom";
-import { customers } from "./data";
+// import { customers } from "./data";
 import DataGrid, {
   Column,
   Paging,
@@ -20,6 +20,8 @@ import "remixicon/fonts/remixicon.css";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import { useRecoilState } from "recoil";
 import { addedByAtom, stateAtom, statusAtom } from "../../contexts/atom";
+import { useWebSocket } from "../../contexts/websocket";
+import { useAuth } from "../../contexts/auth";
 
 const getStatusColor = (status) => {
   const statusColors = {
@@ -42,9 +44,50 @@ const VisitorMain = () => {
   };
   let dataGrid;
   const [clickedRowData, setClickedRowData] = useState(null);
+  const [visitors, setVisitors] = useState([]);
   const [status, setStatus] = useRecoilState(statusAtom);
   const [state, setState] = useRecoilState(stateAtom);
   const [addedby, setAddedby] = useRecoilState(addedByAtom);
+
+  const { send, eventEmitter } = useWebSocket();
+  const { user } = useAuth();
+  useEffect(() => {
+    console.log("++++++++++++++++++++++++++++++++++++++++");
+    eventEmitter.on("visitors", (data) => {
+      console.log("visitors :", data.visitors);
+      setVisitors(data.visitors);
+    });
+    eventEmitter.on("new_visitor", (data) => {
+      console.log("visitors :", data.visitor);
+      setVisitors((prevVisitors) => {
+        if (!prevVisitors.some(existingVisitor => existingVisitor.id === data.visitor.id)) {
+            return [data.visitor, ...prevVisitors];
+        }
+        return prevVisitors;
+    });
+    });
+
+    eventEmitter.on("update_visitor", (data) => {
+      console.log("visitors :", data.visitor);
+      setVisitors(prevVisitors =>
+        prevVisitors.map(visitor =>
+          visitor.id === data.visitor.transid
+            ? { ...visitor, state: data.visitor.status=="R" ? "Rejected" : data.visitor.status=="A" ? "Approved" : "" , reason: data.visitor.reason }
+            : visitor
+        )
+      );
+      // setVisitors(data.visitors);
+    });
+
+
+    // Send a message to the server to request visitor data
+    send({ type: "send_visitors", cmpid: user ? user.cmpid : 0 });
+
+    // Cleanup on unmount
+    return () => {
+      eventEmitter.off("visitors");
+    };
+  }, [send, eventEmitter]);
 
   // const handlePopupIconClick = (cellData) => {
   //   const selectedRow = cellData.row.data;
@@ -146,7 +189,8 @@ const VisitorMain = () => {
       <Breadcrumbs />
       <div className="content-block dx-card">
         <DataGrid
-          dataSource={customers}
+          dataSource={visitors}
+          // dataSource={customers}
           showBorders={false}
           selection={{
             mode: "multiple",
@@ -170,8 +214,8 @@ const VisitorMain = () => {
             displayMode="compact"
             showNavigationButtons={true}
           />
-          <Column dataField="ID" visible={false} />
-          <Column dataField="VisitorName" />
+          <Column dataField="id" visible={false} />
+          <Column dataField="vName" />
           {/* <Column type="buttons" cellRender={actionTemplate}>
             <ColumnButton
               onClick={(cellData) => handlePopupIconClick(cellData)}
@@ -201,7 +245,7 @@ const VisitorMain = () => {
               );
             }}
           />
-          <Column dataField="companyName" />
+          <Column dataField="vCmpname" />
           <Column
             alignment={"center"}
             // width={150}
@@ -224,11 +268,11 @@ const VisitorMain = () => {
             }}
           />
 
-          <Column dataField="AddedBy" />
+          <Column dataField="addedBy" />
           <Toolbar className="toolbar-item">
             <Item location="before">
               <div className="informer">
-                <SubText text={`In total, you have 110 visitors`} />
+                <SubText text={`In total, you have ${visitors.length} visitors`} />
               </div>
             </Item>
             <Item name="searchPanel" />
