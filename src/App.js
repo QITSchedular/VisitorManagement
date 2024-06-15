@@ -11,15 +11,17 @@ import { useScreenSizeClass } from "./utils/media-query";
 import Content from "./Content";
 import UnauthenticatedContent from "./UnauthenticatedContent";
 import { RecoilRoot } from "recoil";
+import { WebSocketProvider } from "./contexts/websocket";
 
 function App() {
-  const { user, loading } = useAuth();
-
+  const { user, loading, authRuleContext } = useAuth();
   if (loading) {
     return <LoadPanel visible={true} />;
   }
-
+  console.log("user value 1 : ", user);
+  console.log("Auth Rule : ", authRuleContext);
   if (user) {
+    console.log("user value : ", user);
     return <Content />;
   }
 
@@ -33,11 +35,13 @@ export default function Root() {
     <Router>
       <RecoilRoot>
         <AuthProvider>
-          <NavigationProvider>
-            <div className={`app ${screenSizeClass}`}>
-              <App />
-            </div>
-          </NavigationProvider>
+          <WebSocketProvider>
+            <NavigationProvider>
+              <div className={`app ${screenSizeClass}`}>
+                <App />
+              </div>
+            </NavigationProvider>
+          </WebSocketProvider>
         </AuthProvider>
       </RecoilRoot>
     </Router>

@@ -9,6 +9,13 @@ import {
   FillDetailsForm,
   QRCodeForm,
 } from "./components";
+import { Welcome } from "./visitorMobile/welcome/welcome";
+import { Step1 } from "./visitorMobile/welcomeDetails/step1";
+import { CheckOut } from "./visitorMobile/checkout/CheckOut";
+import { CheckInOtp } from "./visitorMobile/OtpVerify/CheckInOtp";
+import { Step3 } from "./visitorMobile/step3/step3";
+import { Step4 } from "./visitorMobile/step4/Step4";
+import CheckStatus from "./visitorMobile/checkStatus/CheckStatus";
 
 export default function UnauthenticatedContent() {
   return (
@@ -73,6 +80,13 @@ export default function UnauthenticatedContent() {
           </SingleCard>
         }
       />
+      <Route path="/welcomevisitor" element={<Welcome />} />
+      <Route path="/welcomestep1" element={<Step1 />} />
+      <Route path="/Checkout" element={<CheckOut />} />
+      <Route path="/checkinotp" element={<CheckInOtp />} />
+      <Route path="/welcomestep3" element={<Step3 />} />
+      <Route path="/welcomestep4" element={<Step4 />} />
+      <Route path="/checkstatus" element={<CheckStatus />} />
       <Route path="*" element={<Navigate to={"/login"} />}></Route>
     </Routes>
   );

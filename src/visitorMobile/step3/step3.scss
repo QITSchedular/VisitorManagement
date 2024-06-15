@@ -1,0 +1,64 @@
+.step3 {
+  width: 100%;
+  padding: 8px 16px;
+  .backbtn {
+    height: 44px;
+    width: 44px;
+    display: flex;
+    align-items: center;
+    color: #344450;
+    margin-bottom: 12px;
+    font-size: 18px;
+  }
+
+  .header-step {
+    height: 87px;
+    margin-bottom: 40px;
+
+    .step-number {
+      font-family: pompiere;
+      font-size: 16px;
+      color: #687787;
+      margin-bottom: 8px;
+    }
+
+    .welcome-text {
+      font-family: inter;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      color: #687787;
+
+      :first-child {
+        font-size: 20px;
+        font-weight: 500;
+        color: #344450;
+      }
+    }
+  }
+  .picture {
+    .captureBtn {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .clickBtn {
+      background-color: white;
+      color: #344450;
+      box-shadow: none;
+      border: 1px solid #4e5d6b;
+    }
+    .imgcature {
+      height: 160px;
+      width: 141px;
+      border: 1px solid black;
+      margin-bottom: 40px;
+    }
+  }
+}
