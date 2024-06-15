@@ -47,7 +47,7 @@ function AuthProvider(props) {
       console.log("my data : ", result.data);
       setAuthRuleContext(result.data.userAuth);
       const { user, userAuth, refresh, access } = result.data;
-      const expirationTime = new Date().getTime() + 5 * 60 * 1000;
+      const expirationTime = new Date().getTime() + 24 * 60 * 60 * 1000;
 
       const authData = {
         user,

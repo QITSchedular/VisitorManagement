@@ -1,6 +1,13 @@
 import axios from "axios";
 const API_URL = process.env.REACT_APP_API;
-
+// const storedSessionValue = JSON.parse(sessionStorage.getItem("authState"));
+// const { access, user, userAuth } = storedSessionValue;
+// const storedData = userAuth;
+// const userData = user;
+// const token = access;
+// const header = {
+//   Authorization: `Bearer ${token}`,
+// };
 const axiosInstance = axios.create({
   baseURL: `${API_URL}`, // Replace with your API base URL
   headers: {
@@ -58,3 +65,4 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+export default axiosInstance;

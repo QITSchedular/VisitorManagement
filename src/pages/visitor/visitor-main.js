@@ -3,7 +3,7 @@ import {
   HeaderText,
   SubText,
 } from "../../components/typographyText/TypograghyText";
-import { SelectBox, Button, Popup, ContextMenu } from "devextreme-react";
+import { SelectBox, Button, Popup, ContextMenu, LoadPanel } from "devextreme-react";
 import "./visitor-main.scss";
 import Breadcrumbs from "../../components/breadcrumbs/BreadCrumbs";
 import { useNavigate } from "react-router-dom";
@@ -48,14 +48,16 @@ const VisitorMain = () => {
   const [status, setStatus] = useRecoilState(statusAtom);
   const [state, setState] = useRecoilState(stateAtom);
   const [addedby, setAddedby] = useRecoilState(addedByAtom);
-
+  const [loading,setLoading] = useState(false);
   const { send, eventEmitter } = useWebSocket();
   const { user } = useAuth();
   useEffect(() => {
     console.log("++++++++++++++++++++++++++++++++++++++++");
     eventEmitter.on("visitors", (data) => {
+      setLoading(true);
       console.log("visitors :", data.visitors);
       setVisitors(data.visitors);
+      setLoading(false);
     });
     eventEmitter.on("new_visitor", (data) => {
       console.log("visitors :", data.visitor);
@@ -164,6 +166,10 @@ const VisitorMain = () => {
 
   return (
     <>
+    { loading ? 
+      <LoadPanel visible={true} />
+      : ""
+    }
       <div className="content-block">
         <div className="navigation-header-main">
           <div className="title-section">
