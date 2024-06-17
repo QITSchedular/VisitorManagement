@@ -1,18 +1,56 @@
-import React, { useState, useRef, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { TextBox, Button as TextBoxButton } from "devextreme-react/text-box";
 import { Button, CheckBox } from "devextreme-react";
 import { eyeopen, eyeclose } from "../../assets/icon";
 import { Validator, RequiredRule } from "devextreme-react/validator";
 import { LoginImage, LoginLogo } from "../../assets";
+import { GenerateNewPassword } from "../../api/common";
 
 export default function ChangePasswordForm() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { state } = location;
   const [loading, setLoading] = useState(false);
   const [showpwd, setShowPwd] = useState(false);
   const [passwordMode, setPasswordMode] = useState("password");
+  const [cpassword, setcpassword] = useState(null);
   const [password, setpassword] = useState(null);
+  const [email, setEmail] = useState(false);
 
+  useEffect(() => {
+    if (state != null) {
+      console.log("State Data : ",state);
+      setEmail(state.Email);
+    }
+  }, []);
+
+
+  const handleConfirmPassword = (e) => {
+    return setcpassword(e.value);
+  };
+  const handlePassword = (e) => {
+    return setpassword(e.value);
+  };
+  const handleSubmit = async () => {
+    try {
+      if(password == cpassword){
+        var apiRes = await GenerateNewPassword(email,password);
+        console.log("APPIRESPONSE : ",apiRes);
+        if(!apiRes.hasError){
+          const data = apiRes.responseData;
+          console.log("Data : ",data);
+          navigate("/login");
+        }
+      }else{
+        console.log("Passowrd Not Match");
+      }
+    } catch (error) {
+      console.log("Error : ",error);
+    }
+    // console.log("Email : ",email);
+    // navigate("/change-password");
+  };
   return (
     <div className="login-container">
       <div className="login-container-left">
@@ -36,6 +74,8 @@ export default function ChangePasswordForm() {
                 labelMode="static"
                 stylingMode="outlined"
                 height={56}
+                valueChangeEvent="keyup"
+                onValueChanged={handlePassword}
               >
                 <Validator className="custom-validator">
                   <RequiredRule message="Email Address is required" />
@@ -46,11 +86,13 @@ export default function ChangePasswordForm() {
               <TextBox
                 label="Confirm New Password"
                 placeholder="Input text"
-                value={password ? password : ""}
+                value={cpassword ? cpassword : ""}
                 mode={passwordMode}
                 labelMode="static"
                 stylingMode="outlined"
                 height={56}
+                valueChangeEvent="keyup"
+                onValueChanged={handleConfirmPassword}
               >
                 <TextBoxButton
                   name="password"
@@ -80,6 +122,7 @@ export default function ChangePasswordForm() {
               height={"48px"}
               // stylingMode="default"
               useSubmitBehavior={true}
+              onClick={handleSubmit}
             />
           </div>
           <div className="terms-condition">

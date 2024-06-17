@@ -2,19 +2,29 @@ import React, { useEffect, useRef, useState } from "react";
 import "./OtpVerificationForm.scss";
 import { Button } from "devextreme-react";
 import { LoginImage, LoginLogo } from "../../assets";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { VerifyOtp } from "../../api/registorApi";
 import { useRegisterState } from "../../Atoms/customHook";
 
 const OtpVerificationForm = () => {
+  const location = useLocation();
+  const { state } = location;
   const [otp, setOtp] = useState(Array(6).fill(""));
   const length = 6;
   const [timer, setTimer] = useState(60);
   const inputRefs = useRef([]);
-
   const navigate = useNavigate();
-
+  const [email, setEmail] = useState(false);
+  const [reset, setReset] = useState(false);
   const [registerUser] = useRegisterState();
+
+  useEffect(() => {
+    if (state != null && state.From=="ResetPassword") {
+      console.log("State Data : ",state);
+      setReset(true);
+      setEmail(state.Email);
+    }
+  }, []);
 
   const handleChange = (index, e) => {
     const value = e.target.value;
@@ -53,13 +63,18 @@ const OtpVerificationForm = () => {
   };
 
   const onOtpSubmit = async (combinedOtp) => {
-    const email = registerUser.e_mail;
+    const email1 = registerUser.e_mail;
     const role = "company";
     console.log(" otp : ", combinedOtp);
     // Add your logic here after OTP submission
     const verifyMyOtp = await VerifyOtp(email, combinedOtp, role);
     if (verifyMyOtp.response.Status === 200) {
       console.log("Otp Verified ");
+      if(reset){
+        return navigate("/change-password",{
+          state: { Email:email },
+        });
+      }
       return navigate("/fill-details");
     }
 
@@ -102,7 +117,7 @@ const OtpVerificationForm = () => {
                 <span>OTP Verification </span>
               </div>
               <div className="header-sub-title">
-                <div>Sent to qitdemo@gmail.com</div>
+                <div>Sent to {email}</div>
               </div>
             </div>
             <div className="main-container">

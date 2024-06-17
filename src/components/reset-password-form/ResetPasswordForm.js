@@ -5,12 +5,37 @@ import { Validator, RequiredRule } from "devextreme-react/validator";
 import { LoginImage, LoginLogo } from "../../assets";
 import { TextBox, Button as TextBoxButton } from "devextreme-react/text-box";
 import { Button, CheckBox } from "devextreme-react";
+import { forgetPasswordChk } from "../../api/common";
 
 export default function ResetPasswordForm() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const handleSubmit = () => {
-    navigate("/change-password");
+  const [email, setEmail] = useState(false);
+  const handleSubmit = async () => {
+    try {
+      var apiRes = await forgetPasswordChk(email);
+      console.log("APPIRESPONSE : ",apiRes);
+      if(!apiRes.hasError){
+        const data = apiRes.responseData;
+        if(data && data.Role.toUpperCase()=="USER"){
+          // need to make an page which redirect for request link
+        }
+        if(data && data.Role.toUpperCase()=="COMPANY"){
+          console.log("Hello : +++++++++++");
+          return navigate("/otp-verification",{
+            state: { From: "ResetPassword",Email:email },
+          });
+        }
+        navigate("/change-password");
+      }
+    } catch (error) {
+      console.log("Error : ",error);
+    }
+    // console.log("Email : ",email);
+    // navigate("/change-password");
+  };
+  const handleEmail = (e) => {
+    return setEmail(e.value);
   };
 
   return (
@@ -37,6 +62,8 @@ export default function ResetPasswordForm() {
                 placeholder="Input text"
                 labelMode="static"
                 stylingMode="outlined"
+                valueChangeEvent="keyup"
+                onValueChanged={handleEmail}
                 height={56}
               >
                 <Validator className="custom-validator">
