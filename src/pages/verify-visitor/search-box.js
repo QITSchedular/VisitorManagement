@@ -4,6 +4,7 @@ import { TextBox } from "devextreme-react";
 const SearchBox = ({ searchText, setSearchText }) => {
   const handleSearchChange = (e) => {
     setSearchText(e.value ? e.value.toLowerCase() : "");
+    console.log("seraSearch");
   };
 
   return (
@@ -15,10 +16,7 @@ const SearchBox = ({ searchText, setSearchText }) => {
           placeholder="Search Visitors"
           onValueChanged={handleSearchChange}
           width={300}
-          displayExpr={(item) => item}
-          searchExpr="name"
           showClearButton={true}
-          valueChangeEvent="keyup"
         />
       </div>
     </div>

@@ -11,21 +11,14 @@ import { visitors } from "./visitor-card/visitorData";
 
 const VerifyVisitorMain = () => {
   const [searchText, setSearchText] = useState("");
-  const formatItemName = (name) => {
-    if (!searchText || searchText.trim() === "") {
-      return name;
-    }
-    const lowerCaseSearchText = searchText.toLowerCase();
-    let highlightedName = name;
-    const regex = new RegExp(lowerCaseSearchText, "gi");
-    highlightedName = highlightedName.replace(
-      regex,
-      (match) => `<span class="highlight">${match}</span>`
-    );
-    return highlightedName;
-  };
+  const [filteredVisitors, setFilteredVisitors] = useState(visitors);
+
   useEffect(() => {
-    formatItemName(searchText);
+    const lowerCaseSearchText = searchText ? searchText.toLowerCase() : "";
+    const filteredData = visitors.filter((visitor) =>
+      visitor.VisitorName.toLowerCase().includes(lowerCaseSearchText)
+    );
+    setFilteredVisitors(filteredData);
   }, [searchText]);
 
   const [expandedCards, setExpandedCards] = useState({});
@@ -56,14 +49,14 @@ const VerifyVisitorMain = () => {
           style={{ marginBottom: "24px" }}
         >
           <div className="title-section">
-            <SubText text={`In total, you have 110 visitors`} />
+            <SubText text={`In total, you have 9 visitors`} />
           </div>
           <div className="title-section-btn">
             <SearchBox searchText={searchText} setSearchText={setSearchText} />
           </div>
         </div>
         <div className="visitor-cards-container">
-          {visitors.map((visitor, index) => (
+          {filteredVisitors.map((visitor, index) => (
             <VisitorCard
               key={index}
               visitor={visitor}

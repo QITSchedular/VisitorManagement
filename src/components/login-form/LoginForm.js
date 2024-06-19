@@ -8,6 +8,7 @@ import { eyeopen, eyeclose } from "../../assets/icon";
 import { Validator, RequiredRule } from "devextreme-react/validator";
 import "./LoginForm.scss";
 import { LoginImage, LoginLogo } from "../../assets";
+import { toastDisplayer } from "../toastDisplayer/toastdisplayer";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -25,17 +26,26 @@ export default function LoginForm() {
   };
 
   const handleUserLogin = async () => {
+    if (!email || !password) {
+      if (!email) {
+        return toastDisplayer("error", "Enter Email");
+      }
+      if (!password) {
+        return toastDisplayer("error", "Enter Password");
+      }
+    }
     setLoading(true);
     try {
       const response = await signIn(email, password);
-      // Handle successful login here
-      console.log("response 2 :  ", response);
-      notify("Login successful", "success", 2000);
-      navigate("/dashboard");
+      if (response.isOk) {
+        toastDisplayer("success", "Login successfully");
+        navigate("/dashboard");
+      } else {
+        toastDisplayer("error", "Invalid User..!!");
+      }
     } catch (error) {
-      // Handle login error here
-      console.log("error handling : ", error);
-      notify("Login failed", "error", 2000);
+      console.log("error handling: ", error);
+      toastDisplayer("error", error.message || "Invalid User..!!");
     } finally {
       setLoading(false);
     }
@@ -57,88 +67,101 @@ export default function LoginForm() {
     <div className="login-container">
       <div className="login-container-left">
         <div className="login-form">
-          <div className="header-image">
-            <img src={LoginLogo} alt="logo" width={200} height={70} />
-          </div>
-          <div className="header-title">
-            <div className="header-main-title">
-              <span>Login into an account </span>
+          <form
+            method="post"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleUserLogin();
+              }
+            }}
+          >
+            <div className="header-image">
+              <img src={LoginLogo} alt="logo" width={200} height={70} />
             </div>
-            <div className="header-sub-title">
-              <div>
-                Don’t have an account?
-                <span className="create-account" onClick={onCreateAccountClick}>
-                  Create an account
-                </span>
+            <div className="header-title">
+              <div className="header-main-title">
+                <span>Login into an account </span>
+              </div>
+              <div className="header-sub-title">
+                <div>
+                  Don’t have an account?
+                  <span
+                    className="create-account"
+                    onClick={onCreateAccountClick}
+                  >
+                    Create an account
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="login-container-right-body">
-            <div className="inputField">
-              <TextBox
-                label="Email Address"
-                placeholder="Input text"
-                labelMode="static"
-                stylingMode="outlined"
-                height={56}
-                onValueChanged={handleEmail}
-              >
-                <Validator className="custom-validator">
-                  <RequiredRule message="Email Address is required" />
-                </Validator>
-              </TextBox>
+            <div className="login-container-right-body">
+              <div className="inputField">
+                <TextBox
+                  label="Email Address"
+                  placeholder="Input text"
+                  labelMode="static"
+                  stylingMode="outlined"
+                  height={56}
+                  onValueChanged={handleEmail}
+                >
+                  <Validator className="custom-validator">
+                    <RequiredRule message="Email Address is required" />
+                  </Validator>
+                </TextBox>
+              </div>
+              <div className="inputField">
+                <TextBox
+                  label="Password"
+                  placeholder="Input text"
+                  value={password}
+                  mode={passwordMode}
+                  labelMode="static"
+                  height={56}
+                  stylingMode="outlined"
+                  onValueChanged={handlePassword}
+                >
+                  <TextBoxButton
+                    name="password"
+                    location="after"
+                    options={{
+                      icon: `${showpwd ? eyeopen : eyeclose}`,
+                      stylingMode: "text",
+                      onClick: () => {
+                        setShowPwd(!showpwd);
+                        setPasswordMode((prevPasswordMode) =>
+                          prevPasswordMode === "text" ? "password" : "text"
+                        );
+                      },
+                    }}
+                  />
+                  <Validator>
+                    <RequiredRule message="Password is required" />
+                  </Validator>
+                </TextBox>
+              </div>
+              <div className="forget-pwd">
+                <Link to={"/reset-password"}>Forgot Password?</Link>
+              </div>
             </div>
-            <div className="inputField">
-              <TextBox
-                label="Password"
-                placeholder="Input text"
-                value={password}
-                mode={passwordMode}
-                labelMode="static"
-                height={56}
-                stylingMode="outlined"
-                onValueChanged={handlePassword}
-              >
-                <TextBoxButton
-                  name="password"
-                  location="after"
-                  options={{
-                    icon: `${showpwd ? eyeopen : eyeclose}`,
-                    stylingMode: "text",
-                    onClick: () => {
-                      setShowPwd(!showpwd);
-                      setPasswordMode((prevPasswordMode) =>
-                        prevPasswordMode === "text" ? "password" : "text"
-                      );
-                    },
-                  }}
-                />
-                <Validator>
-                  <RequiredRule message="Password is required" />
-                </Validator>
-              </TextBox>
-            </div>
-            <div className="forget-pwd">
-              <Link to={"/reset-password"}>Forgot Password?</Link>
-            </div>
-          </div>
 
-          <div className="login-container-right-footer">
-            <Button
-              text="Continue"
-              width={"100%"}
-              height={"48px"}
-              useSubmitBehavior={true}
-              onClick={handleUserLogin}
-              disabled={loading}
-            />
-          </div>
-          <div className="terms-condition">
-            <div>
-              I agree with your{" "}
-              <span className="terms-service">Terms of Service</span>
+            <div className="login-container-right-footer">
+              <Button
+                text="Continue"
+                width={"100%"}
+                height={"48px"}
+                // useSubmitBehavior={true}
+                onClick={handleUserLogin}
+                disabled={loading}
+              />
             </div>
-          </div>
+            <div className="terms-condition">
+              <div>
+                I agree with your{" "}
+                <span className="terms-service">Terms of Service</span>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
       <div className="login-container-right">

@@ -30,9 +30,4 @@ export const navigation = [
     path: "/generalsettings",
     icon: "ri-settings-4-line",
   },
-  {
-    text: "Tasks",
-    path: "/tasks",
-    icon: "ri-file-list-line",
-  },
 ];

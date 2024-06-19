@@ -3,7 +3,13 @@ import {
   HeaderText,
   SubText,
 } from "../../components/typographyText/TypograghyText";
-import { SelectBox, Button, Popup, ContextMenu, LoadPanel } from "devextreme-react";
+import {
+  SelectBox,
+  Button,
+  Popup,
+  ContextMenu,
+  LoadPanel,
+} from "devextreme-react";
 import "./visitor-main.scss";
 import Breadcrumbs from "../../components/breadcrumbs/BreadCrumbs";
 import { useNavigate } from "react-router-dom";
@@ -48,11 +54,28 @@ const VisitorMain = () => {
   const [status, setStatus] = useRecoilState(statusAtom);
   const [state, setState] = useRecoilState(stateAtom);
   const [addedby, setAddedby] = useRecoilState(addedByAtom);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { send, eventEmitter } = useWebSocket();
   const { user } = useAuth();
+  const [filterStatus, setFilterStatus] = useState("All");
+
+  // ------------------ filter according to state ----------------//
+  const allVisitorsState = [
+    { value: "All", text: "All Visitors" },
+    { value: "Pending", text: "Pending Visitors" },
+    { value: "Approved", text: "Approved Visitors" },
+    { value: "Rejected", text: "Rejected Visitors" },
+  ];
+
+  const handleFilterChange = (newStatus) => {
+    setFilterStatus(newStatus);
+    const filterValue = newStatus === "All" ? undefined : newStatus;
+    if (dataGrid && dataGrid.instance) {
+      dataGrid.instance.columnOption("state", "filterValue", filterValue);
+      dataGrid.instance.refresh();
+    }
+  };
   useEffect(() => {
-    console.log("++++++++++++++++++++++++++++++++++++++++");
     eventEmitter.on("visitors", (data) => {
       setLoading(true);
       console.log("visitors :", data.visitors);
@@ -62,25 +85,37 @@ const VisitorMain = () => {
     eventEmitter.on("new_visitor", (data) => {
       console.log("visitors :", data.visitor);
       setVisitors((prevVisitors) => {
-        if (!prevVisitors.some(existingVisitor => existingVisitor.id === data.visitor.id)) {
-            return [data.visitor, ...prevVisitors];
+        if (
+          !prevVisitors.some(
+            (existingVisitor) => existingVisitor.id === data.visitor.id
+          )
+        ) {
+          return [data.visitor, ...prevVisitors];
         }
         return prevVisitors;
-    });
+      });
     });
 
     eventEmitter.on("update_visitor", (data) => {
       console.log("visitors :", data.visitor);
-      setVisitors(prevVisitors =>
-        prevVisitors.map(visitor =>
+      setVisitors((prevVisitors) =>
+        prevVisitors.map((visitor) =>
           visitor.id === data.visitor.transid
-            ? { ...visitor, state: data.visitor.status=="R" ? "Rejected" : data.visitor.status=="A" ? "Approved" : "" , reason: data.visitor.reason }
+            ? {
+                ...visitor,
+                state:
+                  data.visitor.status == "R"
+                    ? "Rejected"
+                    : data.visitor.status == "A"
+                    ? "Approved"
+                    : "",
+                reason: data.visitor.reason,
+              }
             : visitor
         )
       );
       // setVisitors(data.visitors);
     });
-
 
     // Send a message to the server to request visitor data
     send({ type: "send_visitors", cmpid: user ? user.cmpid : 0 });
@@ -166,10 +201,7 @@ const VisitorMain = () => {
 
   return (
     <>
-    { loading ? 
-      <LoadPanel visible={true} />
-      : ""
-    }
+      {loading ? <LoadPanel visible={true} /> : ""}
       <div className="content-block">
         <div className="navigation-header-main">
           <div className="title-section">
@@ -221,7 +253,7 @@ const VisitorMain = () => {
             showNavigationButtons={true}
           />
           <Column dataField="id" visible={false} />
-          <Column dataField="vName" />
+          <Column dataField="vName" caption="Visitor name" />
           {/* <Column type="buttons" cellRender={actionTemplate}>
             <ColumnButton
               onClick={(cellData) => handlePopupIconClick(cellData)}
@@ -251,7 +283,7 @@ const VisitorMain = () => {
               );
             }}
           />
-          <Column dataField="vCmpname" />
+          <Column dataField="vCmpname" caption="Company Name" />
           <Column
             alignment={"center"}
             // width={150}
@@ -278,7 +310,9 @@ const VisitorMain = () => {
           <Toolbar className="toolbar-item">
             <Item location="before">
               <div className="informer">
-                <SubText text={`In total, you have ${visitors.length} visitors`} />
+                <SubText
+                  text={`In total, you have ${visitors.length} visitors`}
+                />
               </div>
             </Item>
             <Item name="searchPanel" />
@@ -300,7 +334,9 @@ const VisitorMain = () => {
                 valueExpr="value"
                 displayExpr="text"
                 stylingMode="outlined"
-                placeholder="Pending Visitors"
+                items={allVisitorsState}
+                value={filterStatus}
+                // placeholder="Pending Visitors"
               />
             </Item>
           </Toolbar>

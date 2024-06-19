@@ -12,20 +12,21 @@ import Content from "./Content";
 import UnauthenticatedContent from "./UnauthenticatedContent";
 import { RecoilRoot } from "recoil";
 import { WebSocketProvider } from "./contexts/websocket";
-import axiosInstance from './api/axiosInstance';
+import axiosInstance from "./api/axiosInstance";
+import { ToastContainer } from "react-toastify";
 function App() {
   const { user, loading, authRuleContext } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get('VMS/secure');
-        console.log("response ++++++++: ",response.data)
+        const response = await axiosInstance.get("VMS/secure");
+        console.log("response ++++++++: ", response.data);
         // setData(response.data);
       } catch (err) {
         // setError(err);
-        console.log("err : ",err);
-      } 
+        console.log("err : ", err);
+      }
     };
 
     fetchData();
@@ -49,6 +50,7 @@ export default function Root() {
 
   return (
     <Router>
+      <ToastContainer />
       <RecoilRoot>
         <AuthProvider>
           <WebSocketProvider>

@@ -17,10 +17,6 @@ import GeneralSetting from "./pages/generalSetting/GeneralSetting";
 
 const routes = [
   {
-    path: "/tasks",
-    element: TasksPage,
-  },
-  {
     path: "/profile",
     element: ProfilePage,
   },
@@ -58,7 +54,7 @@ const routes = [
     element: UserSettingsMain,
   },
 
-  //Notification 
+  //Notification
   {
     path: "/notification",
     element: Notification,
