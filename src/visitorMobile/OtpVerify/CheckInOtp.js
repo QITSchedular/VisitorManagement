@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./checkinotp.scss";
+import { useRegisterVisitor } from "../../Atoms/customHook";
+import { VerifyOtp, requestOtp } from "../../api/registorApi";
+import { toast } from "react-toastify";
 
 export const CheckInOtp = () => {
   const [otp, setOtp] = useState(Array(6).fill(""));
@@ -8,19 +11,29 @@ export const CheckInOtp = () => {
   const [timer, setTimer] = useState(60);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
+  const [registerVisitor , setRegisterVisitor] = useRegisterVisitor();
+
+
+  const email  = registerVisitor.e_mail;
+// Get the OTP at the UseEffect 
+  // const hanldeGetOtp = ()=>{
+  //   const role = "visitor";
+  //   const handleOtp = requestOtp(email ,role);
+
+  //   if(handleOtp === true){
+  //     return console.log("error")
+  //   }
+
+  // }
 
   const handleChange = (index, e) => {
     const value = e.target.value;
     if (isNaN(value)) return;
-
     const newOtp = [...otp];
-
     newOtp[index] = value.substring(value.length - 1);
     setOtp(newOtp);
-
     const combinedOtp = newOtp.join("");
     if (combinedOtp.length === length) onOtpSubmit(combinedOtp);
-
     if (value && index < length - 1 && inputRefs.current[index + 1]) {
       inputRefs.current[index + 1].focus();
     }
@@ -28,7 +41,6 @@ export const CheckInOtp = () => {
 
   const handleClick = (index) => {
     inputRefs.current[index].setSelectionRange(1, 1);
-
     if (index > 0 && !otp[index - 1]) {
       inputRefs.current[otp.indexOf("")].focus();
     }
@@ -45,17 +57,21 @@ export const CheckInOtp = () => {
     }
   };
 
-  const onOtpSubmit = (combinedOtp) => {
-    console.log("hii");
-    // Add your logic here after OTP submission
+  const onOtpSubmit = async(combinedOtp) => {
+    const role = "visitor";
+    const checkOtp = await VerifyOtp(email ,combinedOtp ,role);
+    if(checkOtp.hasError === true){
+     return console.log("Wrong Otp")
+    }
+
+    return navigate('/welcomestep3');
+   // console.log("hii");
   };
 
   const handleResendOtp = () => {
-    // Add your logic to resend OTP
     setTimer(60); // Reset timer
   };
   const handleRetryClick = () => {
-    // getOtpFromMail(officialMail, userType);
     setTimer(60);
   };
   useEffect(() => {
@@ -71,8 +87,13 @@ export const CheckInOtp = () => {
   }, [timer]);
 
   const handlePreviousBtn = () => {
-    navigate("/welcomevisitor");
+    navigate("/welcomestep1");
   };
+
+  useEffect(()=>{
+    console.log("Get the OTP : ",  registerVisitor)
+  }, [registerVisitor])
+  
 
   const minutes = Math.floor(timer / 60);
   const seconds = timer % 60;
@@ -81,7 +102,7 @@ export const CheckInOtp = () => {
       <div className="login-container main-form-container">
         <div className="backbtn">
           <i
-            class="ri-arrow-left-line"
+            className="ri-arrow-left-line"
             style={{ fontSize: "20px" }}
             onClick={handlePreviousBtn}
           ></i>
@@ -94,7 +115,7 @@ export const CheckInOtp = () => {
                 <span>OTP Verification </span>
               </div>
               <div className="header-sub-title">
-                <div>Sent to qitdemo@gmail.com</div>
+                <div>Sent to {email}</div>
               </div>
             </div>
             <div className="main-container">
