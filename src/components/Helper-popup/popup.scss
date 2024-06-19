@@ -1,0 +1,39 @@
+.release-popup-main {
+  display: flex;
+  justify-content: space-between;
+}
+
+.verify-pro-datagrid {
+  .dx-toolbar-after {
+    width: 100%;
+    padding-inline-start: 0px;
+
+    .dx-datagrid-search-panel {
+      width: 100% !important;
+      margin: 0px 0px 0px 0px !important;
+      background-color: white;
+      border: 1px solid #c2c2c2;
+      border-radius: 4px;
+      height: 44px;
+    }
+  }
+  .dx-datagrid-header-panel {
+    padding: 0px 0px !important;
+  }
+}
+
+.cancelQcBtn{
+  .dx-button-content{
+    background-color: white;
+
+    .dx-button-text{
+      background-color: white;
+      color: #262626;
+    }
+  }
+}
+.close-btn-section{
+  .dx-button{
+    background-color: transparent;
+  }
+}
