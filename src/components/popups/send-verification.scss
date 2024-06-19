@@ -24,6 +24,15 @@
   margin-top: 50px;
 }
 
+.continueBtn {
+  margin: 24px 0px;
+}
+
+// .dx-overlay-content {
+//   display: flex;
+//   justify-content: center;
+// }
+
 @include sm {
   .dx-overlay-content .dx-popup-content {
     width: 290px;
