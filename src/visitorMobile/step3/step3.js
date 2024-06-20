@@ -1,7 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./step3.scss";
 import { Button } from "devextreme-react";
 import { useNavigate } from "react-router-dom";
+import { useRegisterVisitor } from "../../Atoms/customHook";
 
 export const Step3 = () => {
   const navigate = useNavigate();
@@ -9,7 +10,9 @@ export const Step3 = () => {
   const [imageSrcBase, setImageSrcBase] = useState(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const [registerVisitor , setRegisterVisitor] = useRegisterVisitor();
 
+  // For Starting the Camera
   const startCamera = () => {
     navigator.mediaDevices
       .getUserMedia({ video: { width: 720, height: 1280 } }) // 9:16 aspect ratio
@@ -21,6 +24,7 @@ export const Step3 = () => {
       });
   };
 
+  //For Stopping the Camera 
   const stopCamera = () => {
     let stream = videoRef.current.srcObject;
     let tracks = stream.getTracks();
@@ -32,6 +36,7 @@ export const Step3 = () => {
     videoRef.current.srcObject = null;
   };
 
+  // Camera Toggle Operation
   const toggleCamera = () => {
     if (isCameraOn) {
       stopCamera();
@@ -41,25 +46,44 @@ export const Step3 = () => {
     setIsCameraOn((prevState) => !prevState);
   };
 
+  // Capturing The Photo in the camera 
   const capturePhoto = () => {
     const canvas = canvasRef.current;
     const video = videoRef.current;
     const context = canvas.getContext("2d");
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
     const imageSrc = canvas.toDataURL("image/jpeg");
-    console.log("Captured Image: ", imageSrc);
     setImageSrcBase(imageSrc);
+    stopCamera();
+    setIsCameraOn(false);
   };
 
+  // Previous Button
   const handlePreviousBtn = () => {
-    navigate("/welcomevisitor");
+    navigate("/welcomestep1");
   };
+
+  // Action for continue button
+  const hanldeActionContinue =()=>{
+    console.log("this is my img src = " ,imageSrcBase)
+    setRegisterVisitor((prev)=>({
+      ...prev,
+      vavatar : imageSrcBase
+    }))
+
+    return navigate('/welcomestep4')
+  }
+
+
+  useEffect(()=>{
+    console.log("This is my State : " , registerVisitor)
+  },[registerVisitor])
 
   return (
     <div className="step3">
       <div className="backbtn">
         <i
-          class="ri-arrow-left-line"
+          className="ri-arrow-left-line"
           style={{ fontSize: "20px" }}
           onClick={handlePreviousBtn}
         ></i>
@@ -72,23 +96,34 @@ export const Step3 = () => {
           <span>Click Photo</span> <span>Fill in the details</span>
         </div>
       </div>
-      <div className="picture">
-        <div className="imgcapture">
-          <video
-            ref={videoRef}
-            width="140"
-            height="160"
-            autoPlay
-            style={{ display: isCameraOn ? "block" : "none" }}
-          ></video>
-          <canvas
-            ref={canvasRef}
-            width="720"
-            height="1280"
-            style={{ display: "none" }}
-          ></canvas>
-        </div>
-        {imageSrcBase && (
+      <div className={`picture ${isCameraOn ? "fullscreen" : ""}`}>
+        {isCameraOn && (
+          <div className="imgcapture">
+            <div className="video-wrapper">
+              <video
+                ref={videoRef}
+                width="100%"
+                height="100%"
+                autoPlay
+                style={{ display: isCameraOn ? "block" : "none" }}
+              ></video>
+              {isCameraOn && (
+                <div className="photo-button" onClick={capturePhoto}>
+                  <div className="circle"></div>
+                  <div className="ring"></div>
+                </div>
+              )}
+            </div>
+            <canvas
+              ref={canvasRef}
+              width="720"
+              height="1280"
+              style={{ display: "none" }}
+            ></canvas>
+          </div>
+        )}
+
+        {!isCameraOn && imageSrcBase && (
           <div className="imgcapture">
             <img
               src={imageSrcBase}
@@ -99,22 +134,30 @@ export const Step3 = () => {
           </div>
         )}
 
-        <div className="captureBtn">
-          <Button
-            text={"Click a picture"}
-            width={"100%"}
-            height={"44px"}
-            className="clickBtn"
-            onClick={toggleCamera}
-          />
-          <Button
-            text={"Continue"}
-            width={"100%"}
-            height={"44px"}
-            onClick={capturePhoto}
-          />
-        </div>
+        {!isCameraOn && (
+          <div className="captureBtn">
+            <Button
+              text={"Click a picture"}
+              width={"100%"}
+              height={"44px"}
+              className="clickBtn"
+              onClick={toggleCamera}
+            />
+
+            {imageSrcBase && (
+              <Button
+              text={"Continue"}
+              width={"100%"}
+              height={"44px"}
+              onClick={hanldeActionContinue}
+            />
+            )}
+
+          </div>
+        )}
       </div>
     </div>
   );
 };
+
+export default Step3;

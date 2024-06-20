@@ -37,7 +37,11 @@ export const requestOtp = async (email, role) => {
     responseBody.response = response.data;
     return responseBody;
   } catch (error) {
-    responseBody.error = error;
+    console.log(error);
+    responseBody.errorMessage = responseBody.errorMessage =
+      error.response?.data?.StatusMsg ||
+      error.message ||
+      error.response?.data?.errors;
     responseBody.hasError = true;
     return responseBody;
   }

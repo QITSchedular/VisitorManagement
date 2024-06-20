@@ -6,8 +6,18 @@ import {
 } from "../typographyText/TypograghyText";
 import { Link } from "react-router-dom";
 import "./send-verification.scss";
+import { VerifyOtp } from "../../api/registorApi";
 
-const OtpPopup = ({ isVisible, onHide, header, subHeader }) => {
+const OtpPopup = ({
+  isVisible,
+  onHide,
+  header,
+  subHeader,
+  email,
+  role,
+  isBtnVisible,
+  setIsOTPVrified,
+}) => {
   const [otp, setOtp] = useState(Array(6).fill(""));
   const length = 6;
   const [timer, setTimer] = useState(60);
@@ -49,8 +59,30 @@ const OtpPopup = ({ isVisible, onHide, header, subHeader }) => {
     }
   };
 
-  const onOtpSubmit = (combinedOtp) => {
-    console.log("hii");
+  const verifyOTPFun = async (combinedOtp) => {
+    const verifyMyOtp = await VerifyOtp(email, combinedOtp, role);
+    if (verifyMyOtp.hasError === true) {
+      return console.log(verifyMyOtp.errorMessage);
+      // return toastDisplayer("error", getOtpFromID.errorMessage);
+    } else {
+      setIsOTPVrified(true);
+      onHide();
+      return console.log("OTP verify successfully..!!");
+      // return toastDisplayer("suceess", "OTP send successfully..!!");
+    }
+  };
+
+  const handleVerifyOTP = async () => {
+    const combinedOtp = otp.join("");
+    console.log("OTP : " + combinedOtp);
+    verifyOTPFun(combinedOtp);
+  };
+
+  const onOtpSubmit = async (combinedOtp) => {
+    if (!isBtnVisible) {
+      console.log("hii : " + combinedOtp);
+    }
+
     // Add your logic here after OTP submission
   };
 
@@ -59,6 +91,7 @@ const OtpPopup = ({ isVisible, onHide, header, subHeader }) => {
     setTimer(60); // Reset timer
   };
   const handleRetryClick = () => {
+    console.log("here");
     // getOtpFromMail(officialMail, userType);
     setTimer(60);
   };
@@ -80,8 +113,8 @@ const OtpPopup = ({ isVisible, onHide, header, subHeader }) => {
     <Popup
       visible={isVisible}
       onHiding={onHide}
-      width={"auto"}
-      height={250}
+      width={375}
+      height={"auto"}
       showCloseButton={false}
       dragEnabled={false}
       showTitle={false}
@@ -115,6 +148,18 @@ const OtpPopup = ({ isVisible, onHide, header, subHeader }) => {
           })}
         </div>
       </div>
+      {isBtnVisible && (
+        <div className="continueBtn">
+          <Button
+            text="Continue"
+            width={"100%"}
+            height={44}
+            className="button-with-margin"
+            onClick={handleVerifyOTP}
+          />
+        </div>
+      )}
+
       <div className="otp-terms">
         <span className="otp-terms-condition">
           {" "}
@@ -126,7 +171,7 @@ const OtpPopup = ({ isVisible, onHide, header, subHeader }) => {
         </span>
         {timer === 0 && (
           <span className="resend-link">
-            <Link onClick={handleRetryClick}>Click here to resend </Link>
+            <Link onClick={handleVerifyOTP}>Click here to resend </Link>
           </span>
         )}
       </div>

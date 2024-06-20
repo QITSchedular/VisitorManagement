@@ -16,6 +16,8 @@ import { CheckInOtp } from "./visitorMobile/OtpVerify/CheckInOtp";
 import { Step3 } from "./visitorMobile/step3/step3";
 import { Step4 } from "./visitorMobile/step4/Step4";
 import CheckStatus from "./visitorMobile/checkStatus/CheckStatus";
+import AfterApproval from "./visitorMobile/AfterApproval/AfterApproval";
+import StatusPage from "./visitorMobile/checkStatus/StatusPage";
 
 export default function UnauthenticatedContent() {
   return (
@@ -87,6 +89,8 @@ export default function UnauthenticatedContent() {
       <Route path="/welcomestep3" element={<Step3 />} />
       <Route path="/welcomestep4" element={<Step4 />} />
       <Route path="/checkstatus" element={<CheckStatus />} />
+      <Route path="/Success" element={<AfterApproval />} />
+      <Route path="/statusPage" element={<StatusPage />} />
       <Route path="*" element={<Navigate to={"/login"} />}></Route>
     </Routes>
   );
