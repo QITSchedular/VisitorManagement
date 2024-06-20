@@ -36,6 +36,7 @@ const UserProfile = () => {
             />
           </div>
         </div>
+
         <DataGrid
           dataSource={userData}
           showBorders={false}

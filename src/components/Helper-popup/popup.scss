@@ -4,6 +4,7 @@
 }
 
 .verify-pro-datagrid {
+  margin-top: 24px;
   .dx-toolbar-after {
     width: 100%;
     padding-inline-start: 0px;
@@ -19,21 +20,13 @@
   }
   .dx-datagrid-header-panel {
     padding: 0px 0px !important;
+    margin-bottom: 16px;
   }
 }
-
-.cancelQcBtn{
-  .dx-button-content{
-    background-color: white;
-
-    .dx-button-text{
-      background-color: white;
-      color: #262626;
-    }
-  }
-}
-.close-btn-section{
-  .dx-button{
-    background-color: transparent;
-  }
+.popup-btn-section {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  gap: 16px;
 }

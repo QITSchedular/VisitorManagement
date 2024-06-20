@@ -12,8 +12,11 @@ import {
   finalObject,
 } from "../../../components/common-object/common-object";
 import { Button, LoadPanel, Popup } from "devextreme-react";
-import { HeaderText } from "../../../components/typographyText/TypograghyText";
-import { helpIcon, saveIcon } from "../../../assets/icon";
+import {
+  HeaderText,
+  PopupHeaderText,
+} from "../../../components/typographyText/TypograghyText";
+import { PreSetRule, helpIcon } from "../../../assets";
 import HelperPopupPage from "../../../components/Helper-popup/helper_popup";
 import "../authorize-user/user-authorization.scss";
 import { useAuth } from "../../../contexts/auth";
@@ -22,6 +25,7 @@ import {
   getUserNotificationRule,
   postNotificationRule,
 } from "../../../api/common";
+import { toastDisplayer } from "../../../components/toastDisplayer/toastdisplayer";
 const NotificationAuthorization = () => {
   const [loading, setLoading] = useState(false);
   const [UserData, setUserData] = useState(false);
@@ -31,8 +35,10 @@ const NotificationAuthorization = () => {
   const [expandedKeys] = useState([]);
   const [selectedKeys] = useState([]);
   const [checkboxStates, setCheckboxStates] = useState({});
-  const [selectedRowKeysOnChangeAuth, setSelectedRowKeysOnChangeAuth] = useState([]);
-  const [selectedCopyRowKeysOnChangeAuth, setSelectedCopyRowKeysOnChangeAuth] =  useState([]);
+  const [selectedRowKeysOnChangeAuth, setSelectedRowKeysOnChangeAuth] =
+    useState([]);
+  const [selectedCopyRowKeysOnChangeAuth, setSelectedCopyRowKeysOnChangeAuth] =
+    useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedCopyRowKeys, setSelectedCopyRowKeys] = useState([]);
   const [userNotificationRule, setuserNotificationRule] = useState([]);
@@ -56,7 +62,7 @@ const NotificationAuthorization = () => {
     icon: helpIcon,
     onClick: () => showPopupHandler(),
   };
-  
+
   const showPopupHandler = () => {
     setNotificationPopUp(true);
   };
@@ -75,8 +81,10 @@ const NotificationAuthorization = () => {
         // return toastDisplayer("error", result.errorMessage);
       }
       setLoading(false);
-      const new_data = result.responseData.filter((user) => user.usertype !== "Admin");
-      console.log("New Dtaa : ",new_data);
+      const new_data = result.responseData.filter(
+        (user) => user.usertype !== "Admin"
+      );
+      console.log("New Dtaa : ", new_data);
       setUserData(new_data);
     };
     getData();
@@ -128,7 +136,7 @@ const NotificationAuthorization = () => {
       ...updatedStates,
     }));
   }
- 
+
   const handleSave = async () => {
     setSelectedRowKeys(selectedRowKeysOnChangeAuth);
     if (selectedRowKeysOnChangeAuth.length > 0) {
@@ -167,7 +175,7 @@ const NotificationAuthorization = () => {
       // return toastDisplayer("error", "Please select a user");
     }
   };
- 
+
   const selectedRowSetterApprove = async (params) => {
     setSelectedRowKeysOnChangeAuth(params);
   };
@@ -178,18 +186,19 @@ const NotificationAuthorization = () => {
     setSelectedRowKeysOnChangeAuth(selectedRowKeys);
     const length = await selectedRowKeys.length;
     if (selectedRowKeys.length > 1) {
-      const value = await dataGridRefNotificationRule.current.instance.selectRows(
-        selectedRowKeys[length - 1]
-      );
+      const value =
+        await dataGridRefNotificationRule.current.instance.selectRows(
+          selectedRowKeys[length - 1]
+        );
       return selectedRowSetterApprove(value);
     } else {
-      const value = await dataGridRefNotificationRule.current.instance.selectRows(
-        selectedRowKeys[0]
-      );
+      const value =
+        await dataGridRefNotificationRule.current.instance.selectRows(
+          selectedRowKeys[0]
+        );
       return selectedRowSetterApprove(value);
     }
   };
-
 
   const handleClick = async () => {
     try {
@@ -216,13 +225,13 @@ const NotificationAuthorization = () => {
       };
       const apiResponse = await postNotificationRule(payload);
       if (apiResponse.hasError) {
-        // return toastDisplayer("error", apiResponse.errorMessage);
+        return toastDisplayer("error", apiResponse.errorMessage);
       } else {
         setSelectedRowKeys([]);
         // setSelectedRowKeysOnChangeAuth([]);
         // setModuleTreeVisible(false);
         setLoading(false);
-        // return toastDisplayer("success", apiResponse.responseData.statusMsg);
+        return toastDisplayer("success", apiResponse.responseData.statusMsg);
       }
     } catch (error) {
       console.log("error : ", error);
@@ -230,9 +239,9 @@ const NotificationAuthorization = () => {
   };
 
   // ================== copy data
- 
+
   const copyhelpOptions = {
-    icon: helpIcon,
+    icon: PreSetRule,
     class: "copyIcon",
     onClick: async () => {
       copyshowPopupHandler();
@@ -257,7 +266,7 @@ const NotificationAuthorization = () => {
   }) => {
     setSelectedCopyRowKeysOnChangeAuth(selectedRowKeys);
   };
- 
+
   const handleCopySave = async () => {
     const res = [];
     setLoading(true);
@@ -280,12 +289,12 @@ const NotificationAuthorization = () => {
         res.forEach((item) => {
           if (item.hasError) {
             setLoading(false);
-            // toastDisplayer("error", item.errorMessage);
+            toastDisplayer("error", item.errorMessage);
           }
         });
       } else {
         setLoading(false);
-        // toastDisplayer("success", "Copy rule successfully...!!");
+        toastDisplayer("success", "Copy rule successfully...!!");
       }
       CopysetNotificationPopUp(false);
     } else {
@@ -296,65 +305,62 @@ const NotificationAuthorization = () => {
   };
   return (
     <>
-    {loading && <LoadPanel visible={true} />}
-    {NotificationPopUp && (
-      <Popup
-        visible={true}
-        height={window.innerHeight - 100}
-        width={"1000px !important"}
-        showCloseButton={false}
-        className="initate-popup-css"
-        showTitle={false}
-        contentRender={() => (
-          <HelperPopupPage
-            title={"User Details"}
-            caption={"Choose the user"}
-            handleCancel={handleCancel}
-            handleSave={handleSave}
-            datagridData={UserData}
-            keyExpr={"e_mail"}
-            handleDataGridRowSelection={
-              handleDataGridRowSelectionAuthRuleUser
-            }
-            dataGridRef={dataGridRefNotificationRule}
-            selectedRowKeys={selectedRowKeys}
-          />
-        )}
-      ></Popup>
-    )}
-    {CopyNotificationPopUp && (
-      <Popup
-        visible={true}
-        height={window.innerHeight - 100}
-        width={"1000px !important"}
-        showCloseButton={false}
-        className="initate-popup-css"
-        showTitle={false}
-        contentRender={() => (
-          <HelperPopupPage
-            title={"Apply Same Authorisation Rule to Users"}
-            caption={"Apply rules to users"}
-            handleCancel={handleCopyPopupCancel}
-            handleSave={handleCopySave}
-            datagridData={userCopyData}
-            keyExpr={"e_mail"}
-            handleDataGridRowSelection={
-              handleDataGridCopyRowSelectionAuthRuleUser
-            }
-            dataGridRef={dataGridCopyRefNotificationRule}
-            selectedRowKeys={selectedCopyRowKeys}
-          />
-        )}
-      ></Popup>
-    )}
+      {loading && <LoadPanel visible={true} />}
+      {NotificationPopUp && (
+        <Popup
+          visible={true}
+          height={window.innerHeight - 100}
+          showCloseButton={false}
+          className="initate-popup-css"
+          showTitle={false}
+          contentRender={() => (
+            <HelperPopupPage
+              title={"User Details"}
+              caption={"Select the user"}
+              handleCancel={handleCancel}
+              handleSave={handleSave}
+              datagridData={UserData}
+              keyExpr={"e_mail"}
+              handleDataGridRowSelection={
+                handleDataGridRowSelectionAuthRuleUser
+              }
+              dataGridRef={dataGridRefNotificationRule}
+              selectedRowKeys={selectedRowKeys}
+            />
+          )}
+        ></Popup>
+      )}
+      {CopyNotificationPopUp && (
+        <Popup
+          visible={true}
+          height={window.innerHeight - 100}
+          showCloseButton={false}
+          className="initate-popup-css"
+          showTitle={false}
+          contentRender={() => (
+            <HelperPopupPage
+              title={"Apply Same Authorisation Rule to Users"}
+              caption={"Apply rules to users"}
+              handleCancel={handleCopyPopupCancel}
+              handleSave={handleCopySave}
+              datagridData={userCopyData}
+              keyExpr={"e_mail"}
+              handleDataGridRowSelection={
+                handleDataGridCopyRowSelectionAuthRuleUser
+              }
+              dataGridRef={dataGridCopyRefNotificationRule}
+              selectedRowKeys={selectedCopyRowKeys}
+            />
+          )}
+        ></Popup>
+      )}
 
-    <div className="dx-card" style={{ marginTop: "16px" }}>
-      <div className="navigation-header-main">
-        <div className="title-section">
-          <HeaderText text="Notification Authorise" />
-        </div>
-        <div className="title-section-btn">
-          {isModuleTreeVisible && (
+      <div className="dx-card" style={{ marginTop: "16px" }}>
+        <div className="navigation-header-main">
+          <div className="title-section">
+            <HeaderText text="Notification Authorise" />
+          </div>
+          <div className="title-section-btn">
             <Button
               text="Save Details"
               width={140}
@@ -362,98 +368,100 @@ const NotificationAuthorization = () => {
               className="button-with-margin"
               onClick={handleClick}
             />
-          )}
+          </div>
         </div>
-      </div>
 
-      <div className="main-content-div">
-        <div className="auth-title-section">
-          <TextBox
-            labelMode="outside"
-            placeholder="User Name"
-            width={"40%"}
-            className="seachBox"
-            value={
-              selectedRowKeysOnChangeAuth.length > 0
-                ? selectedRowKeysOnChangeAuth[0].e_mail
-                : ""
-            }
-          >
-            <TextBoxButton
-              name="popupSearch"
-              location="after"
-              options={userHelpOptions}
-              height={44}
-              width={44}
-              className="searchicon"
-              style={{ "background-color": "#f6f6f6" }}
-            />
-          </TextBox>
+        <div className="main-content-div">
+          <div className="auth-title-section">
+            <TextBox
+              label="User Name"
+              placeholder="Input"
+              labelMode="static"
+              stylingMode="outlined"
+              width={300}
+              height={56}
+              className="seachBox"
+              value={
+                selectedRowKeysOnChangeAuth.length > 0
+                  ? selectedRowKeysOnChangeAuth[0].e_mail
+                  : ""
+              }
+            >
+              <TextBoxButton
+                name="popupSearch"
+                location="after"
+                options={userHelpOptions}
+                className="searchicon"
+                // style={{ "background-color": "#f6f6f6" }}
+              />
+            </TextBox>
+          </div>
         </div>
-      </div>
-      {isModuleTreeVisible && (
-        <TreeList
-          dataSource={authObject}
-          keyExpr="Task_ID"
-          defaultExpandedRowKeys={expandedKeys}
-          defaultSelectedRowKeys={selectedKeys}
-          showRowLines={true}
-          showColumnLines={false}
-          columnAutoWidth={true}
-          className="tree-list-main"
-        >
-          <SearchPanel visible={true} />
-          <Column dataField="Task_Subject" caption="Modules" width={300} />
-          <Column dataField="Task_ID" visible={false} />
-          <Column
-            caption="Authorise"
-            alignment={"center"}
-            cellRender={(cellData) => {
-              return (
-                <>
-                  <CheckBox
-                    value={checkboxStates[cellData.data.Task_ID]?.C}
-                    onValueChanged={(e) => {
-                      handleCheckboxValueChanged(
-                        cellData.data.Task_ID,
-                        "C",
-                        e.value
-                      );
-                    }}
-                  />
-                </>
-              );
-            }}
-          />
+        {isModuleTreeVisible && (
+          <div className="tree-list-main">
+            <TreeList
+              dataSource={authObject}
+              keyExpr="Task_ID"
+              defaultExpandedRowKeys={expandedKeys}
+              defaultSelectedRowKeys={selectedKeys}
+              showRowLines={true}
+              showColumnLines={false}
+              columnAutoWidth={true}
+              className="tree-list-main"
+            >
+              <SearchPanel visible={true} />
+              <Column dataField="Task_Subject" caption="Modules" width={300} />
+              <Column dataField="Task_ID" visible={false} />
+              <Column
+                caption="Authorise"
+                alignment={"center"}
+                cellRender={(cellData) => {
+                  return (
+                    <>
+                      <CheckBox
+                        value={checkboxStates[cellData.data.Task_ID]?.C}
+                        onValueChanged={(e) => {
+                          handleCheckboxValueChanged(
+                            cellData.data.Task_ID,
+                            "C",
+                            e.value
+                          );
+                        }}
+                      />
+                    </>
+                  );
+                }}
+              />
 
-          <Toolbar className="header-toolbar-modules">
-            <Item location="before">
-              <div className="informer">
-                {/* <span className="sub-text">All Modules</span> */}
-              </div>
-            </Item>
-            <Item name="searchPanel" />
-            <Item location="after" cssClass="searchPanelIcon">
-              <TextBox
-                placeholder="Pre-set Rule"
-                width={168}
-                className="report-right"
-              >
-                <TextBoxButton
-                  name="popupSearch"
-                  location="after"
-                  options={copyhelpOptions}
-                  height={44}
-                  className="popup-copy-icon"
-                />
-              </TextBox>
-            </Item>
-          </Toolbar>
-        </TreeList>
-      )}
-    </div>
-  </>
-  )
+              <Toolbar className="header-toolbar-modules">
+                <Item location="before">
+                  <div className="informer">
+                    <PopupHeaderText text={"All Modules"} />
+                  </div>
+                </Item>
+                <Item name="searchPanel" />
+                <Item location="after" cssClass="searchPanelIcon">
+                  <TextBox
+                    placeholder="Pre-set Rule"
+                    width={168}
+                    className="report-right"
+                  >
+                    <TextBoxButton
+                      name="popupSearch"
+                      location="after"
+                      options={copyhelpOptions}
+                      height={44}
+                      className="popup-copy-icon"
+                    />
+                  </TextBox>
+                </Item>
+              </Toolbar>
+            </TreeList>
+          </div>
+        )}
+      </div>
+    </>
+  );
 };
 
 export default NotificationAuthorization;

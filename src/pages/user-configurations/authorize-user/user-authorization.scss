@@ -1,17 +1,21 @@
-
+.main-content-div {
+  margin-top: 32px;
+}
 .dx-popup-wrapper > .dx-overlay-content {
-    width: 50% ;
-    max-width: none;
-    
+  width: 50%;
+  max-width: none;
+}
+.auth-title-section {
+  .dx-button {
+    background-color: transparent;
   }
-  .auth-title-section{
-    .dx-button{
-        background-color: transparent;
-    }
-  }
+}
 
-  .searchPanelIcon{
-    .dx-button{
-      background-color: transparent;
+.searchPanelIcon {
+  .dx-button {
+    background-color: transparent;
   }
-  }
+}
+.tree-list-main {
+  margin-top: 20px;
+}
