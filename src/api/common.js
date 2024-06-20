@@ -54,6 +54,44 @@ export async function GenerateNewPassword(email,password) {
     }
 }
 
+
+export async function GettingDepratmentdata(company_id){
+  const responsebody ={
+    repsonseData : null,
+    hasError : false ,
+    error : null
+  }
+  try{
+    const response = await axios.get(`${API_URL}VMS/Department/GetByCid/${company_id}`);
+    responsebody.repsonseData = response.data;
+    return responsebody;
+  }catch(error){
+    responsebody.hasError = false
+    responsebody.error = error
+    return responsebody
+  }   
+}
+
+export async function checkUserStatus(email , company_id){
+  const responseBody ={
+    responseData: null, 
+    hasError :false ,
+    error: null
+  }
+  const payload ={
+    e_mail: email,
+    company_id: company_id
+  }
+  try{
+    const response = await axios.post(`${API_URL}VMS/Visitor/CheckStatus`, payload);
+    responseBody.responseData = response.data
+    return responseBody;
+  }catch(error){
+    responseBody.hasError = true
+    responseBody.error = error
+    return responseBody
+  }
+
 // VMS/User/Get/All/38
 // Get All User API
 export async function getUserData(type,cmpid) {

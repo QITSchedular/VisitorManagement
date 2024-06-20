@@ -11,7 +11,7 @@ export const CheckOut = () => {
     <div className="Checkout">
       <div className="backbtn">
         <i
-          class="ri-arrow-left-line"
+          className="ri-arrow-left-line"
           style={{ fontSize: "20px" }}
           onClick={handlePreviousBtn}
         ></i>
