@@ -64,7 +64,7 @@ const AddVisitor = () => {
           </div>
           <div className="form-input popup-textbox">
             <TextBox
-              label="Mobile Number"
+              label="Email Address"
               placeholder="Input"
               labelMode="static"
               stylingMode="outlined"

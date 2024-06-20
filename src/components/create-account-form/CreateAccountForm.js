@@ -35,7 +35,7 @@ export default function CreateAccountForm() {
     const role = "company";
     const getOtp = await requestOtp(userEmail, role);
     console.log("getotp : ", getOtp);
-    if (getOtp.response.Status !== 200) {
+    if (getOtp.response.Status === 400) {
       return console.log("Error in generating Otp");
     } else {
       navigate("/otp-verification");
@@ -50,85 +50,96 @@ export default function CreateAccountForm() {
     <div className="login-container">
       <div className="login-container-left">
         <div className="login-form">
-          <div className="header-image">
-            <img src={LoginLogo} alt="logo" width={200} height={70} />
-          </div>
-          <div className="step-text">Step 1\4</div>
-          <div className="header-title">
-            <div className="header-main-title">
-              <span>Create an account </span>
+          <form
+            method="post"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSubmit();
+              }
+            }}
+          >
+            <div className="header-image">
+              <img src={LoginLogo} alt="logo" width={200} height={70} />
             </div>
-            <div className="header-sub-title">
-              <div>
-                Already have an account?
-                <span className="create-account">
-                  <Link to={"/login"}>Log in</Link>
-                </span>
+            <div className="step-text">Step 1\4</div>
+            <div className="header-title">
+              <div className="header-main-title">
+                <span>Create an account </span>
+              </div>
+              <div className="header-sub-title">
+                <div>
+                  Already have an account?
+                  <span className="create-account">
+                    <Link to={"/login"}>Log in</Link>
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="login-container-right-body">
-            <div className="inputField">
-              <TextBox
-                label="Email Address"
-                placeholder="Input text"
-                labelMode="static"
-                stylingMode="outlined"
-                height={56}
-                onValueChanged={(e) =>
-                  handleChange({ target: { name: "e_mail", value: e.value } })
-                }
-              >
-                <Validator className="custom-validator">
-                  <RequiredRule message="Email Address is required" />
-                </Validator>
-              </TextBox>
+            <div className="login-container-right-body">
+              <div className="inputField">
+                <TextBox
+                  label="Email Address"
+                  placeholder="Input text"
+                  labelMode="static"
+                  stylingMode="outlined"
+                  height={56}
+                  onValueChanged={(e) =>
+                    handleChange({ target: { name: "e_mail", value: e.value } })
+                  }
+                >
+                  <Validator className="custom-validator">
+                    <RequiredRule message="Email Address is required" />
+                  </Validator>
+                </TextBox>
+              </div>
+              <div className="inputField">
+                <TextBox
+                  label="Password"
+                  placeholder="Input text"
+                  value={password ? password : ""}
+                  mode={passwordMode}
+                  labelMode="static"
+                  stylingMode="outlined"
+                  height={56}
+                  onValueChanged={(e) =>
+                    handleChange({
+                      target: { name: "password", value: e.value },
+                    })
+                  }
+                >
+                  <TextBoxButton
+                    name="password"
+                    location="after"
+                    options={{
+                      icon: `${showpwd ? eyeopen : eyeclose}`,
+                      stylingMode: "text",
+                      onClick: () => {
+                        setShowPwd(!showpwd);
+                        setPasswordMode((prevPasswordMode) =>
+                          prevPasswordMode === "text" ? "password" : "text"
+                        );
+                      },
+                    }}
+                  />
+                  <Validator>
+                    <RequiredRule message="Password is required" />
+                  </Validator>
+                </TextBox>
+              </div>
             </div>
-            <div className="inputField">
-              <TextBox
-                label="Password"
-                placeholder="Input text"
-                value={password ? password : ""}
-                mode={passwordMode}
-                labelMode="static"
-                stylingMode="outlined"
-                height={56}
-                onValueChanged={(e) =>
-                  handleChange({ target: { name: "password", value: e.value } })
-                }
-              >
-                <TextBoxButton
-                  name="password"
-                  location="after"
-                  options={{
-                    icon: `${showpwd ? eyeopen : eyeclose}`,
-                    stylingMode: "text",
-                    onClick: () => {
-                      setShowPwd(!showpwd);
-                      setPasswordMode((prevPasswordMode) =>
-                        prevPasswordMode === "text" ? "password" : "text"
-                      );
-                    },
-                  }}
-                />
-                <Validator>
-                  <RequiredRule message="Password is required" />
-                </Validator>
-              </TextBox>
-            </div>
-          </div>
 
-          <div className="login-container-right-footer">
-            <Button
-              text="Continue"
-              width={"100%"}
-              height={"48px"}
-              // stylingMode="default"
-              useSubmitBehavior={true}
-              onClick={() => handleSubmit()}
-            />
-          </div>
-          {/* <div className="or-text">or</div>
+            <div className="login-container-right-footer">
+              <Button
+                text="Continue"
+                width={"100%"}
+                height={"48px"}
+                // stylingMode="default"
+                useSubmitBehavior={true}
+                onClick={() => handleSubmit()}
+              />
+            </div>
+            {/* <div className="or-text">or</div>
           <div className="login-with-google">
             <Button
               text="Continue with Google"
@@ -139,12 +150,13 @@ export default function CreateAccountForm() {
             />
           </div> */}
 
-          <div className="terms-condition">
-            <div>
-              I agree with your{" "}
-              <span className="terms-service">Terms of Service</span>
+            <div className="terms-condition">
+              <div>
+                I agree with your{" "}
+                <span className="terms-service">Terms of Service</span>
+              </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
       <div className="login-container-right">
