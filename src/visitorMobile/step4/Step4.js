@@ -26,10 +26,7 @@ export const Step4 = () => {
 
   const handleAproval = async () => {
     console.log("payload : ", registerVisitor);
-    setRegisterVisitor((prev) => ({
-      ...prev,
-      company_id: 38
-    }));
+
 
     if (!registerVisitor.cnctperson) {
       return console.log("Mention person you want to meet:", registerVisitor.cnctperson);
@@ -41,6 +38,7 @@ export const Step4 = () => {
       return console.log("Please mention the purpose of visit");
     }
 
+    console.log("registor : " ,registerVisitor);
     const registor = await registerVisitorApi(registerVisitor);
 
     if (registor.hasError === true) {
@@ -51,7 +49,7 @@ export const Step4 = () => {
     return navigate('/Success');
   };
 
-  const company_id = 38;
+  const company_id = 2;
   const getDepartmentdata = async () => {
     const departmentData = await GettingDepratmentdata(company_id);
     if (departmentData.hasError === true) {
@@ -82,7 +80,11 @@ export const Step4 = () => {
   
   const generateTimeSlots = (date) => {
     let slots = [];
-    for (let i = 0; i < 24; i++) {
+    const now = new Date();
+    
+    // Get the current hour (0-23) from the Date object
+    const currentHour = now.getHours();
+    for (let i = currentHour; i < 24; i++) {
       const slotDate = new Date(date);
       slotDate.setHours(i, 0, 0, 0);
       const displayText = `${slotDate.getDate()} - ${
@@ -106,6 +108,10 @@ export const Step4 = () => {
 
   useEffect(() => {
     console.log("getting Data");
+    setRegisterVisitor((prev) => ({
+      ...prev,
+      company_id: 2
+    }));
     getDepartmentdata();
   }, []);
 
@@ -113,6 +119,8 @@ export const Step4 = () => {
     setTimeSlots(memoizedTimeSlots);
     console.log("slot: ", memoizedTimeSlots);
   }, [memoizedTimeSlots]);
+
+  
 
   return (
     <div className="Step1">
@@ -153,6 +161,7 @@ export const Step4 = () => {
           stylingMode="outlined"
           height={"56px"}
           className="step-textbox"
+          searchEnabled={true}
           onValueChanged={(e) =>
             hanldeInputChange({
               target: { name: "department_id", value: e.value },

@@ -11,6 +11,9 @@ export const Welcome = () => {
   const handleCheckout = () => {
     navigate("/checkout");
   };
+  const handleCheckStatus =() =>{
+    navigate('/checkstatus')
+  }
   return (
     <div className="outer-container">
       {/* <div className="upper-part"></div> */}
@@ -37,7 +40,7 @@ export const Welcome = () => {
           />
           <div className="welcome-footer">
             <span>Already applied?</span>
-            <span className="check-status">Check Status</span>
+            <span className="check-status" onClick={handleCheckStatus}>Check Status</span>
           </div>
         </div>
       </div>

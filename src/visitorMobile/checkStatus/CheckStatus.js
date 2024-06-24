@@ -16,7 +16,7 @@ const CheckStatus = () => {
     if(!email){
       return console.log("Enter Email")
     }
-    const company_id = 39;
+    const company_id = 2;
     const checkStatus = await checkUserStatus(email , company_id);
 
     if(checkStatus.hasError === true){

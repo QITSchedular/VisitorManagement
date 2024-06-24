@@ -12,7 +12,7 @@ export async function forgetPasswordChk(email) {
             "e_mail":email
         }
       var apiRes = await axios.post(`${API_URL}VMS/ForgetPasswordOTP`, payload);
-      if (apiRes.status == 200) {
+      if (apiRes.status === 200) {
         console.log("APIresponse : ",apiRes.data);
         responseBody.hasError = false;
         responseBody.responseData = apiRes.data;
@@ -91,7 +91,7 @@ export async function checkUserStatus(email , company_id){
     responseBody.error = error
     return responseBody
   }
-
+}
 // VMS/User/Get/All/38
 // Get All User API
 export async function getUserData(type,cmpid) {
@@ -265,32 +265,20 @@ export const getUserNotificationRule = async (email,role,cmpid) => {
 
 // Add Notification auth rule
 export async function postNotificationRule(payload) {
-  // const myCookieValue = Cookies.get("token");
-  // const userData = Cookies.get("User");
-  // const myCookieValue = localStorage.getItem("token");
-  // const userData = localStorage.getItem("User");
-  // const storedData = localStorage.getItem("AuthRule");
+
   const responseBody = {
     responseData: null,
     hasError: false,
     errorMessage: null,
   };
-  // if (myCookieValue != null && userData != null && storedData != null) {
+
     try {
-      // const headers = {
-      //   Authorization: `Bearer ${myCookieValue}`,
-      // };
+
       const response = await axios.post(
         `${API_URL}VMS/NotificationAuthUser/Save`,
         payload
       );
-      // const response = await axios.post(
-      //   `${API_URL}/AuthUser/SaveAuthRule`,
-      //   payload,
-      //   {
-      //     headers: headers,
-      //   }
-      // );
+
     
       responseBody.responseData = response.data;
       return responseBody;
@@ -300,9 +288,4 @@ export async function postNotificationRule(payload) {
         error.response?.data?.statusMsg || error.response?.data?.errors;
       return responseBody;
     }
-  // } else {
-  //   responseBody.hasError = true;
-  //   responseBody.errorMessage = "something wrong";
-  //   return responseBody;
-  // }
-}
+  }

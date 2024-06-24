@@ -19,7 +19,7 @@ const OtpVerificationForm = () => {
   const [registerUser] = useRegisterState();
 
   useEffect(() => {
-    if (state != null && state.From=="ResetPassword") {
+    if (state != null && state.From==="ResetPassword") {
       console.log("State Data : ",state);
       setReset(true);
       setEmail(state.Email);
@@ -63,7 +63,8 @@ const OtpVerificationForm = () => {
   };
 
   const onOtpSubmit = async (combinedOtp) => {
-    const email1 = registerUser.e_mail;
+    console.log("registerUser : ", registerUser);
+    const email = registerUser.e_mail;
     const role = "company";
     console.log(" otp : ", combinedOtp);
     // Add your logic here after OTP submission
