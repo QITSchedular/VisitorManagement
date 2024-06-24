@@ -26,13 +26,14 @@ const AddUser = () => {
     const response = await GetCmpDept(user.cmpid);
     if (response.hasError === true) {
       setLoading(false);
-      return console.log(response.errorMessage);
+      // return console.log(response.errorMessage);
       // return toastDisplayer("error", getOtpFromID.errorMessage);
+      return toastDisplayer("error", response.errorMessage);
     } else {
       console.log(response.responseData);
       setDeptData(response.responseData);
       setLoading(false);
-      // return toastDisplayer("suceess", "OTP send successfully..!!");
+      return toastDisplayer("suceess", "OTP send successfully..!!");
     }
   };
   useEffect(() => {
@@ -64,8 +65,7 @@ const AddUser = () => {
 
     if (isMatch === false) {
       console.log("Enter a correct Mail");
-      return;
-      // return toastDisplayer("error", "Enter a correct Mail ");
+      return toastDisplayer("error", "Enter a correct Mail ");
     }
     GenerateOTP(formData?.e_mail, "user");
   };

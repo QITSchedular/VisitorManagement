@@ -43,7 +43,7 @@ const UserProfile = () => {
           selection={{
             mode: "multiple",
           }}
-          className="data-grid"
+          className="data-grid on-hover-data"
           hoverStateEnabled={true}
           columnAutoWidth={true}
           // ref={(ref) => {
