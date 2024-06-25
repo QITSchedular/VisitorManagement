@@ -31,15 +31,23 @@ export default function CreateAccountForm() {
   };
 
   const handleSubmit = async () => {
+    console.log("step 1")
     const userEmail = registerUser.e_mail;
     const role = "company";
+
+  
     const getOtp = await requestOtp(userEmail, role);
+ console.log("step 2")
     console.log("getotp : ", getOtp);
     if (getOtp.response.Status === 400) {
+      console.log("error")
       return console.log("Error in generating Otp");
     } else {
+      console.log("susccess")
       navigate("/otp-verification");
     }
+
+    return navigate("/otp-verification");
   };
 
   // useEffect(() => {
@@ -135,8 +143,8 @@ export default function CreateAccountForm() {
                 width={"100%"}
                 height={"48px"}
                 // stylingMode="default"
-                useSubmitBehavior={true}
-                onClick={() => handleSubmit()}
+                //useSubmitBehavior={true}
+                onClick={ handleSubmit}
               />
             </div>
             {/* <div className="or-text">or</div>

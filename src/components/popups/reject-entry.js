@@ -4,6 +4,9 @@ import {
   PopupHeaderText,
   PopupSubText,
 } from "../typographyText/TypograghyText";
+import { visitorDecision } from "../../api/visitorApi";
+import { toastDisplayer } from "../toastDisplayer/toastdisplayer";
+import { useNavigate } from "react-router-dom";
 
 const RejectEntryPopup = ({
   header,
@@ -11,7 +14,33 @@ const RejectEntryPopup = ({
   isVisible,
   onHide,
   subHeader,
+  verifyData,
+  setVerifyData,
 }) => {
+  const navigate = useNavigate();
+  const handleAllowVisitor = async () => {
+    console.log("value : ", verifyData);
+    
+
+    const decision = await visitorDecision(verifyData);
+
+    if (decision.hasError === true) {
+      return toastDisplayer("error", `${decision.error}`);
+    }
+
+    toastDisplayer("success", "Allowed Visitor");
+    onHide();
+    return navigate('/Verify-Visitors')
+  };
+
+  const handleReasonInput = (e) => {
+    console.log("Input received");
+    setVerifyData((prev) => ({
+      ...prev,
+      reason: e.value, // Access the input value from the event
+    }));
+  };
+
   return (
     <>
       <Popup
@@ -40,6 +69,7 @@ const RejectEntryPopup = ({
               placeholder="Input"
               labelMode="static"
               stylingMode="outlined"
+              onValueChanged={handleReasonInput}
               height={56}
             />
           </div>
@@ -48,7 +78,7 @@ const RejectEntryPopup = ({
           <Button
             text={rejectEntry}
             height={44}
-            onClick={onHide}
+            onClick={handleAllowVisitor}
             className="full-width-button"
             stylingMode="outlined"
           />

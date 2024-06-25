@@ -1,9 +1,12 @@
 import { Button, Popup, TextBox } from "devextreme-react";
-import React from "react";
+import React, { useState } from "react";
 import {
   PopupHeaderText,
   PopupSubText,
 } from "../typographyText/TypograghyText";
+import { visitorDecision } from "../../api/visitorApi";
+import { toastDisplayer } from "../toastDisplayer/toastdisplayer";
+import { useNavigate } from "react-router-dom";
 
 const AllowEntryPopup = ({
   header,
@@ -11,7 +14,35 @@ const AllowEntryPopup = ({
   isVisible,
   onHide,
   subHeader,
+  dessionStatus,
+  verifyData,
+  setVerifyData,
 }) => {
+  const [reason, setReason] = useState();
+  const navigate = useNavigate();
+
+  const handleAllowVisitor = async() => {
+    console.log("value : ", verifyData);
+
+    const decision = await visitorDecision(verifyData);
+
+    if(decision.hasError === true){
+      return toastDisplayer("error" ,`${decision.error}`);
+    }
+
+    toastDisplayer("success" ,"Allowed Visitor");
+    onHide();
+    return navigate('/Verify-Visitors')
+  };
+
+  const handleReasonInput = (e) => {
+    console.log("Input received");
+    setVerifyData((prev) => ({
+      ...prev,
+      reason: e.value, // Access the input value from the event
+    }));
+  };
+
   return (
     <>
       <Popup
@@ -40,6 +71,7 @@ const AllowEntryPopup = ({
               placeholder="Input"
               labelMode="static"
               stylingMode="outlined"
+              onValueChanged={handleReasonInput} // Use onValueChanged instead of onChange
               height={56}
             />
           </div>
@@ -48,7 +80,7 @@ const AllowEntryPopup = ({
           <Button
             text={allowEntry}
             height={44}
-            onClick={onHide}
+            onClick={handleAllowVisitor}
             className="full-width-button"
           />
         </div>

@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = process.env.REACT_APP_API;
+const REACT_APP_API = process.env.REACT_APP_API;
 
 export const registerUserApi = async (payload) => {
   const responseBody = {
@@ -10,7 +10,7 @@ export const registerUserApi = async (payload) => {
   console.log("payload : ", payload);
   //return null;
   try {
-    const response = await axios.post(`${API_URL}VMS/Register`, payload);
+    const response = await axios.post(`${REACT_APP_API}VMS/Register`, payload);
     responseBody.response = response.data;
     return responseBody;
   } catch (error) {
@@ -21,7 +21,7 @@ export const registerUserApi = async (payload) => {
 };
 
 export const requestOtp = async (email, role) => {
-  console.log("api url : ", API_URL);
+  console.log("api url : ", REACT_APP_API);
   const payload = {
     e_mail: email,
     role: role,
@@ -33,7 +33,7 @@ export const requestOtp = async (email, role) => {
   };
   try {
     console.log("payload : ", payload);
-    const response = await axios.post(`${API_URL}VMS/GenerateOTP`, payload);
+    const response = await axios.post(`${REACT_APP_API}VMS/GenerateOTP`, payload);
     responseBody.response = response.data;
     return responseBody;
   } catch (error) {
@@ -58,8 +58,9 @@ export const VerifyOtp = async (email, otp, role) => {
     VerifyOTP: otp,
     role: role,
   };
+ // return console.log("payload : " , payload)
   try {
-    const response = await axios.post(`${API_URL}VMS/VerifyOTP`, payload);
+    const response = await axios.post(`${REACT_APP_API}VMS/VerifyOTP`, payload);
     responseBody.response = response.data;
     return responseBody;
   } catch (error) {

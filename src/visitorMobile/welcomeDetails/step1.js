@@ -4,6 +4,7 @@ import { Button, TextBox } from "devextreme-react";
 import { useNavigate } from "react-router-dom";
 import { useRegisterVisitor } from "../../Atoms/customHook";
 import { requestOtp } from "../../api/registorApi";
+import { toastDisplayer } from "../../components/toastDisplayer/toastdisplayer";
 
 export const Step1 = () => {
   const [registerVisitor , setRegisterVisitor] = useRegisterVisitor();
@@ -27,15 +28,15 @@ export const Step1 = () => {
   const hanldeOnContinue = () => {
   console.log("yooo : ", registerVisitor.e_mail)
     if(registerVisitor.vname === ''){
-      return console.log("Name required");
+      return toastDisplayer("error","Name required");
     }else if(registerVisitor.e_mail===""){
-     return console.log("Email Required")
+     return toastDisplayer("error","Email Required")
     }else if(registerVisitor.phone1===''){
-      return console.log("Visitor Phone Number Required")
+      return toastDisplayer("error","Visitor Phone Number Required")
     }else if(registerVisitor.vcmpname===""){
-      return console.log("Visitor Company Number Required")
+      return toastDisplayer("error","Visitor Company Number Required")
     }else if(registerVisitor.vlocation===""){
-      return  console.log("Visitor Company Location Required")
+      return  toastDisplayer("error", "Visitor Company Location Required")
     }else{
       hanldeGetOtp();
      return navigate("/checkinotp");
@@ -53,6 +54,10 @@ export const Step1 = () => {
       return console.log("error")
     }
 
+  }
+
+  const hanldeNavigateCheckOut=()=>{
+    navigate('/checkout')
   }
   useEffect(()=>{
     console.log('registor : ' ,registerVisitor)
@@ -142,7 +147,7 @@ export const Step1 = () => {
       </div>
       <div className="already-text">
         <span> Already a visitor?</span>
-        <span> Check Out</span>
+        <span onClick={hanldeNavigateCheckOut}> Check Out</span>
       </div>
     </div>
   );

@@ -11,11 +11,30 @@ export async function forgetPasswordChk(email) {
     const payload = {
       e_mail: email,
     };
+
     var apiRes = await axios.post(`${API_URL}VMS/ForgetPasswordOTP`, payload);
     if (apiRes.status == 200) {
       console.log("APIresponse : ", apiRes.data);
       responseBody.hasError = false;
       responseBody.responseData = apiRes.data;
+
+    try {
+        const payload = {
+            "e_mail":email
+        }
+      var apiRes = await axios.post(`${API_URL}VMS/ForgetPasswordOTP`, payload);
+      if (apiRes.status === 200) {
+        console.log("APIresponse : ",apiRes.data);
+        responseBody.hasError = false;
+        responseBody.responseData = apiRes.data;
+        return responseBody;
+      } else {
+        responseBody.errorMessage = "Not Save Data..!!";
+      }
+    } catch (error) {
+      responseBody.errorMessage = responseBody.errorMessage =
+        error.response?.data?.statusMsg || error.response?.data?.errors;
+
       return responseBody;
     } else {
       responseBody.errorMessage = "Not Save Data..!!";
@@ -268,44 +287,29 @@ export const getUserNotificationRule = async (email, role, cmpid) => {
 
 // Add Notification auth rule
 export async function postNotificationRule(payload) {
-  // const myCookieValue = Cookies.get("token");
-  // const userData = Cookies.get("User");
-  // const myCookieValue = localStorage.getItem("token");
-  // const userData = localStorage.getItem("User");
-  // const storedData = localStorage.getItem("AuthRule");
+
   const responseBody = {
     responseData: null,
     hasError: false,
     errorMessage: null,
   };
-  // if (myCookieValue != null && userData != null && storedData != null) {
-  try {
-    // const headers = {
-    //   Authorization: `Bearer ${myCookieValue}`,
-    // };
-    const response = await axios.post(
-      `${API_URL}VMS/NotificationAuthUser/Save`,
-      payload
-    );
-    // const response = await axios.post(
-    //   `${API_URL}/AuthUser/SaveAuthRule`,
-    //   payload,
-    //   {
-    //     headers: headers,
-    //   }
-    // );
 
-    responseBody.responseData = response.data;
-    return responseBody;
-  } catch (error) {
-    responseBody.hasError = true;
-    responseBody.errorMessage = responseBody.errorMessage =
-      error.response?.data?.statusMsg || error.response?.data?.errors;
-    return responseBody;
+
+    try {
+
+      const response = await axios.post(
+        `${API_URL}VMS/NotificationAuthUser/Save`,
+        payload
+      );
+
+    
+      responseBody.responseData = response.data;
+      return responseBody;
+    } catch (error) {
+      responseBody.hasError = true;
+      responseBody.errorMessage = responseBody.errorMessage =
+        error.response?.data?.statusMsg || error.response?.data?.errors;
+      return responseBody;
+    }
   }
-  // } else {
-  //   responseBody.hasError = true;
-  //   responseBody.errorMessage = "something wrong";
-  //   return responseBody;
-  // }
-}
+
