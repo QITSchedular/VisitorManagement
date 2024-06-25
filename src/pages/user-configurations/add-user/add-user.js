@@ -141,7 +141,7 @@ const AddUser = () => {
               text="Save Details"
               width={140}
               height={44}
-              className="button-with-margin"
+              // className="button-with-margin"
               onClick={handleClick}
               useSubmitBehavior={true}
             />

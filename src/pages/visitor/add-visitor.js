@@ -174,7 +174,8 @@ const AddVisitor = () => {
         anyhardware: formData?.hardware,
         purposeofvisit: formData?.purpose,
         vavatar: "null" || null,
-        createdby: user,
+        createdby: user.transid,
+        reason: "",
       };
       setLoading(true);
       const response = await registerVisitorApi(reqPayload);
