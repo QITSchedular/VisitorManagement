@@ -46,7 +46,7 @@ const RejectEntryPopup = ({
       <Popup
         visible={isVisible}
         onHiding={onHide}
-        // width={480}
+        width={"25%"}
         height={"auto"}
         showCloseButton={false}
         dragEnabled={false}

@@ -162,7 +162,6 @@ const OtpPopup = ({
 
       <div className="otp-terms">
         <span className="otp-terms-condition">
-          {" "}
           {timer > 0
             ? `Didn’t get a OTP ? Retry in ${minutes
                 .toString()

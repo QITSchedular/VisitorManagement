@@ -337,6 +337,7 @@ const VisitorMain = () => {
                 items={allVisitorsState}
                 value={filterStatus}
                 // placeholder="Pending Visitors"
+                onValueChanged={(e) => handleFilterChange(e.value)}
               />
             </Item>
           </Toolbar>

@@ -12,8 +12,11 @@ import {
   finalObject,
 } from "../../../components/common-object/common-object";
 import { Button, LoadPanel, Popup } from "devextreme-react";
-import { HeaderText } from "../../../components/typographyText/TypograghyText";
-import { helpIcon, saveIcon } from "../../../assets/icon";
+import {
+  HeaderText,
+  PopupHeaderText,
+  PopupSubText,
+} from "../../../components/typographyText/TypograghyText";
 import HelperPopupPage from "../../../components/Helper-popup/helper_popup";
 import "./user-authorization.scss";
 import { useAuth } from "../../../contexts/auth";
@@ -22,6 +25,8 @@ import {
   getUserData,
   postAuthenticationRule,
 } from "../../../api/common";
+import { toastDisplayer } from "../../../components/toastDisplayer/toastdisplayer";
+import { PreSetRule, helpIcon } from "../../../assets";
 const UserAuthorization = () => {
   const [loading, setLoading] = useState(false);
   const [UserData, setUserData] = useState(false);
@@ -31,8 +36,10 @@ const UserAuthorization = () => {
   const [expandedKeys] = useState([]);
   const [selectedKeys] = useState([]);
   const [checkboxStates, setCheckboxStates] = useState({});
-  const [selectedRowKeysOnChangeAuth, setSelectedRowKeysOnChangeAuth] = useState([]);
-  const [selectedCopyRowKeysOnChangeAuth, setSelectedCopyRowKeysOnChangeAuth] =  useState([]);
+  const [selectedRowKeysOnChangeAuth, setSelectedRowKeysOnChangeAuth] =
+    useState([]);
+  const [selectedCopyRowKeysOnChangeAuth, setSelectedCopyRowKeysOnChangeAuth] =
+    useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedCopyRowKeys, setSelectedCopyRowKeys] = useState([]);
   const [userAuthorizationRule, setuserAuthorizationRule] = useState([]);
@@ -56,7 +63,7 @@ const UserAuthorization = () => {
     icon: helpIcon,
     onClick: () => showPopupHandler(),
   };
-  
+
   const showPopupHandler = () => {
     setAuthPopUp(true);
   };
@@ -72,10 +79,12 @@ const UserAuthorization = () => {
       if (result.hasError) {
         setLoading(false);
         console.log("Error : ", result);
-        // return toastDisplayer("error", result.errorMessage);
+        return toastDisplayer("error", result.errorMessage);
       }
       setLoading(false);
-      const new_data = result.responseData.filter((user) => user.usertype !== "Admin");
+      const new_data = result.responseData.filter(
+        (user) => user.usertype !== "Admin"
+      );
       setUserData(new_data);
     };
     getData();
@@ -127,7 +136,7 @@ const UserAuthorization = () => {
       ...updatedStates,
     }));
   }
- 
+
   const handleSave = async () => {
     setSelectedRowKeys(selectedRowKeysOnChangeAuth);
     if (selectedRowKeysOnChangeAuth.length > 0) {
@@ -165,7 +174,7 @@ const UserAuthorization = () => {
       // return toastDisplayer("error", "Please select a user");
     }
   };
- 
+
   const selectedRowSetterApprove = async (params) => {
     setSelectedRowKeysOnChangeAuth(params);
   };
@@ -187,7 +196,6 @@ const UserAuthorization = () => {
       return selectedRowSetterApprove(value);
     }
   };
-
 
   const handleClick = async () => {
     try {
@@ -214,13 +222,13 @@ const UserAuthorization = () => {
       };
       const apiResponse = await postAuthenticationRule(payload);
       if (apiResponse.hasError) {
-        // return toastDisplayer("error", apiResponse.errorMessage);
+        return toastDisplayer("error", apiResponse.errorMessage);
       } else {
         setSelectedRowKeys([]);
         // setSelectedRowKeysOnChangeAuth([]);
         // setModuleTreeVisible(false);
         setLoading(false);
-        // return toastDisplayer("success", apiResponse.responseData.statusMsg);
+        return toastDisplayer("success", apiResponse.responseData.statusMsg);
       }
     } catch (error) {
       console.log("error : ", error);
@@ -228,9 +236,9 @@ const UserAuthorization = () => {
   };
 
   // ================== copy data
- 
+
   const copyhelpOptions = {
-    icon: helpIcon,
+    icon: PreSetRule,
     class: "copyIcon",
     onClick: async () => {
       copyshowPopupHandler();
@@ -255,7 +263,7 @@ const UserAuthorization = () => {
   }) => {
     setSelectedCopyRowKeysOnChangeAuth(selectedRowKeys);
   };
- 
+
   const handleCopySave = async () => {
     const res = [];
     setLoading(true);
@@ -278,18 +286,18 @@ const UserAuthorization = () => {
         res.forEach((item) => {
           if (item.hasError) {
             setLoading(false);
-            // toastDisplayer("error", item.errorMessage);
+            toastDisplayer("error", item.errorMessage);
           }
         });
       } else {
-        // toastDisplayer("success", "Copy rule successfully...!!");
+        toastDisplayer("success", "Copy rule successfully...!!");
       }
       setLoading(false);
       CopysetAuthPopUp(false);
     } else {
       setLoading(false);
       CopysetAuthPopUp(false);
-      // return toastDisplayer("error", "Something went wrong");
+      return toastDisplayer("error", "Something went wrong");
     }
   };
 
@@ -300,14 +308,13 @@ const UserAuthorization = () => {
         <Popup
           visible={true}
           height={window.innerHeight - 100}
-          width={"1000px !important"}
           showCloseButton={false}
           className="initate-popup-css"
           showTitle={false}
           contentRender={() => (
             <HelperPopupPage
               title={"User Details"}
-              caption={"Choose the user"}
+              caption={"Select the user"}
               handleCancel={handleCancel}
               handleSave={handleSave}
               datagridData={UserData}
@@ -325,7 +332,6 @@ const UserAuthorization = () => {
         <Popup
           visible={true}
           height={window.innerHeight - 100}
-          width={"1000px !important"}
           showCloseButton={false}
           className="initate-popup-css"
           showTitle={false}
@@ -350,10 +356,10 @@ const UserAuthorization = () => {
       <div className="dx-card" style={{ marginTop: "16px" }}>
         <div className="navigation-header-main">
           <div className="title-section">
-            <HeaderText text="Authorise User" />
+            <HeaderText text="Authorise the Modules to User" />
           </div>
           <div className="title-section-btn">
-            {isModuleTreeVisible && (
+            {/* {isModuleTreeVisible && (
               <Button
                 text="Save Details"
                 width={140}
@@ -361,16 +367,26 @@ const UserAuthorization = () => {
                 className="button-with-margin"
                 onClick={handleClick}
               />
-            )}
+            )} */}
+            <Button
+              text="Save Details"
+              width={140}
+              height={44}
+              // className="button-with-margin"
+              onClick={handleClick}
+            />
           </div>
         </div>
 
         <div className="main-content-div">
           <div className="auth-title-section">
             <TextBox
-              labelMode="outside"
-              placeholder="User Name"
-              width={"40%"}
+              label="User Name"
+              placeholder="Input"
+              labelMode="static"
+              stylingMode="outlined"
+              width={300}
+              height={56}
               className="seachBox"
               value={
                 selectedRowKeysOnChangeAuth.length > 0
@@ -382,8 +398,6 @@ const UserAuthorization = () => {
                 name="popupSearch"
                 location="after"
                 options={userHelpOptions}
-                height={44}
-                width={44}
                 className="searchicon"
                 style={{ "background-color": "#f6f6f6" }}
               />
@@ -391,64 +405,65 @@ const UserAuthorization = () => {
           </div>
         </div>
         {isModuleTreeVisible && (
-          <TreeList
-            dataSource={authObject}
-            keyExpr="Task_ID"
-            defaultExpandedRowKeys={expandedKeys}
-            defaultSelectedRowKeys={selectedKeys}
-            showRowLines={true}
-            showColumnLines={false}
-            columnAutoWidth={true}
-            className="tree-list-main"
-          >
-            <SearchPanel visible={true} />
-            <Column dataField="Task_Subject" caption="Modules" width={300} />
-            <Column dataField="Task_ID" visible={false} />
-            <Column
-              caption="Authorise"
-              alignment={"center"}
-              cellRender={(cellData) => {
-                return (
-                  <>
-                    <CheckBox
-                      value={checkboxStates[cellData.data.Task_ID]?.C}
-                      onValueChanged={(e) => {
-                        handleCheckboxValueChanged(
-                          cellData.data.Task_ID,
-                          "C",
-                          e.value
-                        );
-                      }}
-                    />
-                  </>
-                );
-              }}
-            />
+          <div className="tree-list-main">
+            <TreeList
+              dataSource={authObject}
+              keyExpr="Task_ID"
+              defaultExpandedRowKeys={expandedKeys}
+              defaultSelectedRowKeys={selectedKeys}
+              showRowLines={true}
+              showColumnLines={false}
+              columnAutoWidth={true}
+            >
+              <SearchPanel visible={true} />
+              <Column dataField="Task_Subject" caption="Modules" width={300} />
+              <Column dataField="Task_ID" visible={false} />
+              <Column
+                caption="Authorise"
+                alignment={"center"}
+                cellRender={(cellData) => {
+                  return (
+                    <>
+                      <CheckBox
+                        value={checkboxStates[cellData.data.Task_ID]?.C}
+                        onValueChanged={(e) => {
+                          handleCheckboxValueChanged(
+                            cellData.data.Task_ID,
+                            "C",
+                            e.value
+                          );
+                        }}
+                      />
+                    </>
+                  );
+                }}
+              />
 
-            <Toolbar className="header-toolbar-modules">
-              <Item location="before">
-                <div className="informer">
-                  {/* <span className="sub-text">All Modules</span> */}
-                </div>
-              </Item>
-              <Item name="searchPanel" />
-              <Item location="after" cssClass="searchPanelIcon">
-                <TextBox
-                  placeholder="Pre-set Rule"
-                  width={168}
-                  className="report-right"
-                >
-                  <TextBoxButton
-                    name="popupSearch"
-                    location="after"
-                    options={copyhelpOptions}
-                    height={44}
-                    className="popup-copy-icon"
-                  />
-                </TextBox>
-              </Item>
-            </Toolbar>
-          </TreeList>
+              <Toolbar className="header-toolbar-modules">
+                <Item location="before">
+                  <div className="informer">
+                    <PopupHeaderText text={"All Modules"} />
+                  </div>
+                </Item>
+                <Item name="searchPanel" />
+                <Item location="after" cssClass="searchPanelIcon">
+                  <TextBox
+                    placeholder="Pre-set Rule"
+                    width={168}
+                    className="report-right"
+                  >
+                    <TextBoxButton
+                      name="popupSearch"
+                      location="after"
+                      options={copyhelpOptions}
+                      height={44}
+                      className="popup-copy-icon"
+                    />
+                  </TextBox>
+                </Item>
+              </Toolbar>
+            </TreeList>
+          </div>
         )}
       </div>
     </>

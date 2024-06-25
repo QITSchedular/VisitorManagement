@@ -31,18 +31,19 @@ const UserProfile = () => {
               text="Save Details"
               width={140}
               height={44}
-              className="button-with-margin"
+              // className="button-with-margin"
               // onClick={handleClick}
             />
           </div>
         </div>
+
         <DataGrid
           dataSource={userData}
           showBorders={false}
           selection={{
             mode: "multiple",
           }}
-          className="data-grid"
+          className="data-grid on-hover-data"
           hoverStateEnabled={true}
           columnAutoWidth={true}
           // ref={(ref) => {

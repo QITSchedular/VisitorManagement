@@ -9,6 +9,10 @@ import DataGrid, {
 } from "devextreme-react/data-grid";
 import { Button } from "devextreme-react";
 import "./popup.scss";
+import {
+  PopupHeaderText,
+  PopupSubText,
+} from "../typographyText/TypograghyText";
 function HelperPopupPage({
   handleCancel,
   handleSave,
@@ -45,24 +49,23 @@ function HelperPopupPage({
   return (
     <>
       <div className="popup-main-cointainer search-panel-width">
-        <div className="popup-header">
-          <div className="release-popup-main">
-            <div>
-              <div className="conform-popup-header-text">{title}</div>
-              <div className="conform-popup-sub-text">{caption}</div>
-            </div>
-            <div className="close-btn-section">
-              <Button icon="close" onClick={handleCancel} />
-            </div>
+        <div className="verification-popup-main">
+          <PopupHeaderText text={title} />
+          <div className="popup-subtext">
+            <PopupSubText text={caption} />
+          </div>
+
+          <div className="popup-close-btn">
+            <Button icon="close" onClick={handleCancel} />
           </div>
         </div>
         {loading ? (
           // <Triangleloader />
           ""
         ) : (
-          <div className="popup-data verify-pro-datagrid">
+          <div className="verify-pro-datagrid">
             <DataGrid
-              height={window.innerHeight - 250}
+              // height={window.innerHeight - 250}
               dataSource={dataSource}
               keyExpr={keyExpr}
               showBorders={false}
@@ -72,10 +75,7 @@ function HelperPopupPage({
               ref={dataGridRef}
               selectedRowKeys={selectedRowKeysNew}
             >
-              <SearchPanel
-                visible={true}
-                className={"search-panel"}
-              />
+              <SearchPanel visible={true} className={"search-panel"} />
               <Selection mode="multiple" allowSelectAll={false} />
               <Scrolling columnRenderingMode="virtual" />
               <Paging defaultPageSize={10} />
@@ -111,37 +111,16 @@ function HelperPopupPage({
             </DataGrid>
           </div>
         )}
-        <div
-          className="buttons-section"
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            padding: "20px",
-            display: "flex",
-            justifyContent: "flex-end",
-            gap: "10px",
-          }}
-        >
+        <div className="popup-btn-section">
           <Button
             text="Cancel"
             width={144}
             height={44}
-            style={{ backGroundColor: "white", border:"2px solid #C6C6C6",borderRadius : "4px" }}
             onClick={handleCancel}
-            className="cancelQcBtn"
+            stylingMode="outlined"
           />
-          <Button
-            text="Add"
-            type="default"
-            width={144}
-            height={44}
-            onClick={handleSave}
-            className="OkQcBtn"
-          />
+          <Button text="Add" width={144} height={44} onClick={handleSave} />
         </div>
-        
       </div>
     </>
   );

@@ -10,6 +10,7 @@ import { requestOtp } from "../../../api/registorApi";
 import { LoadPanel } from "devextreme-react/load-panel";
 import { useAuth } from "./../../../contexts/auth";
 import { GetCmpDept, SaveUserData } from "../../../api/userAPI";
+import { toastDisplayer } from "../../../components/toastDisplayer/toastdisplayer";
 
 const AddUser = () => {
   const [isOtpPopupVisible, setIsOtpPopupVisible] = useState(false);
@@ -25,13 +26,14 @@ const AddUser = () => {
     const response = await GetCmpDept(user.cmpid);
     if (response.hasError === true) {
       setLoading(false);
-      return console.log(response.errorMessage);
+      // return console.log(response.errorMessage);
       // return toastDisplayer("error", getOtpFromID.errorMessage);
+      return toastDisplayer("error", response.errorMessage);
     } else {
       console.log(response.responseData);
       setDeptData(response.responseData);
       setLoading(false);
-      // return toastDisplayer("suceess", "OTP send successfully..!!");
+      return toastDisplayer("suceess", "OTP send successfully..!!");
     }
   };
   useEffect(() => {
@@ -45,13 +47,13 @@ const AddUser = () => {
 
     if (getOtpFromID.hasError === true) {
       setLoading(false);
-      return console.log(getOtpFromID.errorMessage);
-      // return toastDisplayer("error", getOtpFromID.errorMessage);
+      // return console.log(getOtpFromID.errorMessage);
+      return toastDisplayer("error", getOtpFromID.errorMessage);
     } else {
       setIsOtpPopupVisible(true);
       setLoading(false);
-      return console.log("OTP send successfully..!!");
-      // return toastDisplayer("suceess", "OTP send successfully..!!");
+      // return console.log("OTP send successfully..!!");
+      return toastDisplayer("suceess", "OTP send successfully..!!");
     }
   };
 
@@ -63,8 +65,7 @@ const AddUser = () => {
 
     if (isMatch === false) {
       console.log("Enter a correct Mail");
-      return;
-      // return toastDisplayer("error", "Enter a correct Mail ");
+      return toastDisplayer("error", "Enter a correct Mail ");
     }
     GenerateOTP(formData?.e_mail, "user");
   };
@@ -99,19 +100,20 @@ const AddUser = () => {
         cmpdeptid: formData?.cmpdeptid,
         gender: formData?.gender || null,
         usertype: formData?.usertype,
+        changepassstatus: 0,
       };
       setLoading(true);
       const response = await SaveUserData(reqPayload);
       if (response.hasError === true) {
         setLoading(false);
-        return console.log(response.errorMessage);
-        // return toastDisplayer("error", getOtpFromID.errorMessage);
+        console.log(response.errorMessage);
+        return toastDisplayer("error", response.errorMessage);
       } else {
         setLoading(false);
         setFormData(null);
         setIsOTPVrified(false);
-        return console.log(response.responseData);
-        // return toastDisplayer("suceess", "OTP send successfully..!!");
+        console.log(response.responseData);
+        return toastDisplayer("suceess", "OTP send successfully..!!");
       }
     } else {
       console.log("OTP is not verified..!!");
@@ -139,7 +141,7 @@ const AddUser = () => {
               text="Save Details"
               width={140}
               height={44}
-              className="button-with-margin"
+              // className="button-with-margin"
               onClick={handleClick}
               useSubmitBehavior={true}
             />
@@ -210,7 +212,7 @@ const AddUser = () => {
             </div>
           </div>
           <div className="add-user-form">
-            <div className="form-input">
+            <div className="form-input popup-textbox">
               <TextBox
                 label="Email Address"
                 placeholder="Input"

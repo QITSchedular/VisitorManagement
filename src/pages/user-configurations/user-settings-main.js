@@ -19,19 +19,19 @@ const UserSettingsMain = () => {
         </div>
       </div>
       <div className="content-block tab-panel">
-      <TabPanel id="tabPanel" deferRendering={true}>
-            <Item title="Add Users" deferRendering={true}>
-                <AddUser />
-            </Item>
-            <Item title="User’s Profile" deferRendering={true}>
-                <UserProfile />
-            </Item>
-            <Item title="Authorise User" deferRendering={true}>
-                <UserAuthorization />
-            </Item>
-            <Item title="Notification Authorise" deferRendering={true}>
-                <NotificationAuthorization />
-            </Item>
+        <TabPanel id="tabPanel" deferRendering={true}>
+          <Item title="Add Users" deferRendering={true}>
+            <AddUser />
+          </Item>
+          <Item title="User’s Profile" deferRendering={true}>
+            <UserProfile />
+          </Item>
+          <Item title="Authorise User" deferRendering={true}>
+            <UserAuthorization />
+          </Item>
+          <Item title="Notification Authorise" deferRendering={true}>
+            <NotificationAuthorization />
+          </Item>
         </TabPanel>
       </div>
     </>
