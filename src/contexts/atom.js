@@ -14,3 +14,8 @@ export const addedByAtom = atom({
   key: "addedByAtom",
   default: null,
 });
+
+export const notificationAtom = atom({
+  key: "notificationAtom",
+  default: null,
+});
