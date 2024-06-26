@@ -48,3 +48,49 @@ export const SaveUserData = async (reqPayload) => {
     return responseBody;
   }
 };
+
+// get user data
+export const GetAllUser = async (cid) => {
+  const responseBody = {
+    responseData: null,
+    hasError: false,
+    error: null,
+  };
+  console.log("payload : ", cid);
+  //return null;
+  try {
+    const response = await axios.get(`${API_URL}VMS/User/Get/ALL/${cid}`);
+    responseBody.responseData = response.data;
+    return responseBody;
+  } catch (error) {
+    responseBody.errorMessage = responseBody.errorMessage =
+      error.response?.data?.StatusMsg ||
+      error.message ||
+      error.response?.data?.errors;
+    responseBody.hasError = true;
+    return responseBody;
+  }
+};
+
+// Update user data
+export const EditUser = async (reqBody) => {
+  const responseBody = {
+    responseData: null,
+    hasError: false,
+    error: null,
+  };
+  console.log("payload : ", reqBody);
+  //return null;
+  try {
+    const response = await axios.put(`${API_URL}VMS/User/Update`, reqBody);
+    responseBody.responseData = response.data;
+    return responseBody;
+  } catch (error) {
+    responseBody.errorMessage = responseBody.errorMessage =
+      error.response?.data?.StatusMsg ||
+      error.message ||
+      error.response?.data?.errors;
+    responseBody.hasError = true;
+    return responseBody;
+  }
+};

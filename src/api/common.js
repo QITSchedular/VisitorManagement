@@ -270,3 +270,80 @@ export async function postNotificationRule(payload) {
     return responseBody;
   }
 }
+
+// Read Notification API
+export const updateNotificationStatus = async (nid, email,cmpid) => {
+  const responseBody = {
+    responseData: null,
+    hasError: false,
+    errorMessage: null,
+  };  
+  try {
+    const response = await axios.post(
+      `${API_URL}VMS/Notification/Read`,
+      {
+        "transid":nid,
+        "email":email,
+        "cmptransid":cmpid
+    }
+    );
+  
+    responseBody.responseData = response.data;
+    return responseBody;
+  } catch (error) {
+ 
+    responseBody.hasError = true;
+    // responseBody.errorMessage =
+    //   error.response?.data?.errorMessage || error.response?.data?.errors;
+    responseBody.errorMessage = responseBody.errorMessage = error.message ||
+      error.response?.data?.statusMsg || error.response?.data?.errors;
+    return responseBody;
+  }
+};
+
+// Get Notification auth rule by user
+export const getAllNotification = async (email, cmpid) => {
+  // const myCookieValue = localStorage.getItem("token");
+  // const userData = localStorage.getItem("User");
+  const responseBody = {
+    responseData: null,
+    hasError: false,
+    errorMessage: null,
+  };
+  try {
+    // if (myCookieValue != null && userData != null) {
+    const payload = {
+      email: email,
+      cmptransid: cmpid,
+    };
+    // const headers = {
+    //   Authorization: `Bearer ${myCookieValue}`,
+    // };
+    // const response = await axios.post(
+    //   `${API_URL}/AuthUser/GetAuthRule`,
+    //   reqObj,
+    //   {
+    //     headers: headers,
+    //   }
+    // );
+    const response = await axios.post(
+      `${API_URL}VMS/Notification/GET`,
+      payload
+    );
+
+    responseBody.responseData = response.data;
+    return responseBody;
+    // }
+    // else {
+
+    //   responseBody.hasError = true;
+    //   responseBody.errorMessage = "UnAuthorise for add user";
+    //   return responseBody;
+    // }
+  } catch (error) {
+    responseBody.hasError = true;
+    responseBody.errorMessage =
+      error.response?.data?.errorMessage || error.response?.data?.errors;
+    return responseBody;
+  }
+};
