@@ -54,25 +54,6 @@ export async function GenerateNewPassword(email, password) {
   }
 }
 
-export async function GettingDepratmentdata(company_id) {
-  const responsebody = {
-    repsonseData: null,
-    hasError: false,
-    error: null,
-  };
-  try {
-    const response = await axios.get(
-      `${API_URL}VMS/Department/GetByCid/${company_id}`
-    );
-    responsebody.repsonseData = response.data;
-    return responsebody;
-  } catch (error) {
-    responsebody.hasError = false;
-    responsebody.error = error;
-    return responsebody;
-  }
-}
-
 export async function checkUserStatus(email, company_id) {
   const responseBody = {
     responseData: null,

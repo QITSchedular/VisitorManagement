@@ -5,6 +5,7 @@ import { LoginImage, LoginLogo } from "../../assets";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { VerifyOtp } from "../../api/registorApi";
 import { useRegisterState } from "../../Atoms/customHook";
+import { toastDisplayer } from "../toastDisplayer/toastdisplayer";
 
 const OtpVerificationForm = () => {
   const location = useLocation();
@@ -19,8 +20,8 @@ const OtpVerificationForm = () => {
   const [registerUser] = useRegisterState();
 
   useEffect(() => {
-    if (state != null && state.From==="ResetPassword") {
-      console.log("State Data : ",state);
+    if (state != null && state.From === "ResetPassword") {
+      console.log("State Data : ", state);
       setReset(true);
       setEmail(state.Email);
     }
@@ -70,16 +71,16 @@ const OtpVerificationForm = () => {
     // Add your logic here after OTP submission
     const verifyMyOtp = await VerifyOtp(email, combinedOtp, role);
     if (verifyMyOtp.response.Status === 200) {
-      console.log("Otp Verified ");
-      if(reset){
-        return navigate("/change-password",{
-          state: { Email:email },
+      toastDisplayer("success", "Otp Verified ");
+      if (reset) {
+        return navigate("/change-password", {
+          state: { Email: email },
         });
       }
       return navigate("/fill-details");
     }
 
-    console.log("Wrong Otp");
+    return toastDisplayer("error", "Wrong Otp");
   };
 
   const handleResendOtp = () => {

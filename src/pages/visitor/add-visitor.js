@@ -5,7 +5,7 @@ import {
   HeaderText,
 } from "../../components/typographyText/TypograghyText";
 import { Button as TextBoxButton } from "devextreme-react/text-box";
-import { Button, SelectBox, TextBox } from "devextreme-react";
+import { Button, LoadPanel, SelectBox, TextBox } from "devextreme-react";
 import SendVerification from "../../components/popups/send-verification";
 import { PopUpIcon } from "../../assets";
 import OtpPopup from "../../components/popups/otp-popup";
@@ -26,7 +26,7 @@ const AddVisitor = () => {
   const [refFocused, setrefFocused] = useState(false);
   const [timeSlots, setTimeSlots] = useState([]);
   const { user } = useAuth();
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleClosePopup = () => {
     setIsPopupVisible(false);
   };
@@ -36,25 +36,26 @@ const AddVisitor = () => {
   const handleCloseOtpPopup = () => {
     setIsOtpPopupVisible(false);
   };
+  const handleOtpBtnClick = async () => {
+    setIsLoading(true);
+    await OtpBtnHandler();
+    setIsLoading(false);
+    setIsOtpPopupVisible(true);
+  };
 
   const mobileOption = {
-    isDisabled: true,
+    isDisabled: isLoading,
     icon: PopUpIcon,
-    onClick: () => {
-      OtpBtnHandler();
-    },
+    onClick: handleOtpBtnClick,
   };
 
   const handleSelectTimeSlot = (e) => {
-    console.log({ target: { name: "timeslot", value: e.value } });
-    console.log("payload tiem : ", e.value.value);
     setFormData((prev) => ({
       ...prev,
       timeslot: e.value,
     }));
   };
   const handleInputChange = (fieldName, e) => {
-    console.log("i am called ", e.value, "key : ", fieldName);
     setFormData((prevState) => ({
       ...prevState,
       [fieldName]: e.value,
@@ -65,28 +66,24 @@ const AddVisitor = () => {
     setLoading(true);
     setrefFocused(true);
     const getOtpFromID = await requestOtp(officialMail, type);
-
+    console.log(getOtpFromID);
     if (getOtpFromID.hasError === true) {
       setLoading(false);
-      // return console.log(getOtpFromID.errorMessage);
+      console.log("vggg", getOtpFromID);
       return toastDisplayer("error", getOtpFromID.errorMessage);
     } else {
       setIsOtpPopupVisible(true);
       setLoading(false);
-      // return console.log("OTP send successfully..!!");
       return toastDisplayer("suceess", "OTP send successfully..!!");
     }
   };
 
-  useEffect(() => {
-    console.log("from Data  : ", formData);
-  }, [formData]);
+  useEffect(() => {}, [formData]);
+
   const OtpBtnHandler = () => {
-    console.log(formData?.e_mail);
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const isMatch = regex.test(formData?.e_mail);
     if (isMatch === false) {
-      console.log("Enter a correct Mail");
       return toastDisplayer("error", "Enter a correct Mail ");
     }
     GenerateOTP(formData?.e_mail, "visitor");
@@ -101,7 +98,6 @@ const AddVisitor = () => {
       // return toastDisplayer("error", getOtpFromID.errorMessage);
       return toastDisplayer("error", response.errorMessage);
     } else {
-      console.log(response.responseData);
       setDeptData(response.responseData);
       setLoading(false);
       return toastDisplayer("suceess", "OTP send successfully..!!");
@@ -150,11 +146,9 @@ const AddVisitor = () => {
 
   useEffect(() => {
     setTimeSlots(memoizedTimeSlots);
-    console.log("slot: ", memoizedTimeSlots);
   }, [memoizedTimeSlots]);
 
   const handleSaveFunction = async () => {
-    console.log("save function");
     if (isOTPVerified) {
       const requiredFields = ["username", "e_mail"];
       const hasEmptyField = requiredFields.find((field) => !formData[field]);
@@ -181,17 +175,15 @@ const AddVisitor = () => {
       const response = await registerVisitorApi(reqPayload);
       if (response.hasError === true) {
         setLoading(false);
-        console.log(response.errorMessage);
         return toastDisplayer("error", response.errorMessage);
       } else {
         setLoading(false);
         setFormData(null);
-        setIsOTPVrified(false);
-        // console.log(response.responseData);
-        return toastDisplayer("suceess", "OTP send successfully..!!");
+        setIsPopupVisible(false);
+        return toastDisplayer("success", "Visitor Added Successfully");
       }
     } else {
-      toastDisplayer("error", "OTP is not verified..!!");
+      toastDisplayer("error", "Visitor is already Exist");
     }
   };
   return (
@@ -235,6 +227,9 @@ const AddVisitor = () => {
               </TextBox>
             </div>
             <div className="form-input popup-textbox">
+              {isLoading && (
+                <LoadPanel visible={true} shadingColor="rgba(0,0,0,0.4)" />
+              )}
               <TextBox
                 label="Email Address"
                 placeholder="Input"
