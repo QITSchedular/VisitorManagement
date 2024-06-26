@@ -14,12 +14,27 @@ import { Autocomplete, Button } from "devextreme-react";
 import "remixicon/fonts/remixicon.css";
 import * as events from "devextreme/events";
 import { useAuth } from "../../contexts/auth";
-
+import { notificationAtom } from "../../contexts/atom";
+import { useRecoilState } from "recoil";
 export default function SideNavigationMenu(props) {
   const { children, selectedItemChanged, openMenu, compactMode, onMenuReady } =
     props;
-  const { user, signOut } = useAuth();
+  const { signOut } = useAuth();
   const { isLarge } = useScreenSize();
+
+  const [notificationAtomState,setNotificationAtomState] = useRecoilState(notificationAtom);
+
+  
+  const [notificationCnt,setNotificationCnt] = useState(0);
+  useEffect(()=>{
+    if(notificationAtom){
+      if(notificationAtomState){
+        console.log("notificationAtomState : ",notificationAtomState)
+        setNotificationCnt(notificationAtomState.length);
+      }
+    }
+  },[notificationAtomState])
+
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -69,12 +84,12 @@ export default function SideNavigationMenu(props) {
       treeView.collapseAll();
     }
   }, [currentPath, compactMode]);
-
+  
   const itemRender = (item) => {
     return (
       <div className="treeview-item-content">
         <i className={`${item.icon} custom-icon`}></i>
-        <span className="custom-text">{item.text}</span>
+        <span className="custom-text">{item.text} {item.text == "Notification" ?(notificationCnt) :""}</span>
       </div>
     );
   };
@@ -90,6 +105,8 @@ export default function SideNavigationMenu(props) {
       ? item.text.toLowerCase().includes(searchValue.toLowerCase())
       : true
   );
+
+
 
   return (
     <div
