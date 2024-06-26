@@ -149,7 +149,7 @@ const VistorsDetails = () => {
         <div className="visitor-personal-detail">
           <div className="visitor-personal-data">
             <div className="visitor-header">Carrying hardware</div>
-            <div className="visitor-sub-header">Input</div>
+            <div className="visitor-sub-header">{singleVisitor.anyhardware}</div>
           </div>
         </div>
       </div>

@@ -20,10 +20,10 @@ const routes = [
     path: "/profile",
     element: ProfilePage,
   },
-  {
-    path: "/home",
-    element: HomePage,
-  },
+  // {
+  //   path: "/home",
+  //   element: HomePage,
+  // },
   {
     path: "/Visitors",
     element: VisitorMain,
