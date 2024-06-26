@@ -3,7 +3,7 @@ import "./step4.scss";
 import { Button, SelectBox, TextBox } from "devextreme-react";
 import { useNavigate } from "react-router-dom";
 import { useRegisterVisitor } from "../../Atoms/customHook";
-import { GettingDepratmentdata } from "../../api/common";
+import { GettingDepratmentdata } from "../../api/departmentAPi";
 import { registerVisitorApi } from "../../api/mobileVisitorApi";
 
 export const Step4 = () => {
@@ -27,9 +27,11 @@ export const Step4 = () => {
   const handleAproval = async () => {
     console.log("payload : ", registerVisitor);
 
-
     if (!registerVisitor.cnctperson) {
-      return console.log("Mention person you want to meet:", registerVisitor.cnctperson);
+      return console.log(
+        "Mention person you want to meet:",
+        registerVisitor.cnctperson
+      );
     } else if (!registerVisitor.department_id) {
       return console.log("Select the department");
     } else if (!registerVisitor.timeslot) {
@@ -38,22 +40,25 @@ export const Step4 = () => {
       return console.log("Please mention the purpose of visit");
     }
 
-    console.log("registor : " ,registerVisitor);
+    console.log("registor : ", registerVisitor);
     const registor = await registerVisitorApi(registerVisitor);
 
     if (registor.hasError === true) {
       return console.log("error: ", registor);
     }
 
-    sessionStorage.removeItem('registerVisitor');
-    return navigate('/Success');
+    sessionStorage.removeItem("registerVisitor");
+    return navigate("/Success");
   };
 
   const company_id = 2;
   const getDepartmentdata = async () => {
     const departmentData = await GettingDepratmentdata(company_id);
     if (departmentData.hasError === true) {
-      return console.log("error while getting the department data", departmentData.error);
+      return console.log(
+        "error while getting the department data",
+        departmentData.error
+      );
     }
     return setDepartmentdataState(departmentData.repsonseData);
   };
@@ -69,19 +74,19 @@ export const Step4 = () => {
   const formatDateTime = (date) => {
     const d = new Date(date);
     const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const day = String(d.getDate()).padStart(2, '0');
-    const hours = String(d.getHours()).padStart(2, '0');
-    const minutes = String(d.getMinutes()).padStart(2, '0');
-    const seconds = String(d.getSeconds()).padStart(2, '0');
-  
+    const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+    const day = String(d.getDate()).padStart(2, "0");
+    const hours = String(d.getHours()).padStart(2, "0");
+    const minutes = String(d.getMinutes()).padStart(2, "0");
+    const seconds = String(d.getSeconds()).padStart(2, "0");
+
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
-  
+
   const generateTimeSlots = (date) => {
     let slots = [];
     const now = new Date();
-    
+
     // Get the current hour (0-23) from the Date object
     const currentHour = now.getHours();
     for (let i = currentHour; i < 24; i++) {
@@ -99,7 +104,6 @@ export const Step4 = () => {
     }
     return slots;
   };
-  
 
   const memoizedTimeSlots = useMemo(() => {
     const today = new Date();
@@ -110,7 +114,7 @@ export const Step4 = () => {
     console.log("getting Data");
     setRegisterVisitor((prev) => ({
       ...prev,
-      company_id: 2
+      company_id: 2,
     }));
     getDepartmentdata();
   }, []);
@@ -119,8 +123,6 @@ export const Step4 = () => {
     setTimeSlots(memoizedTimeSlots);
     console.log("slot: ", memoizedTimeSlots);
   }, [memoizedTimeSlots]);
-
-  
 
   return (
     <div className="Step1">

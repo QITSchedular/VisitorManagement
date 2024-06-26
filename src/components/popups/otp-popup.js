@@ -7,6 +7,7 @@ import {
 import { Link } from "react-router-dom";
 import "./send-verification.scss";
 import { VerifyOtp } from "../../api/registorApi";
+import { toastDisplayer } from "../toastDisplayer/toastdisplayer";
 
 const OtpPopup = ({
   isVisible,
@@ -62,13 +63,13 @@ const OtpPopup = ({
   const verifyOTPFun = async (combinedOtp) => {
     const verifyMyOtp = await VerifyOtp(email, combinedOtp, role);
     if (verifyMyOtp.hasError === true) {
-      return console.log(verifyMyOtp.errorMessage);
-      // return toastDisplayer("error", getOtpFromID.errorMessage);
+      // return console.log(verifyMyOtp.errorMessage);
+      return toastDisplayer("error", verifyMyOtp.errorMessage);
     } else {
       setIsOTPVrified(true);
       onHide();
-      return console.log("OTP verify successfully..!!");
-      // return toastDisplayer("suceess", "OTP send successfully..!!");
+      // return console.log("OTP verify successfully..!!");
+      return toastDisplayer("suceess", "OTP send successfully..!!");
     }
   };
 

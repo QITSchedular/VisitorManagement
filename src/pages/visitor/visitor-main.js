@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   HeaderText,
   SubText,
@@ -48,7 +48,7 @@ const VisitorMain = () => {
   const handleClick = () => {
     navigate("/Visitors/Add-Visitors");
   };
-  let dataGrid;
+  // let dataGrid;
   const [clickedRowData, setClickedRowData] = useState(null);
   const [visitors, setVisitors] = useState([]);
   const [status, setStatus] = useRecoilState(statusAtom);
@@ -58,7 +58,8 @@ const VisitorMain = () => {
   const { send, eventEmitter } = useWebSocket();
   const { user } = useAuth();
   const [filterStatus, setFilterStatus] = useState("All");
-
+  const [filterState, setFilterState] = useState("All");
+  const dataGrid = useRef(null);
   // ------------------ filter according to state ----------------//
   const allVisitorsState = [
     { value: "All", text: "All Visitors" },
@@ -70,9 +71,33 @@ const VisitorMain = () => {
   const handleFilterChange = (newStatus) => {
     setFilterStatus(newStatus);
     const filterValue = newStatus === "All" ? undefined : newStatus;
-    if (dataGrid && dataGrid.instance) {
-      dataGrid.instance.columnOption("state", "filterValue", filterValue);
-      dataGrid.instance.refresh();
+    if (dataGrid.current && dataGrid.current.instance) {
+      dataGrid.current.instance.columnOption(
+        "state",
+        "filterValue",
+        filterValue
+      );
+      dataGrid.current.instance.refresh();
+    }
+  };
+
+  const allCheckinVisitor = [
+    { value: "All", text: "All Visitors" },
+    { value: "Check in", text: "Check in" },
+    { value: "Check Out", text: "Check Out" },
+  ];
+
+  const handleFilterState = (newStatus) => {
+    setFilterState(newStatus);
+    const filterValue = newStatus === "All" ? undefined : newStatus;
+
+    if (dataGrid.current && dataGrid.current.instance) {
+      dataGrid.current.instance.columnOption(
+        "status",
+        "filterValue",
+        filterValue
+      );
+      dataGrid.current.instance.refresh();
     }
   };
   useEffect(() => {
@@ -236,9 +261,10 @@ const VisitorMain = () => {
           className="data-grid"
           hoverStateEnabled={true}
           columnAutoWidth={true}
-          ref={(ref) => {
-            dataGrid = ref;
-          }}
+          ref={dataGrid}
+          // ref={(ref) => {
+          //   dataGrid = ref;
+          // }}
         >
           <SearchPanel
             visible={true}
@@ -325,6 +351,9 @@ const VisitorMain = () => {
                 stylingMode="outlined"
                 className="left-textbox"
                 placeholder="Check In"
+                items={allCheckinVisitor}
+                value={filterState}
+                onValueChanged={(e) => handleFilterState(e.value)}
               />
             </Item>
             <Item location="after">

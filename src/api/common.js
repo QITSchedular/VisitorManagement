@@ -11,30 +11,11 @@ export async function forgetPasswordChk(email) {
     const payload = {
       e_mail: email,
     };
-
     var apiRes = await axios.post(`${API_URL}VMS/ForgetPasswordOTP`, payload);
     if (apiRes.status == 200) {
       console.log("APIresponse : ", apiRes.data);
       responseBody.hasError = false;
       responseBody.responseData = apiRes.data;
-
-    try {
-        const payload = {
-            "e_mail":email
-        }
-      var apiRes = await axios.post(`${API_URL}VMS/ForgetPasswordOTP`, payload);
-      if (apiRes.status === 200) {
-        console.log("APIresponse : ",apiRes.data);
-        responseBody.hasError = false;
-        responseBody.responseData = apiRes.data;
-        return responseBody;
-      } else {
-        responseBody.errorMessage = "Not Save Data..!!";
-      }
-    } catch (error) {
-      responseBody.errorMessage = responseBody.errorMessage =
-        error.response?.data?.statusMsg || error.response?.data?.errors;
-
       return responseBody;
     } else {
       responseBody.errorMessage = "Not Save Data..!!";
@@ -70,25 +51,6 @@ export async function GenerateNewPassword(email, password) {
     responseBody.errorMessage = responseBody.errorMessage =
       error.response?.data?.statusMsg || error.response?.data?.errors;
     return responseBody;
-  }
-}
-
-export async function GettingDepratmentdata(company_id) {
-  const responsebody = {
-    repsonseData: null,
-    hasError: false,
-    error: null,
-  };
-  try {
-    const response = await axios.get(
-      `${API_URL}VMS/Department/GetByCid/${company_id}`
-    );
-    responsebody.repsonseData = response.data;
-    return responsebody;
-  } catch (error) {
-    responsebody.hasError = false;
-    responsebody.error = error;
-    return responsebody;
   }
 }
 
@@ -287,29 +249,24 @@ export const getUserNotificationRule = async (email, role, cmpid) => {
 
 // Add Notification auth rule
 export async function postNotificationRule(payload) {
-
   const responseBody = {
     responseData: null,
     hasError: false,
     errorMessage: null,
   };
 
+  try {
+    const response = await axios.post(
+      `${API_URL}VMS/NotificationAuthUser/Save`,
+      payload
+    );
 
-    try {
-
-      const response = await axios.post(
-        `${API_URL}VMS/NotificationAuthUser/Save`,
-        payload
-      );
-
-    
-      responseBody.responseData = response.data;
-      return responseBody;
-    } catch (error) {
-      responseBody.hasError = true;
-      responseBody.errorMessage = responseBody.errorMessage =
-        error.response?.data?.statusMsg || error.response?.data?.errors;
-      return responseBody;
-    }
+    responseBody.responseData = response.data;
+    return responseBody;
+  } catch (error) {
+    responseBody.hasError = true;
+    responseBody.errorMessage = responseBody.errorMessage =
+      error.response?.data?.statusMsg || error.response?.data?.errors;
+    return responseBody;
   }
-
+}

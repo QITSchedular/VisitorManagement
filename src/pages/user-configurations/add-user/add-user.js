@@ -11,6 +11,7 @@ import { LoadPanel } from "devextreme-react/load-panel";
 import { useAuth } from "./../../../contexts/auth";
 import { GetCmpDept, SaveUserData } from "../../../api/userAPI";
 import { toastDisplayer } from "../../../components/toastDisplayer/toastdisplayer";
+import CustomLoader from "../../../components/customerloader/CustomLoader";
 
 const AddUser = () => {
   const [isOtpPopupVisible, setIsOtpPopupVisible] = useState(false);
@@ -48,6 +49,8 @@ const AddUser = () => {
     if (getOtpFromID.hasError === true) {
       setLoading(false);
       // return console.log(getOtpFromID.errorMessage);
+
+      console.log(getOtpFromID);
       return toastDisplayer("error", getOtpFromID.errorMessage);
     } else {
       setIsOtpPopupVisible(true);
@@ -113,7 +116,7 @@ const AddUser = () => {
         setFormData(null);
         setIsOTPVrified(false);
         console.log(response.responseData);
-        return toastDisplayer("suceess", "OTP send successfully..!!");
+        return toastDisplayer("success", "OTP send successfully..!!");
       }
     } else {
       console.log("OTP is not verified..!!");
@@ -131,6 +134,11 @@ const AddUser = () => {
     <>
       {/* <LoadPanel visible={true} shadingColor="rgba(0,0,0,0.4)" /> */}
       {loading && <LoadPanel visible={true} shadingColor="rgba(0,0,0,0.4)" />}
+      {/* {loading && (
+        <div className="Myloader">
+          <CustomLoader />
+        </div>
+      )} */}
       <div className="dx-card" style={{ marginTop: "16px" }}>
         <div className="navigation-header-main">
           <div className="title-section">

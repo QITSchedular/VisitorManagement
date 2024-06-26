@@ -33,7 +33,10 @@ export const requestOtp = async (email, role) => {
   };
   try {
     console.log("payload : ", payload);
-    const response = await axios.post(`${REACT_APP_API}VMS/GenerateOTP`, payload);
+    const response = await axios.post(
+      `${REACT_APP_API}VMS/GenerateOTP`,
+      payload
+    );
     responseBody.response = response.data;
     return responseBody;
   } catch (error) {
@@ -51,21 +54,29 @@ export const VerifyOtp = async (email, otp, role) => {
   const responseBody = {
     responseData: null,
     hasError: false,
-    error: null,
+    errorMessage: null,
   };
   const payload = {
     e_mail: email,
     VerifyOTP: otp,
     role: role,
   };
- // return console.log("payload : " , payload)
+  // return console.log("payload : " , payload)
   try {
     const response = await axios.post(`${REACT_APP_API}VMS/VerifyOTP`, payload);
     responseBody.response = response.data;
+    if (response.data.Status === 400) {
+      responseBody.hasError = true;
+      responseBody.errorMessage = response.data.StatusMsg;
+    }
+
     return responseBody;
   } catch (error) {
-    responseBody.error = error;
     responseBody.hasError = true;
+    responseBody.errorMessage =
+      error.response?.data?.StatusMsg ||
+      error.response?.data?.errors ||
+      error.message;
     return responseBody;
   }
 };
