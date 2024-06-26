@@ -132,13 +132,25 @@
 }
 
 .custom-text {
+  position: relative;
   font-size: 14px;
   font-weight: 500;
   font-family: Inter;
   color: #344450;
   padding-left: 8px;
 }
-
+.notification-badge {
+  position: absolute;
+  background-color: rgba(78, 93, 107, 0.2);
+  color: #000;
+  border-radius: 32%;
+  padding: 0.2em 0.5em;
+  font-size: 14px;
+  margin-left: 0.5em;
+  display: inline-block;
+  min-width: 32px;
+  text-align: center;
+}
 .search-box {
   position: relative;
   margin: 10px 10px 10px;
