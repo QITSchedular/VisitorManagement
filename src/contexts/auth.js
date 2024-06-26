@@ -43,6 +43,7 @@ function AuthProvider(props) {
     const result = await sendSignInRequest(email, password);
 
     if (result.isOk) {
+      console.log("=========>", result.data.user);
       setUser(result.data.user);
       console.log("my data : ", result.data);
       setAuthRuleContext(result.data.userAuth);
