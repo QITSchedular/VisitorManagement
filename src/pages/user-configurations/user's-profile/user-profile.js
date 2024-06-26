@@ -30,7 +30,6 @@ const UserProfile = () => {
   const { user } = useAuth();
 
   const getAllUserData = async () => {
-    console.log("here");
     setLoading(true);
     const response = await GetAllUser(user.cmpid);
     if (response.hasError === true) {
@@ -39,7 +38,7 @@ const UserProfile = () => {
     } else {
       setUserData(response.responseData);
       setLoading(false);
-      return toastDisplayer("suceess", "OTP send successfully..!!");
+      // return toastDisplayer("suceess", "OTP send successfully..!!");
     }
   };
 

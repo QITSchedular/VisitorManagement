@@ -116,10 +116,11 @@ const AddUser = () => {
         setFormData(null);
         setIsOTPVrified(false);
         console.log(response.responseData);
-        return toastDisplayer("success", "OTP send successfully..!!");
+        return toastDisplayer("success", "User save successfully..!!");
       }
     } else {
       console.log("OTP is not verified..!!");
+      return toastDisplayer("error", "OTP is not verified..!!");
     }
   };
 
