@@ -81,7 +81,14 @@ const VisitorCard = ({
   return (
     <div className="visitor-card">
       <div className="visitor-header-main">
-        <img src={Visitor} alt="visitor-profile" />
+        {visitor.vavatar ? (
+          <img src={visitor.vavatar} alt="visitor-profile" />
+        )
+         :
+         (
+            <img src={Visitor} alt="visitor-profile" /> 
+         )
+         }
         <div className="visitor-deatils">
           <div className="visitor-company">{visitor.vCmpname}</div>
           <div className="visitor-name">{visitor.vName}</div>
