@@ -2176,7 +2176,8 @@
 }
 .dx-button-mode-text.dx-button-default {
   background-color: transparent;
-  color: #03a9f4;
+  /* color: #03a9f4; */
+  color: #7F56D9;
 }
 .dx-button-mode-text.dx-button-default .dx-icon {
   color: #03a9f4;
@@ -2190,7 +2191,9 @@
 }
 .dx-button-mode-text.dx-button-default.dx-state-focused,
 .dx-button-mode-text.dx-button-default.dx-state-hover {
-  background-color: rgba(3,169,244,.08);
+  /* background-color: rgba(3,169,244,.08); */
+  background-color: rgba(127,86,217,.08);
+
 }
 .dx-button-mode-text.dx-button-default.dx-state-active {
   background-color: rgba(3,169,244,.36);

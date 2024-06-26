@@ -11,18 +11,19 @@ import { visitors } from "./visitor-card/visitorData";
 import { getVisiotrCompanyWise } from "../../api/visitorApi";
 import { toastDisplayer } from "../../components/toastDisplayer/toastdisplayer";
 import CustomLoader from "../../components/customerloader/CustomLoader";
+import { LoadPanel } from "devextreme-react";
 
 const VerifyVisitorMain = () => {
   const [searchText, setSearchText] = useState("");
   const [filteredVisitors, setFilteredVisitors] = useState(visitors);
   const [visitorDataState, setVisitorDataState] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [visitorCount , setVisitorCount] = useState(0);
+  const [visitorCount, setVisitorCount] = useState(0);
 
   useEffect(() => {
     const lowerCaseSearchText = searchText ? searchText.toLowerCase() : "";
     const filteredData = visitors.filter((visitor) =>
-      visitor.VisitorName.toLowerCase().includes(lowerCaseSearchText),
+      visitor.VisitorName.toLowerCase().includes(lowerCaseSearchText)
     );
     setFilteredVisitors(filteredData);
   }, [searchText]);
@@ -35,7 +36,6 @@ const VerifyVisitorMain = () => {
       [index]: !prevState[index],
     }));
   };
-
 
   useEffect(() => {
     console.log("This is my State : ", visitorDataState);
@@ -55,10 +55,10 @@ const VerifyVisitorMain = () => {
       return toastDisplayer("error", `${visitorData.error}`);
     }
     console.log("my data : ", visitorData);
-    const data  = visitorData.responseData;
-    const filteredData = data.filter(entry => entry.state === "Pending");
+    const data = visitorData.responseData;
+    const filteredData = data.filter((entry) => entry.state === "Pending");
     setIsLoading(false);
-   setVisitorCount( filteredData.length);
+    setVisitorCount(filteredData.length);
     return setVisitorDataState(filteredData);
   };
 
@@ -73,7 +73,6 @@ const VerifyVisitorMain = () => {
           <CustomLoader />
         </div>
       )}
-
       <div className="content-block">
         <div className="navigation-header-main">
           <div className="title-section">
@@ -98,6 +97,8 @@ const VerifyVisitorMain = () => {
           </div>
         </div>
         <div className="visitor-cards-container">
+          {/* {isLoading && <LoadPanel visible={true} />} */}
+
           {visitorDataState.map((visitor, index) => (
             <VisitorCard
               key={index}

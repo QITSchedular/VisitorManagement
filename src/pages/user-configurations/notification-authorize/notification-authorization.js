@@ -77,8 +77,8 @@ const NotificationAuthorization = () => {
       let result = await getUserData("All", user.cmpid);
       if (result.hasError) {
         setLoading(false);
-        console.log("Error : ", result);
-        // return toastDisplayer("error", result.errorMessage);
+        // console.log("Error : ", result);
+        return toastDisplayer("error", result.errorMessage);
       }
       setLoading(false);
       const new_data = result.responseData.filter(
@@ -172,7 +172,7 @@ const NotificationAuthorization = () => {
     } else {
       setLoading(false);
       setModuleTreeVisible(false);
-      // return toastDisplayer("error", "Please select a user");
+      return toastDisplayer("error", "Please select a user");
     }
   };
 
@@ -300,7 +300,7 @@ const NotificationAuthorization = () => {
     } else {
       setLoading(false);
       CopysetNotificationPopUp(false);
-      // return toastDisplayer("error", "Something went wrong");
+      return toastDisplayer("error", "Something went wrong");
     }
   };
   return (
