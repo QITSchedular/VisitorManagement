@@ -76,7 +76,7 @@ const VerifyVisitorMain = () => {
       <div className="content-block">
         <div className="navigation-header-main">
           <div className="title-section">
-            <HeaderText text="Add Visitors" />
+            <HeaderText text="Verify Visitors" />
           </div>
         </div>
       </div>
@@ -92,7 +92,7 @@ const VerifyVisitorMain = () => {
           <div className="title-section">
             <SubText text={`In total, you have ${visitorCount} visitors`} />
           </div>
-          <div className="title-section-btn">
+          <div className="title-section-search">
             <SearchBox searchText={searchText} setSearchText={setSearchText} />
           </div>
         </div>

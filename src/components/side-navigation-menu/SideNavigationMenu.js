@@ -22,19 +22,18 @@ export default function SideNavigationMenu(props) {
   const { signOut } = useAuth();
   const { isLarge } = useScreenSize();
 
-  const [notificationAtomState,setNotificationAtomState] = useRecoilState(notificationAtom);
+  const [notificationAtomState, setNotificationAtomState] =
+    useRecoilState(notificationAtom);
 
-  
-  const [notificationCnt,setNotificationCnt] = useState(0);
-  useEffect(()=>{
-    if(notificationAtom){
-      if(notificationAtomState){
-        console.log("notificationAtomState : ",notificationAtomState)
+  const [notificationCnt, setNotificationCnt] = useState(0);
+  useEffect(() => {
+    if (notificationAtom) {
+      if (notificationAtomState) {
+        console.log("notificationAtomState : ", notificationAtomState);
         setNotificationCnt(notificationAtomState.length);
       }
     }
-  },[notificationAtomState])
-
+  }, [notificationAtomState]);
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -84,12 +83,17 @@ export default function SideNavigationMenu(props) {
       treeView.collapseAll();
     }
   }, [currentPath, compactMode]);
-  
+
   const itemRender = (item) => {
     return (
       <div className="treeview-item-content">
         <i className={`${item.icon} custom-icon`}></i>
-        <span className="custom-text">{item.text} {item.text == "Notification" ?(notificationCnt) :""}</span>
+        <span className="custom-text">
+          {item.text}
+          {item.text === "Notification" && (
+            <span className="notification-badge">{notificationCnt}</span>
+          )}
+        </span>
       </div>
     );
   };
@@ -105,8 +109,6 @@ export default function SideNavigationMenu(props) {
       ? item.text.toLowerCase().includes(searchValue.toLowerCase())
       : true
   );
-
-
 
   return (
     <div

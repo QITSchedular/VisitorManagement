@@ -2,7 +2,7 @@
 .box {
   position: relative;
 }
-.title-section-btn {
+.title-section-search {
   i {
     position: absolute;
     margin-left: 10px;
@@ -14,19 +14,18 @@
     color: #687787;
   }
 }
-.title-section-btn {
+.title-section-search {
   .dx-placeholder {
-    margin-left: 15px;
+    margin-left: 20px;
     font-size: 14px;
     color: #687787;
     font-family: Inter;
   }
 }
-.title-section-btn .dx-widget input,
+.title-section-search .dx-widget input,
 .dx-widget textarea {
-  // margin-left: 15px;
+  margin-left: 20px;
 }
-
 .highlight {
   font-weight: 500;
   padding: 0px 1px;
