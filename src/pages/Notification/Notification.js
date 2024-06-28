@@ -20,7 +20,7 @@ const Notification = () => {
   useEffect(() => {
     if (notificationAtom) {
       // console.log("notificationAtomState : ", notificationAtomState);
-      setNotificationCnt(notificationAtomState.length);
+      // setNotificationCnt(notificationAtomState.length);
     }
   }, [notificationAtomState]);
 

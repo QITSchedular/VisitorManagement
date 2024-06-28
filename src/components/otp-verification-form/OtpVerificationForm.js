@@ -21,7 +21,7 @@ const OtpVerificationForm = () => {
 
   useEffect(() => {
     if (state != null && state.From === "ResetPassword") {
-      console.log("State Data : ", state);
+      console.log("State Data ===>: ", state.Email);
       setReset(true);
       setEmail(state.Email);
     }
@@ -63,24 +63,43 @@ const OtpVerificationForm = () => {
     }
   };
 
+  // const onOtpSubmit = async (combinedOtp) => {
+  //   console.log("registerUser : ", registerUser);
+  //   const email = registerUser.e_mail;
+  //   const role = "company";
+  //   console.log(" otp : ", combinedOtp);
+  //   // Add your logic here after OTP submission
+  //   const verifyMyOtp = await VerifyOtp(email, combinedOtp, role);
+  //   if (verifyMyOtp.response.Status === 200) {
+  //     toastDisplayer("success", "Otp Verified ");
+  //     if (reset) {
+  //       return navigate("/change-password", {
+  //         state: { Email: email },
+  //       });
+  //     }
+  //     return navigate("/fill-details");
+  //   }
+
+  //   return toastDisplayer("error", "Wrong Otp");
+  // };
+
   const onOtpSubmit = async (combinedOtp) => {
-    console.log("registerUser : ", registerUser);
-    const email = registerUser.e_mail;
+    const email1 = registerUser.e_mail;
     const role = "company";
     console.log(" otp : ", combinedOtp);
     // Add your logic here after OTP submission
     const verifyMyOtp = await VerifyOtp(email, combinedOtp, role);
     if (verifyMyOtp.response.Status === 200) {
-      toastDisplayer("success", "Otp Verified ");
-      if (reset) {
-        return navigate("/change-password", {
-          state: { Email: email },
+      console.log("Otp Verified ");
+      if(reset){
+        return navigate("/change-password",{
+          state: { Email:email },
         });
       }
       return navigate("/fill-details");
     }
 
-    return toastDisplayer("error", "Wrong Otp");
+    console.log("Wrong Otp");
   };
 
   const handleResendOtp = () => {

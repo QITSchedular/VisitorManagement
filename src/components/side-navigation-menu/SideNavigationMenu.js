@@ -19,9 +19,9 @@ import { useRecoilState } from "recoil";
 export default function SideNavigationMenu(props) {
   const { children, selectedItemChanged, openMenu, compactMode, onMenuReady } =
     props;
-  const { signOut } = useAuth();
+  const { signOut,authRuleContext } = useAuth();
   const { isLarge } = useScreenSize();
-
+  const [authNavigation,setAuthNavigation] = useState([]);
   const [notificationAtomState, setNotificationAtomState] =
     useRecoilState(notificationAtom);
 
@@ -34,6 +34,19 @@ export default function SideNavigationMenu(props) {
       }
     }
   }, [notificationAtomState]);
+
+  useEffect(() => {
+    if (authRuleContext) {
+      const correctedString = authRuleContext.replace(/'/g, '"')
+      .replace(/True/g, "true")
+      .replace(/False/g, "false");
+      
+      const userAuthJSON = JSON.parse(correctedString);
+      setAuthNavigation(userAuthJSON);
+      console.log("User ==>: ",userAuthJSON);
+      console.log("User ==>: ",navigation);
+    }
+  }, [authRuleContext]);
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -144,7 +157,8 @@ export default function SideNavigationMenu(props) {
       <div className={"menu-container"}>
         <TreeView
           ref={treeViewRef}
-          items={filteredItems}
+          // items={filteredItems}
+          items={authNavigation}
           keyExpr={"path"}
           selectionMode={"single"}
           focusStateEnabled={false}

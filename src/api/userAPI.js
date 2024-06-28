@@ -1,8 +1,13 @@
 import axios from "axios";
+import { logToServer } from "./logger";
 const API_URL = process.env.REACT_APP_API;
 
 // get department data
 export const GetCmpDept = async (cid) => {
+  const storedSessionValue = JSON.parse(sessionStorage.getItem("authState"));
+
+  const { access, refresh, user, userAuth, expirationTime } =
+    storedSessionValue;
   const responseBody = {
     responseData: null,
     hasError: false,
@@ -15,6 +20,16 @@ export const GetCmpDept = async (cid) => {
       `${API_URL}VMS/Department/GetByCid/${cid}`
     );
     responseBody.responseData = response.data;
+    await logToServer(
+      "User Settings",
+      "dept_master",
+      "GetAllDeptByCId",
+      "S",
+      "SuccessFully get department Data...",
+      JSON.stringify(cid),
+      user.e_mail,
+      user.cmpid
+    );
     return responseBody;
   } catch (error) {
     responseBody.errorMessage = responseBody.errorMessage =
@@ -22,12 +37,26 @@ export const GetCmpDept = async (cid) => {
       error.message ||
       error.response?.data?.errors;
     responseBody.hasError = true;
+    await logToServer(
+      "User Settings",
+      "dept_master",
+      "GetAllDeptByCId",
+      "E",
+      "UnSuccessFully get department Data...",
+      JSON.stringify(cid),
+      user.e_mail,
+      user.cmpid
+    );
     return responseBody;
   }
 };
 
 // save user data
 export const SaveUserData = async (reqPayload) => {
+  const storedSessionValue = JSON.parse(sessionStorage.getItem("authState"));
+
+  const { access, refresh, user, userAuth, expirationTime } =
+    storedSessionValue;
   const responseBody = {
     responseData: null,
     hasError: false,
@@ -38,6 +67,16 @@ export const SaveUserData = async (reqPayload) => {
   try {
     const response = await axios.post(`${API_URL}VMS/User/Save`, reqPayload);
     responseBody.responseData = response.data;
+    await logToServer(
+      "User Settings",
+      "user_master",
+      "save_user",
+      "S",
+      "SuccessFully save user Data...",
+      JSON.stringify(reqPayload),
+      user.e_mail,
+      user.cmpid
+    );
     return responseBody;
   } catch (error) {
     responseBody.errorMessage = responseBody.errorMessage =
@@ -45,12 +84,26 @@ export const SaveUserData = async (reqPayload) => {
       error.message ||
       error.response?.data?.errors;
     responseBody.hasError = true;
+    await logToServer(
+      "User Settings",
+      "user_master",
+      "save_user",
+      "E",
+      "UnSuccessFully save user Data...",
+      JSON.stringify(reqPayload),
+      user.e_mail,
+      user.cmpid
+    );
     return responseBody;
   }
 };
 
 // get user data
 export const GetAllUser = async (cid) => {
+  const storedSessionValue = JSON.parse(sessionStorage.getItem("authState"));
+
+  const { access, refresh, user, userAuth, expirationTime } =
+    storedSessionValue;
   const responseBody = {
     responseData: null,
     hasError: false,
@@ -61,6 +114,16 @@ export const GetAllUser = async (cid) => {
   try {
     const response = await axios.get(`${API_URL}VMS/User/Get/ALL/${cid}`);
     responseBody.responseData = response.data;
+    await logToServer(
+      "User Settings",
+      "user_master",
+      "get_user",
+      "S",
+      "SuccessFully Get user Data...",
+      JSON.stringify(cid),
+      user.e_mail,
+      user.cmpid
+    );
     return responseBody;
   } catch (error) {
     responseBody.errorMessage = responseBody.errorMessage =
@@ -68,12 +131,26 @@ export const GetAllUser = async (cid) => {
       error.message ||
       error.response?.data?.errors;
     responseBody.hasError = true;
+    await logToServer(
+      "User Settings",
+      "user_master",
+      "get_user",
+      "E",
+      "UnSuccessFully Get user Data...",
+      JSON.stringify(cid),
+      user.e_mail,
+      user.cmpid
+    );
     return responseBody;
   }
 };
 
 // Update user data
 export const EditUser = async (reqBody) => {
+  const storedSessionValue = JSON.parse(sessionStorage.getItem("authState"));
+
+  const { access, refresh, user, userAuth, expirationTime } =
+    storedSessionValue;
   const responseBody = {
     responseData: null,
     hasError: false,
@@ -84,6 +161,16 @@ export const EditUser = async (reqBody) => {
   try {
     const response = await axios.put(`${API_URL}VMS/User/Update`, reqBody);
     responseBody.responseData = response.data;
+    await logToServer(
+      "User Settings",
+      "user_master",
+      "update_user",
+      "S",
+      "SuccessFully Edit Data...",
+      JSON.stringify(reqBody),
+      user.e_mail,
+      user.cmpid
+    );
     return responseBody;
   } catch (error) {
     responseBody.errorMessage = responseBody.errorMessage =
@@ -91,6 +178,16 @@ export const EditUser = async (reqBody) => {
       error.message ||
       error.response?.data?.errors;
     responseBody.hasError = true;
+    await logToServer(
+      "User Settings",
+      "user_master",
+      "update_user",
+      "E",
+      "UnSuccessFully Edit Data...",
+      JSON.stringify(reqBody),
+      user.e_mail,
+      user.cmpid
+    );
     return responseBody;
   }
 };
@@ -104,11 +201,36 @@ export const GetCmpDetail = async (cid) => {
   };
   console.log("payload : ", cid);
   //return null;
+  const storedSessionValue = JSON.parse(sessionStorage.getItem("authState"));
+
+  const { access, refresh, user, userAuth, expirationTime } =
+    storedSessionValue;
   try {
     const response = await axios.get(`${API_URL}VMS/GetComapnyDataById/${cid}`);
     responseBody.responseData = response.data;
+    await logToServer(
+      "Profile",
+      "company_master",
+      "GetComapnyDataById",
+      "S",
+      "SuccessFully Get Data...",
+      JSON.stringify(cid),
+      user.e_mail,
+      user.cmpid
+    );
+
     return responseBody;
   } catch (error) {
+    await logToServer(
+      "Profile",
+      "company_master",
+      "GetComapnyDataById",
+      "E",
+      "UnSuccessFully Get Data...",
+      JSON.stringify(cid),
+      user.e_mail,
+      user.cmpid
+    );
     responseBody.errorMessage = responseBody.errorMessage =
       error.response?.data?.StatusMsg ||
       error.message ||
@@ -119,6 +241,10 @@ export const GetCmpDetail = async (cid) => {
 };
 
 export const UpdateCmpData = async (reqPayload) => {
+  const storedSessionValue = JSON.parse(sessionStorage.getItem("authState"));
+
+  const { access, refresh, user, userAuth, expirationTime } =
+    storedSessionValue;
   const responseBody = {
     responseData: null,
     hasError: false,
@@ -129,8 +255,28 @@ export const UpdateCmpData = async (reqPayload) => {
   try {
     const response = await axios.put(`${API_URL}VMS/Company/Edit`, reqPayload);
     responseBody.responseData = response.data;
+    await logToServer(
+      "Profile",
+      "company_master",
+      "EditComapnyDataById",
+      "S",
+      "SuccessFully Edit Data...",
+      JSON.stringify(reqPayload),
+      user.e_mail,
+      user.cmpid
+    );
     return responseBody;
   } catch (error) {
+    await logToServer(
+      "Profile",
+      "company_master",
+      "EditComapnyDataById",
+      "E",
+      "UnSuccessFully Edit Data...",
+      JSON.stringify(reqPayload),
+      user.e_mail,
+      user.cmpid
+    );
     responseBody.errorMessage = responseBody.errorMessage =
       error.response?.data?.StatusMsg ||
       error.message ||

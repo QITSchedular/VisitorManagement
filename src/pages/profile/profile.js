@@ -30,7 +30,7 @@ export default function Profile() {
 
       var dataRes = response.responseData;
       setFormData(response.responseData);
-
+      if (canvasRef.current) {
       qrcode.toCanvas(
         canvasRef.current,
         process.env.REACT_APP_URL + "#/welcomevisitor/" + dataRes.qrstring,
@@ -41,6 +41,7 @@ export default function Profile() {
         }
       );
       setLoading(false);
+      }
       // return toastDisplayer("suceess", "OTP send successfully..!!");
     }
   };

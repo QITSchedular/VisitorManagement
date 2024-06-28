@@ -1,5 +1,6 @@
 import axios from "axios";
 import defaultUser from "../utils/default-user";
+import { logToServer } from "./logger";
 const API_URL = process.env.REACT_APP_API;
 
 export async function signIn(email, password) {
@@ -13,12 +14,32 @@ export async function signIn(email, password) {
     console.log("reponse : ", response);
     console.log(email, password);
     if (response.status === 200) {
+      await logToServer(
+        "Login",
+        "common",
+        "login_view",
+        "S",
+        "SuccessFully LoggedIn...",
+        JSON.stringify(payload),
+        email,
+        response.data.user.cmpid
+      );
       return {
         isOk: true,
         data: response.data,
       };
     }
   } catch (error) {
+    await logToServer(
+      "Login",
+      "common",
+      "login_view",
+      "S",
+      "UnSuccessFully LoggedIn...",
+      JSON.stringify(payload),
+      email,
+      0
+    );
     return {
       isOk: false,
       message: error,
