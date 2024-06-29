@@ -53,13 +53,10 @@ const routes = [
     path: "/Users-Settings",
     element: UserSettingsMain,
   },
-
-  //Notification
   {
     path: "/notification",
     element: Notification,
   },
-  //General Setting
   {
     path: "/generalsettings",
     element: GeneralSetting,

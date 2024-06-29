@@ -12,24 +12,28 @@ export default function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState(false);
   const handleSubmit = async () => {
+    navigate("/reset-pwd-link");
     try {
       var apiRes = await forgetPasswordChk(email);
-      console.log("APPIRESPONSE : ",apiRes);
-      if(!apiRes.hasError){
+      console.log("APPIRESPONSE : ", apiRes);
+      if (!apiRes.hasError) {
         const data = apiRes.responseData;
-        if(data && data.Role.toUpperCase()=="USER" || data.Role.toUpperCase()=="ADMIN" ){
+        if (
+          (data && data.Role.toUpperCase() == "USER") ||
+          data.Role.toUpperCase() == "ADMIN"
+        ) {
           // need to make an page which redirect for request link
         }
-        if(data && data.Role.toUpperCase()=="COMPANY"){
+        if (data && data.Role.toUpperCase() == "COMPANY") {
           console.log("Hello : +++++++++++");
-          return navigate("/otp-verification",{
-            state: { From: "ResetPassword",Email:email },
+          return navigate("/otp-verification", {
+            state: { From: "ResetPassword", Email: email },
           });
         }
         // navigate("/change-password");
       }
     } catch (error) {
-      console.log("Error : ",error);
+      console.log("Error : ", error);
     }
     // console.log("Email : ",email);
     // navigate("/change-password");

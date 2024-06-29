@@ -17,24 +17,35 @@ function AuthProvider(props) {
       const result = await getUser();
       if (result.isOK) {
         setUser(result.data.userData);
-        setAuthRuleContext(result.data.userAuth);
+        const authAPIData = result.data.userAuth;
+        const correctedString = authAPIData
+          .replace(/'/g, '"')
+          .replace(/True/g, "true")
+          .replace(/False/g, "false");
+        const userAuthJSON = JSON.parse(correctedString);
+        const filteredData = userAuthJSON.filter(
+          (section) => section.hasAccess == true
+        );
+        setAuthRuleContext(filteredData);
       }
 
       setLoading(false);
     })();
   }, []);
 
-
   const signIn = useCallback(async (email, password) => {
     const result = await sendSignInRequest(email, password);
     if (result.isOk) {
       setUser(result.data.user);
       const authAPIData = result.data.userAuth;
-      const correctedString = authAPIData.replace(/'/g, '"')
-      .replace(/True/g, "true")
-      .replace(/False/g, "false");
+      const correctedString = authAPIData
+        .replace(/'/g, '"')
+        .replace(/True/g, "true")
+        .replace(/False/g, "false");
       const userAuthJSON = JSON.parse(correctedString);
-      const filteredData = userAuthJSON.filter((section) => section.hasAccess == true);
+      const filteredData = userAuthJSON.filter(
+        (section) => section.hasAccess == true
+      );
       setAuthRuleContext(filteredData);
       const { user, userAuth, refresh, access } = result.data;
       const expirationTime = new Date().getTime() + 24 * 60 * 60 * 1000;

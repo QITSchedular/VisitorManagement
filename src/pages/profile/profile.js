@@ -17,7 +17,6 @@ import { HeaderText } from "../../components/typographyText/TypograghyText";
 import CustomLoader from "../../components/customerloader/CustomLoader";
 import { RequiredRule, EmailRule, Validator } from "devextreme-react/validator";
 
-
 export default function Profile() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -61,7 +60,6 @@ export default function Profile() {
       var dataRes = response.responseData;
       setFormData(response.responseData);
 
-
       if (canvasRef.current) {
         qrcode.toCanvas(
           canvasRef.current,
@@ -90,9 +88,8 @@ export default function Profile() {
       // var dataRes = response.responseData;
       setUserFormData(response.responseData);
       setLoading(false);
-      }
-      // return toastDisplayer("suceess", "OTP send successfully..!!");
     }
+    // return toastDisplayer("suceess", "OTP send successfully..!!");
   };
 
   const canvasRef = useRef(null);

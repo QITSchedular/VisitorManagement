@@ -8,3 +8,4 @@ export { default as SideNavigationMenu } from "./side-navigation-menu/SideNaviga
 export { default as OtpVerificationForm } from "./otp-verification-form/OtpVerificationForm";
 export { default as FillDetailsForm } from "./fill-details-form/FillDetailsForm";
 export { default as QRCodeForm } from "./qr-code-form/QRCodeForm";
+export { default as ResetLinkPassword } from "./reset-password-link/reset-password-link";

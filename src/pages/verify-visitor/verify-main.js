@@ -15,7 +15,7 @@ import { LoadPanel } from "devextreme-react";
 
 const VerifyVisitorMain = () => {
   const [searchText, setSearchText] = useState("");
-  const [filteredVisitors, setFilteredVisitors] = useState(visitors);
+  const [filteredVisitors, setFilteredVisitors] = useState([]);
   const [visitorDataState, setVisitorDataState] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [visitorCount, setVisitorCount] = useState(0);
@@ -94,15 +94,23 @@ const VerifyVisitorMain = () => {
         </div>
 
         <div className="visitor-cards-container">
-          {filteredVisitors &&
-            filteredVisitors.map((visitor, index) => (
-              <VisitorCard
-                key={index}
-                visitor={visitor}
-                isExpanded={expandedCards[index]}
-                onToggleExpand={() => toggleExpand(index)}
-              />
-            ))}
+          {searchText
+            ? filteredVisitors.map((visitor, index) => (
+                <VisitorCard
+                  key={index}
+                  visitor={visitor}
+                  isExpanded={expandedCards[index]}
+                  onToggleExpand={() => toggleExpand(index)}
+                />
+              ))
+            : visitorDataState.map((visitor, index) => (
+                <VisitorCard
+                  key={index}
+                  visitor={visitor}
+                  isExpanded={expandedCards[index]}
+                  onToggleExpand={() => toggleExpand(index)}
+                />
+              ))}
         </div>
       </div>
     </>
