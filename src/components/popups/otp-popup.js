@@ -93,7 +93,6 @@ const OtpPopup = ({
   };
   const handleRetryClick = () => {
     console.log("here");
-    // getOtpFromMail(officialMail, userType);
     setTimer(60);
   };
   useEffect(() => {
@@ -171,7 +170,7 @@ const OtpPopup = ({
         </span>
         {timer === 0 && (
           <span className="resend-link">
-            <Link onClick={handleVerifyOTP}>Click here to resend </Link>
+            <Link onClick={handleRetryClick}>Click here to resend </Link>
           </span>
         )}
       </div>

@@ -21,8 +21,8 @@ const getStatusColor = (status) => {
   return statusColors[status];
 };
 
-const UserProfile = () => {
-  const [loading, setLoading] = useState(false);
+const UserProfile = ({ setLoading }) => {
+  // const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(false);
   const [allowEdit, setAllowEdit] = useState(false);
   const [dataToUpdate, setDataToUpdate] = useState([]);
@@ -166,7 +166,7 @@ const UserProfile = () => {
 
   return (
     <>
-      {loading && <LoadPanel visible={true} shadingColor="rgba(0,0,0,0.4)" />}
+      {/* {loading && <LoadPanel visible={true} shadingColor="rgba(0,0,0,0.4)" />} */}
       <div className="dx-card" style={{ marginTop: "16px" }}>
         <div className="navigation-header-main">
           <div className="title-section">

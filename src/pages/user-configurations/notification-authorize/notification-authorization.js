@@ -26,8 +26,9 @@ import {
   postNotificationRule,
 } from "../../../api/common";
 import { toastDisplayer } from "../../../components/toastDisplayer/toastdisplayer";
-const NotificationAuthorization = () => {
-  const [loading, setLoading] = useState(false);
+
+const NotificationAuthorization = ({ setLoading }) => {
+  // const [loading, setLoading] = useState(false);
   const [UserData, setUserData] = useState(false);
   const [NotificationPopUp, setNotificationPopUp] = useState(false);
   const [isModuleTreeVisible, setModuleTreeVisible] = useState(false);
@@ -305,7 +306,7 @@ const NotificationAuthorization = () => {
   };
   return (
     <>
-      {loading && <LoadPanel visible={true} />}
+      {/* {loading && <LoadPanel visible={true} />} */}
       {NotificationPopUp && (
         <Popup
           visible={true}

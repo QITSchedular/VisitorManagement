@@ -13,7 +13,7 @@ const SearchBox = ({ searchText, setSearchText }) => {
         <i className="ri-search-line"></i>
         <TextBox
           stylingMode="outlined"
-          placeholder="Search Visitors"
+          placeholder="Search Visitors by Name"
           onValueChanged={handleSearchChange}
           width={300}
           showClearButton={true}

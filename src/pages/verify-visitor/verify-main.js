@@ -22,14 +22,13 @@ const VerifyVisitorMain = () => {
 
   useEffect(() => {
     const lowerCaseSearchText = searchText ? searchText.toLowerCase() : "";
-    const filteredData = visitors.filter((visitor) =>
-      visitor.VisitorName.toLowerCase().includes(lowerCaseSearchText)
+    const filteredData = visitorDataState.filter((visitor) =>
+      visitor.vName.toLowerCase().includes(lowerCaseSearchText)
     );
     setFilteredVisitors(filteredData);
   }, [searchText]);
 
   const [expandedCards, setExpandedCards] = useState({});
-
   const toggleExpand = (index) => {
     setExpandedCards((prevState) => ({
       ...prevState,
@@ -45,16 +44,13 @@ const VerifyVisitorMain = () => {
     setIsLoading(true);
     const details = JSON.parse(sessionStorage.getItem("authState"));
     const { user } = details;
-    console.log("user data : ", details);
     const company_id = user.cmpid;
-
     const visitorData = await getVisiotrCompanyWise(company_id);
     if (visitorData.hasError === true) {
       console.log();
       setIsLoading(false);
       return toastDisplayer("error", `${visitorData.error}`);
     }
-    console.log("my data : ", visitorData);
     const data = visitorData.responseData;
     const filteredData = data.filter((entry) => entry.state === "Pending");
     setIsLoading(false);
@@ -64,7 +60,7 @@ const VerifyVisitorMain = () => {
 
   useEffect(() => {
     getAllVisitor();
-  }, []); // The empty array ensures this runs only once
+  }, []);
 
   return (
     <>
@@ -96,17 +92,17 @@ const VerifyVisitorMain = () => {
             <SearchBox searchText={searchText} setSearchText={setSearchText} />
           </div>
         </div>
-        <div className="visitor-cards-container">
-          {/* {isLoading && <LoadPanel visible={true} />} */}
 
-          {visitorDataState.map((visitor, index) => (
-            <VisitorCard
-              key={index}
-              visitor={visitor}
-              isExpanded={expandedCards[index]}
-              onToggleExpand={() => toggleExpand(index)}
-            />
-          ))}
+        <div className="visitor-cards-container">
+          {filteredVisitors &&
+            filteredVisitors.map((visitor, index) => (
+              <VisitorCard
+                key={index}
+                visitor={visitor}
+                isExpanded={expandedCards[index]}
+                onToggleExpand={() => toggleExpand(index)}
+              />
+            ))}
         </div>
       </div>
     </>

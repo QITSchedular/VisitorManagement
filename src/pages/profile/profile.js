@@ -7,6 +7,8 @@ import { useAuth } from "../../contexts/auth";
 import { toastDisplayer } from "../../components/toastDisplayer/toastdisplayer";
 import qrcode from "qrcode";
 import { Button } from "devextreme-react/button";
+import { HeaderText } from "../../components/typographyText/TypograghyText";
+import CustomLoader from "../../components/customerloader/CustomLoader";
 
 export default function Profile() {
   const { user } = useAuth();
@@ -116,7 +118,11 @@ export default function Profile() {
 
   return (
     <>
-      {loading && <LoadPanel visible={true} shadingColor="rgba(0,0,0,0.4)" />}
+      {loading && (
+        <div className="Myloader">
+          <CustomLoader />
+        </div>
+      )}
       <div className="profile">
         <HeaderTab
           HeaderTabText={HeaderTabText}

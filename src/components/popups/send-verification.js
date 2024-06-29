@@ -24,7 +24,7 @@ const SendVerification = ({
       <Popup
         visible={isVisible}
         onHiding={onHide}
-        width={"25%"}
+        width={375}
         height={"auto"}
         showCloseButton={false}
         dragEnabled={false}
