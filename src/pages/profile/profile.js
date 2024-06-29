@@ -58,6 +58,7 @@ export default function Profile() {
       var dataRes = response.responseData;
       setFormData(response.responseData);
 
+
       if (canvasRef.current) {
         qrcode.toCanvas(
           canvasRef.current,
@@ -86,6 +87,7 @@ export default function Profile() {
       // var dataRes = response.responseData;
       setUserFormData(response.responseData);
       setLoading(false);
+      }
       // return toastDisplayer("suceess", "OTP send successfully..!!");
     }
   };

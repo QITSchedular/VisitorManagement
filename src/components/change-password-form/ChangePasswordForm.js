@@ -6,6 +6,7 @@ import { eyeopen, eyeclose } from "../../assets/icon";
 import { Validator, RequiredRule } from "devextreme-react/validator";
 import { LoginImage, LoginLogo } from "../../assets";
 import { GenerateNewPassword } from "../../api/common";
+import { toastDisplayer } from "../toastDisplayer/toastdisplayer";
 
 export default function ChangePasswordForm() {
   const navigate = useNavigate();
@@ -39,11 +40,12 @@ export default function ChangePasswordForm() {
         console.log("APPIRESPONSE : ",apiRes);
         if(!apiRes.hasError){
           const data = apiRes.responseData;
-          console.log("Data : ",data);
-          navigate("/login");
+
+          toastDisplayer("success","Reset Password successfully..!!");
+          return navigate("/login");
         }
       }else{
-        console.log("Passowrd Not Match");
+        return  toastDisplayer("error","Password Not Match..!!");
       }
     } catch (error) {
       console.log("Error : ",error);
@@ -78,7 +80,7 @@ export default function ChangePasswordForm() {
                 onValueChanged={handlePassword}
               >
                 <Validator className="custom-validator">
-                  <RequiredRule message="Email Address is required" />
+                  <RequiredRule message="Password is required" />
                 </Validator>
               </TextBox>
             </div>
@@ -109,7 +111,7 @@ export default function ChangePasswordForm() {
                   }}
                 />
                 <Validator>
-                  <RequiredRule message="Password is required" />
+                  <RequiredRule message="Confirm Password is required" />
                 </Validator>
               </TextBox>
             </div>

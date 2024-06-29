@@ -6,7 +6,6 @@ import React, {
   useCallback,
 } from "react";
 import { getUser, signIn as sendSignInRequest } from "../api/auth";
-import { useNavigate } from "react-router-dom";
 
 function AuthProvider(props) {
   const [user, setUser] = useState();
@@ -14,12 +13,9 @@ function AuthProvider(props) {
   const [authRuleContext, setAuthRuleContext] = useState([]);
 
   useEffect(() => {
-    //console.log("yoo");
     (async function () {
       const result = await getUser();
-      console.log("result : ", result.isOK);
       if (result.isOK) {
-        console.log("here : ");
         setUser(result.data.userData);
         setAuthRuleContext(result.data.userAuth);
       }
@@ -28,28 +24,20 @@ function AuthProvider(props) {
     })();
   }, []);
 
-  const navigate = useNavigate();
-  // useEffect(() => {
-  //   console.log("hii");
-  //   const userExist = sessionStorage.getItem("authState") ? true : false;
-  //   console.log(userExist);
-  //   if (userExist === false) {
-  //     console.log("hio");
-  //     navigate("/login");
-  //   }
-  // }, []);
 
   const signIn = useCallback(async (email, password) => {
     const result = await sendSignInRequest(email, password);
-
     if (result.isOk) {
-      console.log("=========>", result.data.user);
       setUser(result.data.user);
-      console.log("my data : ", result.data);
-      setAuthRuleContext(result.data.userAuth);
+      const authAPIData = result.data.userAuth;
+      const correctedString = authAPIData.replace(/'/g, '"')
+      .replace(/True/g, "true")
+      .replace(/False/g, "false");
+      const userAuthJSON = JSON.parse(correctedString);
+      const filteredData = userAuthJSON.filter((section) => section.hasAccess == true);
+      setAuthRuleContext(filteredData);
       const { user, userAuth, refresh, access } = result.data;
       const expirationTime = new Date().getTime() + 24 * 60 * 60 * 1000;
-
       const authData = {
         user,
         userAuth,
@@ -57,10 +45,8 @@ function AuthProvider(props) {
         access,
         expirationTime,
       };
-
       sessionStorage.setItem("authState", JSON.stringify(authData));
     }
-
     return result;
   }, []);
 
@@ -68,10 +54,6 @@ function AuthProvider(props) {
     sessionStorage.removeItem("authState");
     setUser(undefined);
   }, []);
-
-  useEffect(() => {
-    console.log("my context : ", authRuleContext);
-  }, [authRuleContext]);
 
   return (
     <AuthContext.Provider
