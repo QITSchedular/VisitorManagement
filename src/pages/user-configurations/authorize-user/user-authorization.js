@@ -198,6 +198,9 @@ const UserAuthorization = () => {
   };
 
   const handleClick = async () => {
+    if (!selectedRowKeysOnChangeAuth.length) {
+      return toastDisplayer("error", "Select user..!!");
+    }
     try {
       setLoading(true);
       const finalNavigation = finalObject.map((authItem) => {
@@ -228,7 +231,8 @@ const UserAuthorization = () => {
         // setSelectedRowKeysOnChangeAuth([]);
         // setModuleTreeVisible(false);
         setLoading(false);
-        return toastDisplayer("success", apiResponse.responseData.statusMsg);
+        console.log(apiResponse.responseData.StatusMsg);
+        return toastDisplayer("success", apiResponse.responseData.StatusMsg);
       }
     } catch (error) {
       console.log("error : ", error);
