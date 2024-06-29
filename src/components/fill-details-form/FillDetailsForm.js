@@ -69,7 +69,7 @@ const FillDetails = () => {
           <div className="login-container-right-body">
             <div className="inputField">
               <TextBox
-                label="Business Name"
+                label="Company Name"
                 placeholder="Input text"
                 labelMode="static"
                 stylingMode="outlined"

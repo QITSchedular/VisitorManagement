@@ -20,19 +20,19 @@ export const authObject = [
 export const finalObject = [
   {
       "text": "Visitors",
-      "path": "/visitors",
+      "path": "/Visitors",
       "icon": "ri-user-add-line",
       "hasAccess": true
   },
   {
       "text": "Verify Visitors",
-      "path": "/verifyvisitors",
+      "path": "/Verify-Visitors",
       "icon": "ri-user-follow-line",
       "hasAccess": true
   },
   {
       "text": "User Settings",
-      "path": "/usersettings",
+      "path": "/Users-Settings",
       "icon": "ri-user-settings-line",
       "hasAccess": true
   },

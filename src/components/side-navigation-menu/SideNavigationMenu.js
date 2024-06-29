@@ -29,7 +29,6 @@ export default function SideNavigationMenu(props) {
   useEffect(() => {
     if (notificationAtom) {
       if (notificationAtomState) {
-        console.log("notificationAtomState : ", notificationAtomState);
         setNotificationCnt(notificationAtomState.length);
       }
     }
@@ -37,14 +36,7 @@ export default function SideNavigationMenu(props) {
 
   useEffect(() => {
     if (authRuleContext) {
-      const correctedString = authRuleContext.replace(/'/g, '"')
-      .replace(/True/g, "true")
-      .replace(/False/g, "false");
-      
-      const userAuthJSON = JSON.parse(correctedString);
-      setAuthNavigation(userAuthJSON);
-      console.log("User ==>: ",userAuthJSON);
-      console.log("User ==>: ",navigation);
+      setAuthNavigation(authRuleContext);
     }
   }, [authRuleContext]);
 

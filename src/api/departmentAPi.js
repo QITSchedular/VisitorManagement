@@ -168,7 +168,7 @@ export async function GettingDepratmentdata(company_id) {
       "User Settings",
       "dept_master",
       "GetAllDeptByCId",
-      "S",
+      "I",
       "SuccessFully getting department Data...",
       JSON.stringify(company_id),
       user.e_mail,

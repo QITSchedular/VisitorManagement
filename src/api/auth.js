@@ -11,8 +11,6 @@ export async function signIn(email, password) {
   try {
     // Send request
     const response = await axios.post(`${API_URL}VMS/Login`, payload);
-    console.log("reponse : ", response);
-    console.log(email, password);
     if (response.status === 200) {
       await logToServer(
         "Login",
@@ -70,11 +68,9 @@ export async function checkAuthentication() {
     } catch (error) {
       if (error.response.status === 403) {
         const getNewToken = await getNewAccessToken();
-        console.log("hii :: ", getNewToken);
         if (getNewToken.isOK) {
           const myNewToken = getNewToken.data.access.access_token;
 
-          console.log("Greatest Token : ", myNewToken);
           let authState = JSON.parse(sessionStorage.getItem("authState"));
 
           authState.access = myNewToken;
@@ -84,7 +80,7 @@ export async function checkAuthentication() {
           sessionStorage.setItem("authState", updatedAuthState);
           return true;
         }
-        console.log("my new token : ", getNewToken);
+
       }
       console.log("error : ", error);
       return false;

@@ -171,7 +171,7 @@ export async function getUserData(type, cmpid) {
       "User Settings",
       "user_master",
       "get_user",
-      "S",
+      "I",
       "SuccessFully get user data...",
       JSON.stringify(type),
       user.e_mail,cmpid
@@ -233,7 +233,7 @@ export const getUserAuthRole = async (email, role, cmpid) => {
       "Authorize User",
       "authorization_master",
       "GetAuthRule",
-      "S",
+      "I",
       "SuccessFully get user authrule...",
       JSON.stringify(payload),
       email,cmpid
@@ -365,7 +365,7 @@ export const getUserNotificationRule = async (email, role, cmpid) => {
       "Notification Authorise",
       "notification_master",
       "getNotificationAuthUser",
-      "S",
+      "I",
       "SuccessFully get notification authrule...",
       JSON.stringify(payload),
       user.e_mail,user.cmpid
@@ -522,7 +522,7 @@ export const getAllNotification = async (email, cmpid) => {
       "Notification Authorise",
       "notification_master",
       "getAllNotificationStatus",
-      "S",
+      "I",
       "SuccessFully get all notification...",
       JSON.stringify(payload),
       email,cmpid
