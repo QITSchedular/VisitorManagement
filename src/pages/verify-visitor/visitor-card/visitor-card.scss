@@ -11,6 +11,7 @@
   flex-direction: column;
   overflow: hidden;
   transition: all 0.3s ease;
+  max-width: calc(33.333% - 32px);
 
   .visitor-header-main,
   .visitor-meet-main {
@@ -77,9 +78,12 @@
       flex-direction: column;
       margin-top: 16px;
       .visitor-meeting {
-        font-size: 12px;
+        font-size: 14px;
         color: #344450;
         font-family: Inter;
+      }
+      .meeting-with {
+        margin-right: 4px;
       }
       .visitor-time {
         color: #687787;
@@ -123,14 +127,16 @@
   }
 }
 
-@include md {
+@media (max-width: 768px) {
   .visitor-card {
     flex: 1 1 calc(50% - 32px);
+    max-width: calc(50% - 32px);
   }
 }
 
-@include sm {
+@media (max-width: 576px) {
   .visitor-card {
     flex: 1 1 100%;
+    max-width: 100%;
   }
 }

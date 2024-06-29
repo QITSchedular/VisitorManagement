@@ -7,20 +7,23 @@ import { PopUpIcon } from "../../../assets";
 import OtpPopup from "../../../components/popups/otp-popup";
 import { RequiredRule, EmailRule, Validator } from "devextreme-react/validator";
 import { requestOtp } from "../../../api/registorApi";
-import { LoadPanel } from "devextreme-react/load-panel";
 import { useAuth } from "./../../../contexts/auth";
 import { GetCmpDept, SaveUserData } from "../../../api/userAPI";
 import { toastDisplayer } from "../../../components/toastDisplayer/toastdisplayer";
 import CustomLoader from "../../../components/customerloader/CustomLoader";
+import { eyeclose, eyeopen } from "../../../assets/icon";
+// import { eyeopen, eyeclose } from "../../assets/icon";
 
-const AddUser = () => {
+const AddUser = ({ setLoading }) => {
   const [isOtpPopupVisible, setIsOtpPopupVisible] = useState(false);
   const [formData, setFormData] = useState(null);
   const [refFocused, setrefFocused] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [isOTPVerified, setIsOTPVrified] = useState(false);
   const { user } = useAuth();
   const [deptData, setDeptData] = useState([]);
+  const [showpwd, setShowPwd] = useState(false);
+  const [passwordMode, setPasswordMode] = useState("password");
 
   const loadDeptData = async () => {
     setLoading(true);
@@ -133,7 +136,7 @@ const AddUser = () => {
   return (
     <>
       {/* <LoadPanel visible={true} shadingColor="rgba(0,0,0,0.4)" /> */}
-      {loading && <LoadPanel visible={true} shadingColor="rgba(0,0,0,0.4)" />}
+      {/* {loading && <LoadPanel visible={true} shadingColor="rgba(0,0,0,0.4)" />} */}
       {/* {loading && (
         <div className="Myloader">
           <CustomLoader />
@@ -192,11 +195,27 @@ const AddUser = () => {
               <TextBox
                 label="Password"
                 placeholder="Input"
+                // value={password}
+                mode={passwordMode}
                 labelMode="static"
                 stylingMode="outlined"
                 onValueChanged={(e) => handleInputChange("password", e)}
                 value={formData?.password}
               >
+                <TextBoxButton
+                  name="password"
+                  location="after"
+                  options={{
+                    icon: `${showpwd ? eyeopen : eyeclose}`,
+                    stylingMode: "text",
+                    onClick: () => {
+                      setShowPwd(!showpwd);
+                      setPasswordMode((prevPasswordMode) =>
+                        prevPasswordMode === "text" ? "password" : "text"
+                      );
+                    },
+                  }}
+                />
                 <Validator>
                   <RequiredRule message="Password is required" />
                 </Validator>

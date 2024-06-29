@@ -94,7 +94,6 @@ const OtpPopup = ({
   };
   const handleRetryClick = () => {
     console.log("here");
-    // getOtpFromMail(officialMail, userType);
     setTimer(60);
   };
   useEffect(() => {

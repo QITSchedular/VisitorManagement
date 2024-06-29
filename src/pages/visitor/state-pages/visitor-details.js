@@ -45,6 +45,8 @@ const VisitorDetail = () => {
   const [status] = useRecoilState(statusAtom);
   const [state] = useRecoilState(stateAtom);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const handleOpenPopup = () => {
     setIsPopupVisible(true);
   };

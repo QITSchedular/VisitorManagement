@@ -9,10 +9,11 @@ import { getAllNotification, updateNotificationStatus } from "../../api/common";
 import { useRecoilState } from "recoil";
 import { notificationAtom } from "../../contexts/atom";
 import { HeaderText } from "../../components/typographyText/TypograghyText";
+import CustomLoader from "../../components/customerloader/CustomLoader";
 
 const Notification = () => {
   const [activePage, setActivePage] = useState();
-
+  const [loading, setLoading] = useState(false);
   const [notificationAtomState, setNotificationAtomState] =
     useRecoilState(notificationAtom);
 
@@ -73,9 +74,11 @@ const Notification = () => {
   useEffect(() => {
     const getData = async () => {
       if (selectedTab == "A") {
+        setLoading(true);
         const apiResponse = await getAllNotification(user.e_mail, user.cmpid);
         if (!apiResponse.hasError) {
           setNotificationAllData(apiResponse.responseData.notifications);
+          setLoading(false);
         }
       }
     };
@@ -107,30 +110,46 @@ const Notification = () => {
     setSelectedTab(value);
   };
   return (
-    <div className="notification">
-      <HeaderTab
-        HeaderTabText={HeaderTabText}
-        HeaderText={activePage}
-        setActivePage={setActivePage}
-        NotificationCnt={notificationCnt}
-      />
-      <div className="content-block dx-card">
-        <div className="header-container">
-          <HeaderText text="Notification" />
-          <SelectBox
-            labelMode="outside"
-            width={125}
-            onValueChanged={(e) => handleInputChange(e.value)}
-            value={"R"}
-            items={Source}
-            valueExpr={"value"}
-            displayExpr={"text"}
-          ></SelectBox>
+    <>
+      {loading && (
+        <div className="Myloader">
+          <CustomLoader />
         </div>
-        <div className="notifydropdown-body">
-          {selectedTab === "R"
-            ? notificationData.map((values) => (
-                <>
+      )}
+      <div className="notification">
+        <HeaderTab
+          HeaderTabText={HeaderTabText}
+          HeaderText={activePage}
+          setActivePage={setActivePage}
+          NotificationCnt={notificationCnt}
+        />
+        <div className="content-block dx-card">
+          <div className="header-container">
+            <HeaderText text="Notification" />
+            <SelectBox
+              labelMode="outside"
+              width={125}
+              onValueChanged={(e) => handleInputChange(e.value)}
+              value={"R"}
+              items={Source}
+              valueExpr={"value"}
+              displayExpr={"text"}
+            ></SelectBox>
+          </div>
+          <div className="notifydropdown-body">
+            {selectedTab === "R"
+              ? notificationData.map((values) => (
+                  <>
+                    <NotificationItem
+                      key={values.transid}
+                      values={values}
+                      updateChkStatus={updateChkStatus}
+                      // onClickReadMore={handleClickReadMore}
+                      // expanded={expandedNotifications[values.n_Id]}
+                    />
+                  </>
+                ))
+              : notificationAllData.map((values) => (
                   <NotificationItem
                     key={values.transid}
                     values={values}
@@ -138,20 +157,11 @@ const Notification = () => {
                     // onClickReadMore={handleClickReadMore}
                     // expanded={expandedNotifications[values.n_Id]}
                   />
-                </>
-              ))
-            : notificationAllData.map((values) => (
-                <NotificationItem
-                  key={values.transid}
-                  values={values}
-                  updateChkStatus={updateChkStatus}
-                  // onClickReadMore={handleClickReadMore}
-                  // expanded={expandedNotifications[values.n_Id]}
-                />
-              ))}
+                ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -19,7 +19,21 @@ import { registerVisitorApi } from "../../api/mobileVisitorApi";
 const AddVisitor = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [isOtpPopupVisible, setIsOtpPopupVisible] = useState(false);
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState({
+    username: "",
+    e_mail: "",
+    company: "",
+    location: "",
+    meetPerson: "",
+    cmpdeptid: "",
+    timeslot: "",
+    hardware: "",
+    purpose: "",
+  });
+  const validateFields = () => {
+    const requiredFields = ["username", "e_mail"];
+    return requiredFields.every((field) => formData[field]);
+  };
   const [isOTPVerified, setIsOTPVrified] = useState(false);
   const [deptData, setDeptData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,6 +45,9 @@ const AddVisitor = () => {
     setIsPopupVisible(false);
   };
   const handleOpenPopup = () => {
+    if (!validateFields()) {
+      return toastDisplayer("error", "Please fill in all required fields.");
+    }
     setIsPopupVisible(true);
   };
   const handleCloseOtpPopup = () => {
@@ -44,9 +61,11 @@ const AddVisitor = () => {
   };
 
   const mobileOption = {
-    isDisabled: isLoading,
+    isDisabled: true,
     icon: PopUpIcon,
-    onClick: handleOtpBtnClick,
+    onClick: () => {
+      OtpBtnHandler();
+    },
   };
 
   const handleSelectTimeSlot = (e) => {
@@ -81,6 +100,7 @@ const AddVisitor = () => {
   useEffect(() => {}, [formData]);
 
   const OtpBtnHandler = () => {
+    console.log(formData?.e_mail);
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const isMatch = regex.test(formData?.e_mail);
     if (isMatch === false) {
@@ -150,27 +170,27 @@ const AddVisitor = () => {
 
   const handleSaveFunction = async () => {
     if (isOTPVerified) {
-      const requiredFields = ["username", "e_mail"];
-      const hasEmptyField = requiredFields.find((field) => !formData[field]);
-      if (hasEmptyField) {
-        return console.log(hasEmptyField);
+      if (!validateFields()) {
+        return toastDisplayer("error", "Please fill in all required fields.");
       }
+
       const reqPayload = {
-        vname: formData?.username,
-        e_mail: formData?.e_mail,
+        vname: formData.username,
+        e_mail: formData.e_mail,
         phone1: "",
         company_id: user.cmpid,
-        vcmpname: formData?.company,
-        vlocation: formData?.location,
-        cnctperson: formData?.meetPerson,
-        department_id: formData?.cmpdeptid,
-        timeslot: formData?.timeslot,
-        anyhardware: formData?.hardware,
-        purposeofvisit: formData?.purpose,
+        vcmpname: formData.company,
+        vlocation: formData.location,
+        cnctperson: formData.meetPerson,
+        department_id: formData.cmpdeptid,
+        timeslot: formData.timeslot,
+        anyhardware: formData.hardware,
+        purposeofvisit: formData.purpose,
         vavatar: "null" || null,
         createdby: user.transid,
         reason: "",
       };
+
       setLoading(true);
       const response = await registerVisitorApi(reqPayload);
       if (response.hasError === true) {
@@ -178,7 +198,7 @@ const AddVisitor = () => {
         return toastDisplayer("error", response.errorMessage);
       } else {
         setLoading(false);
-        setFormData(null);
+        setFormData({});
         setIsPopupVisible(false);
         return toastDisplayer("success", "Visitor Added Successfully");
       }
@@ -186,6 +206,7 @@ const AddVisitor = () => {
       toastDisplayer("error", "Visitor is already Exist");
     }
   };
+
   return (
     <>
       <div className="content-block">

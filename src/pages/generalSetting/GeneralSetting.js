@@ -12,6 +12,7 @@ import DataGrid, {
   SearchPanel,
   RequiredRule,
   Editing,
+  LoadPanel,
 } from "devextreme-react/data-grid";
 import { toastDisplayer } from "../../components/toastDisplayer/toastdisplayer";
 import { GetCmpDept } from "../../api/userAPI";
@@ -21,6 +22,7 @@ import {
   saveDepartment,
   updateDepartment,
 } from "../../api/departmentAPi";
+import CustomLoader from "../../components/customerloader/CustomLoader";
 
 const GeneralSetting = () => {
   const [activePage, setActivePage] = useState();
@@ -28,11 +30,14 @@ const GeneralSetting = () => {
   const gridRef = useRef(null);
   const [departmentData, setDepartmentData] = useState([]);
   const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const getDeptData = async () => {
+    setLoading(true);
     var apiRes = await GetCmpDept(user.cmpid);
     if (!apiRes.hasError) {
       setDepartmentData(apiRes.responseData);
+      setLoading(false);
     } else {
       return toastDisplayer("error", apiRes.errorMessage);
     }
@@ -127,56 +132,64 @@ const GeneralSetting = () => {
   };
 
   return (
-    <div className="GeneralSetting">
-      <HeaderTab
-        HeaderTabText={HeaderTabText}
-        HeaderText={activePage}
-        setActivePage={setActivePage}
-      />
-      <div className="content-block dx-card">
-        <div className="navigation-header-main">
-          <div className="title-section">
-            <HeaderText text="Add Department" />
-          </div>
-          <div className="title-section-btn">
-            <Button
-              text="Add Department"
-              height={44}
-              onClick={handleAddPopup}
-              useSubmitBehavior={true}
-            />
-          </div>
+    <>
+      {loading && (
+        <div className="Myloader">
+          <CustomLoader />
         </div>
-        <div style={{ marginTop: "24px" }}>
-          <DataGrid
-            id="gridContainer"
-            dataSource={departmentData}
-            keyExpr="transid"
-            allowColumnReordering={true}
-            showBorders={true}
-            ref={gridRef}
-            onRowUpdated={handleUpdateDepartment}
-            onRowRemoved={handleRemoveDepartment}
-            onRowInserted={handleAddDepartment}
-          >
-            <Paging defaultPageSize={10} />
-            <Pager
-              visible={true}
-              displayMode="compact"
-              showNavigationButtons={true}
-            />
-            <Editing mode="row" allowUpdating={true} allowDeleting={true} />
-            <Column caption="Department Name" dataField="deptname">
-              {/* <ValidationRule
+      )}
+      <div className="GeneralSetting">
+        <HeaderTab
+          HeaderTabText={HeaderTabText}
+          HeaderText={activePage}
+          setActivePage={setActivePage}
+        />
+        <div className="content-block dx-card">
+          <div className="navigation-header-main">
+            <div className="title-section">
+              <HeaderText text="Add Department" />
+            </div>
+            <div className="title-section-btn">
+              <Button
+                text="Add Department"
+                height={44}
+                onClick={handleAddPopup}
+                useSubmitBehavior={true}
+              />
+            </div>
+          </div>
+          <div style={{ marginTop: "24px" }}>
+            <DataGrid
+              id="gridContainer"
+              dataSource={departmentData}
+              keyExpr="transid"
+              allowColumnReordering={true}
+              showBorders={true}
+              ref={gridRef}
+              onRowUpdated={handleUpdateDepartment}
+              onRowRemoved={handleRemoveDepartment}
+              onRowInserted={handleAddDepartment}
+            >
+              <LoadPanel visible={false} />
+              <Paging defaultPageSize={10} />
+              <Pager
+                visible={true}
+                displayMode="compact"
+                showNavigationButtons={true}
+              />
+              <Editing mode="row" allowUpdating={true} allowDeleting={true} />
+              <Column caption="Department Name" dataField="deptname">
+                {/* <ValidationRule
                   type="required"
                   message="Category name is required"
                 /> */}
-              <RequiredRule message="Required" />
-            </Column>
-          </DataGrid>
+                <RequiredRule message="Required" />
+              </Column>
+            </DataGrid>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

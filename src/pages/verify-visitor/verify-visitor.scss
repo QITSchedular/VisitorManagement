@@ -76,12 +76,14 @@
 }
 
 .Myloader {
-  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  position: absolute;
-  z-index: 999999;
+  height: 100%;
+  background: #3444503c;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #3444503c;
+  z-index: 9999;
 }
