@@ -3,7 +3,6 @@ import { logToServer } from "./logger";
 const API_URL = process.env.REACT_APP_API;
 
 export async function forgetPasswordChk(email) {
- 
   let responseBody = {
     hasError: true,
     responseData: null,
@@ -22,8 +21,8 @@ export async function forgetPasswordChk(email) {
         "ForgotPassword",
         "common",
         "ForgetPasswordOTP",
-        "S",
-        "SuccessFully forgot password...",
+        "I",
+        "forgot password...",
         JSON.stringify(payload),
         email,0
       );
@@ -40,6 +39,49 @@ export async function forgetPasswordChk(email) {
         "ForgetPasswordOTP",
         "E",
         "UnSuccessFully forgot password...",
+        JSON.stringify(payload),
+        email,0
+      );
+    return responseBody;
+  }
+}
+
+export async function forgetPasswordRequestLink(email) {
+  let responseBody = {
+    hasError: true,
+    responseData: null,
+    errorMessage: null,
+  };
+  const payload = {
+    e_mail: email,
+  };
+  try {
+    var apiRes = await axios.post(`${API_URL}VMS/ForgetPasswordRequest`, payload);
+    if (apiRes.status == 200) {
+      responseBody.hasError = false;
+      responseBody.responseData = apiRes.data;
+      await logToServer(
+        "ForgotPassword",
+        "common",
+        "ForgetPasswordRequest",
+        "I",
+        "forgot password request link...",
+        JSON.stringify(payload),
+        email,0
+      );
+      return responseBody;
+    } else {
+      responseBody.errorMessage = "Not Save Data..!!";
+    }
+  } catch (error) {
+    responseBody.errorMessage = responseBody.errorMessage =
+      error.response?.data?.statusMsg || error.response?.data?.errors;
+      await logToServer(
+        "ForgotPassword",
+        "common",
+        "ForgetPasswordRequest",
+        "E",
+        "UnSuccessFully forgot password request link...",
         JSON.stringify(payload),
         email,0
       );
