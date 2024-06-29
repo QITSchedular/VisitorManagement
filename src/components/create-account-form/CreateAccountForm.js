@@ -12,7 +12,7 @@ import "./CreateAccountForm.scss";
 import { useRegisterState } from "../../Atoms/customHook";
 import { requestOtp } from "../../api/registorApi";
 import { toast } from "react-toastify";
-
+import { toastDisplayer } from "../toastDisplayer/toastdisplayer";
 export default function CreateAccountForm() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -39,10 +39,9 @@ export default function CreateAccountForm() {
     const getOtp = await requestOtp(userEmail, role);
  console.log("step 2")
     console.log("getotp : ", getOtp);
-    if (getOtp.response.Status === 400) {
-      console.log("error")
-      return console.log("Error in generating Otp");
-    } else {
+    if (getOtp.hasError) {
+        return toastDisplayer("error",getOtp.errorMessage);
+    } else {  
       console.log("susccess")
       navigate("/otp-verification");
     }

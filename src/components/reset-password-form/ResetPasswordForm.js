@@ -12,7 +12,6 @@ export default function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState(false);
   const handleSubmit = async () => {
-    navigate("/reset-pwd-link");
     try {
       var apiRes = await forgetPasswordChk(email);
       console.log("APPIRESPONSE : ", apiRes);
@@ -22,6 +21,9 @@ export default function ResetPasswordForm() {
           (data && data.Role.toUpperCase() == "USER") ||
           data.Role.toUpperCase() == "ADMIN"
         ) {
+          navigate("/reset-pwd-link",{
+            state: { From: "ResetPassword", Email: email },
+          });
           // need to make an page which redirect for request link
         }
         if (data && data.Role.toUpperCase() == "COMPANY") {

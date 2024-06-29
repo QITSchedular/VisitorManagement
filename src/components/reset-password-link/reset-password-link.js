@@ -1,8 +1,35 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LoginImage, LoginLogo } from "../../assets";
 import { Button } from "devextreme-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toastDisplayer } from "../toastDisplayer/toastdisplayer";
+import { forgetPasswordRequestLink } from "../../api/common";
 
 const ResetLinkPassword = () => {
+  const location = useLocation();
+  const { state } = location;
+  const inputRefs = useRef([]);
+  const navigate = useNavigate();
+  const [email, setEmail] = useState(false);
+  const [reset, setReset] = useState(false);
+
+  useEffect(() => {
+    if (state != null && state.From === "ResetPassword") {
+      console.log("State Data ===>: ", state.Email);
+      setReset(true);
+      setEmail(state.Email);
+    }
+  }, []);
+  const handleSubmit = async () => {
+    const getOtp = await forgetPasswordRequestLink(email);
+    if (getOtp.hasError) {
+        return toastDisplayer("error",getOtp.errorMessage);
+    } else {  
+      toastDisplayer("success",`request for reset password successfully..`);
+      return navigate("/login");
+    }
+
+  };
   return (
     <div className="login-container">
       <div className="login-container-left">
@@ -24,7 +51,7 @@ const ResetLinkPassword = () => {
               width={"100%"}
               height={"48px"}
               useSubmitBehavior={true}
-              // onClick={handleSubmit}
+              onClick={handleSubmit}
             />
           </div>
         </div>
