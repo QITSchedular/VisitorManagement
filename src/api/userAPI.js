@@ -139,3 +139,53 @@ export const UpdateCmpData = async (reqPayload) => {
     return responseBody;
   }
 };
+
+// get company profile data
+export const GetUserDetail = async (cid, uid) => {
+  const responseBody = {
+    responseData: null,
+    hasError: false,
+    error: null,
+  };
+  console.log("payload : ", cid);
+  //return null;
+  try {
+    const response = await axios.get(
+      `${API_URL}VMS/User/GetById/${cid}/${uid}`
+    );
+    responseBody.responseData = response.data;
+    return responseBody;
+  } catch (error) {
+    responseBody.errorMessage = responseBody.errorMessage =
+      error.response?.data?.StatusMsg ||
+      error.message ||
+      error.response?.data?.errors;
+    responseBody.hasError = true;
+    return responseBody;
+  }
+};
+
+export const UpdateUserData = async (reqPayload) => {
+  const responseBody = {
+    responseData: null,
+    hasError: false,
+    error: null,
+  };
+  console.log("payload : ", reqPayload);
+  //return null;
+  try {
+    const response = await axios.put(
+      `${API_URL}VMS/User/UpdateProfile`,
+      reqPayload
+    );
+    responseBody.responseData = response.data;
+    return responseBody;
+  } catch (error) {
+    responseBody.errorMessage = responseBody.errorMessage =
+      error.response?.data?.StatusMsg ||
+      error.message ||
+      error.response?.data?.errors;
+    responseBody.hasError = true;
+    return responseBody;
+  }
+};

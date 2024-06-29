@@ -1,12 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./profile.scss";
 import HeaderTab from "../../components/HeaderTab/HeaderTab";
-import { LoadPanel, TextBox } from "devextreme-react";
-import { GetCmpDetail, UpdateCmpData } from "../../api/userAPI";
+import { LoadPanel, TextBox, SelectBox } from "devextreme-react";
+import {
+  GetCmpDept,
+  GetCmpDetail,
+  GetUserDetail,
+  UpdateCmpData,
+  UpdateUserData,
+} from "../../api/userAPI";
 import { useAuth } from "../../contexts/auth";
 import { toastDisplayer } from "../../components/toastDisplayer/toastdisplayer";
 import qrcode from "qrcode";
 import { Button } from "devextreme-react/button";
+import { RequiredRule, EmailRule, Validator } from "devextreme-react/validator";
 
 export default function Profile() {
   const { user } = useAuth();
@@ -18,6 +25,26 @@ export default function Profile() {
   const [isProfExpand, setIsProfExpand] = useState(false);
   const [isCmpExpand, setIsCmpExpand] = useState(false);
   const [formData, setFormData] = useState(null);
+  const [userFormData, setUserFormData] = useState(null);
+  const [isCmp, setIsCmp] = useState(user.userrole == "COMPANY" ? true : false);
+  const Genders = ["Male", "Female"];
+  const [deptData, setDeptData] = useState([]);
+
+  const loadDeptData = async () => {
+    setLoading(true);
+    const response = await GetCmpDept(user.cmpid);
+    if (response.hasError === true) {
+      setLoading(false);
+      // return console.log(response.errorMessage);
+      // return toastDisplayer("error", getOtpFromID.errorMessage);
+      return toastDisplayer("error", response.errorMessage);
+    } else {
+      console.log(response.responseData);
+      setDeptData(response.responseData);
+      setLoading(false);
+      return toastDisplayer("suceess", "OTP send successfully..!!");
+    }
+  };
 
   const getProfileData = async () => {
     setLoading(true);
@@ -31,15 +58,33 @@ export default function Profile() {
       var dataRes = response.responseData;
       setFormData(response.responseData);
 
-      qrcode.toCanvas(
-        canvasRef.current,
-        process.env.REACT_APP_URL + "#/welcomevisitor/" + dataRes.qrstring,
-        (error) => {
-          if (error) {
-            console.error("Error while genratting  QR code:", error);
+      if (canvasRef.current) {
+        qrcode.toCanvas(
+          canvasRef.current,
+          process.env.REACT_APP_URL + "#/welcomevisitor/" + dataRes.qrstring,
+          (error) => {
+            if (error) {
+              console.error("Error while genratting  QR code:", error);
+            }
           }
-        }
-      );
+        );
+        setLoading(false);
+      }
+      // return toastDisplayer("suceess", "OTP send successfully..!!");
+    }
+  };
+
+  const getUserProfileData = async () => {
+    setLoading(true);
+    const response = await GetUserDetail(user.cmpid, user.transid);
+    if (response.hasError === true) {
+      setLoading(false);
+      return toastDisplayer("error", response.errorMessage);
+    } else {
+      // setCompanyData(response.responseData);
+
+      // var dataRes = response.responseData;
+      setUserFormData(response.responseData);
       setLoading(false);
       // return toastDisplayer("suceess", "OTP send successfully..!!");
     }
@@ -49,6 +94,10 @@ export default function Profile() {
 
   useEffect(() => {
     getProfileData();
+    loadDeptData();
+    if (user.userrole == "USER" || user.userrole == "ADMIN") {
+      getUserProfileData();
+    }
   }, []);
 
   const handleProfExpand = () => {
@@ -84,7 +133,7 @@ export default function Profile() {
 
   const handleInputChange = (fieldName, e) => {
     console.log(fieldName);
-    setFormData((prevState) => ({
+    setUserFormData((prevState) => ({
       ...prevState,
       [fieldName]: e,
     }));
@@ -95,7 +144,6 @@ export default function Profile() {
       console.log(formData);
       setFormData(companyData);
       setLoading(true);
-      console.log("here ===========>");
       const response = await UpdateCmpData(formData);
       if (response.hasError === true) {
         setLoading(false);
@@ -103,6 +151,30 @@ export default function Profile() {
         return toastDisplayer("error", response.errorMessage);
       } else {
         getProfileData();
+        setLoading(false);
+        console.log(response.responseData);
+        return toastDisplayer("success", "Profile data updated..!!");
+      }
+    } else {
+      console.log("----------->", userFormData);
+      setLoading(true);
+      // userFormData["company_id"] = user.cmpid;
+      const reqPayload = {
+        transid: userFormData.transid,
+        username: userFormData.username,
+        phone: userFormData.phone,
+        department_id: userFormData.cmpdeptid,
+        gender: userFormData.gender,
+        company_id: user.cmpid,
+      };
+      // return console.log(reqPayload);
+      const response = await UpdateUserData(reqPayload);
+      if (response.hasError === true) {
+        setLoading(false);
+        console.log(response.errorMessage);
+        return toastDisplayer("error", response.errorMessage);
+      } else {
+        getUserProfileData();
         setLoading(false);
         console.log(response.responseData);
         return toastDisplayer("success", "Profile data updated..!!");
@@ -135,40 +207,63 @@ export default function Profile() {
               <div className="about-profile">
                 {user.userrole == "COMPANY" ? (
                   <>
-                    <span className="portal-name">Admin Portal</span>
+                    <span className="portal-name">Company Portal</span>
+
+                    <div className="name-address">
+                      <span className="bname">{companyData.bname}</span>
+                      {companyData.city != null && companyData.city != "" ? (
+                        <>
+                          <span>|</span>
+                          <span className="cityTxt">
+                            {companyData.city}
+                            {companyData.state != null ? (
+                              <>,{companyData.state}</>
+                            ) : (
+                              <></>
+                            )}
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          {companyData.state != null ? (
+                            <>
+                              <span>|</span>
+                              <span className="cityTxt">
+                                {companyData.state}
+                              </span>
+                            </>
+                          ) : (
+                            <></>
+                          )}
+                        </>
+                      )}
+                    </div>
                   </>
                 ) : (
                   <>
-                    <span className="portal-name">User Portal</span>
-                  </>
-                )}
-                <div className="name-address">
-                  <span className="bname">{companyData.bname}</span>
-                  {companyData.city != null && companyData.city != "" ? (
-                    <>
+                    {user.userrole == "ADMIN" ? (
+                      <>
+                        <span className="portal-name">Admin Portal</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="portal-name">User Portal</span>
+                      </>
+                    )}
+                    <div className="name-address">
+                      <span className="bname">{userFormData?.username}</span>
+
                       <span>|</span>
                       <span className="cityTxt">
-                        {companyData.city}
-                        {companyData.state != null ? (
-                          <>,{companyData.state}</>
-                        ) : (
-                          <></>
-                        )}
+                        {
+                          deptData?.find(
+                            (e) => e.transid == userFormData.cmpdeptid
+                          )?.deptname
+                        }
                       </span>
-                    </>
-                  ) : (
-                    <>
-                      {companyData.state != null ? (
-                        <>
-                          <span>|</span>
-                          <span className="cityTxt">{companyData.state}</span>
-                        </>
-                      ) : (
-                        <></>
-                      )}
-                    </>
-                  )}
-                </div>
+                    </div>
+                  </>
+                )}
                 <span className="forget-pass">Reset Password</span>
               </div>
               <div className="save-btn-section">
@@ -191,6 +286,8 @@ export default function Profile() {
           </div>
 
           {user.userrole == "COMPANY" ? (
+            <></>
+          ) : (
             <>
               <div className="edit-profile-section">
                 <div className="profile-section-header">
@@ -202,50 +299,81 @@ export default function Profile() {
                   )}
                 </div>
                 {isProfExpand ? (
-                  <div className="profile-section-editor">
-                    <TextBox
-                      label="Business Name"
-                      labelMode="static"
-                      stylingMode="outlined"
-                      className="step-textbox"
-                      height={"56px"}
-                      width={"304px"}
-                      value={formData.bname}
-                      onValueChanged={(e) =>
-                        handleInputChange("bname", e.value)
-                      }
-                    />
-                    <TextBox
-                      label="Business Location"
-                      labelMode="static"
-                      stylingMode="outlined"
-                      className="step-textbox"
-                      height={"56px"}
-                      width={"304px"}
-                      value={formData.blocation}
-                      onValueChanged={(e) =>
-                        handleInputChange("blocation", e.value)
-                      }
-                    />
-                    <TextBox
-                      label="Email Address"
-                      labelMode="static"
-                      stylingMode="outlined"
-                      className="step-textbox"
-                      height={"56px"}
-                      width={"304px"}
-                      readOnly={true}
-                      value={companyData.e_mail}
-                    />
-                  </div>
+                  <>
+                    <div className="profile-section-editor">
+                      <TextBox
+                        label="User Name"
+                        labelMode="static"
+                        stylingMode="outlined"
+                        className="step-textbox"
+                        height={"56px"}
+                        width={"304px"}
+                        value={userFormData.username}
+                        onValueChanged={(e) =>
+                          handleInputChange("username", e.value)
+                        }
+                      />
+                      <TextBox
+                        label="Email Address"
+                        labelMode="static"
+                        stylingMode="outlined"
+                        className="step-textbox"
+                        height={"56px"}
+                        width={"304px"}
+                        readOnly={true}
+                        value={userFormData.e_mail}
+                      />
+                      <TextBox
+                        label="Mobile Number"
+                        labelMode="static"
+                        stylingMode="outlined"
+                        className="step-textbox"
+                        height={"56px"}
+                        width={"304px"}
+                        value={userFormData.phone}
+                        onValueChanged={(e) =>
+                          handleInputChange("phone", e.value)
+                        }
+                      />
+                    </div>
+
+                    <div className="profile-section-editor">
+                      <SelectBox
+                        label="Select Department"
+                        placeholder="Input"
+                        labelMode="static"
+                        stylingMode="outlined"
+                        onValueChanged={(e) =>
+                          handleInputChange("cmpdeptid", e.value)
+                        }
+                        height={"56px"}
+                        width={"304px"}
+                        items={deptData}
+                        displayExpr={"deptname"}
+                        valueExpr={"transid"}
+                        value={userFormData?.cmpdeptid}
+                      >
+                        <Validator>
+                          <RequiredRule message="Department is required" />
+                        </Validator>
+                      </SelectBox>
+                      <SelectBox
+                        label="Select Gender"
+                        placeholder="Input"
+                        labelMode="static"
+                        stylingMode="outlined"
+                        items={Genders}
+                        height={"56px"}
+                        width={"304px"}
+                        onValueChanged={(e) => handleInputChange("gender", e)}
+                        value={userFormData?.gender}
+                      ></SelectBox>
+                    </div>
+                  </>
                 ) : (
                   <></>
                 )}
               </div>
-            </>
-          ) : (
-            <>
-              <span className="portal-name">User Portal</span>
             </>
           )}
 
@@ -259,96 +387,153 @@ export default function Profile() {
               )}
             </div>
             {isCmpExpand ? (
-              <div className="profile-section-editor">
-                <TextBox
-                  label="Zipcode"
-                  labelMode="static"
-                  stylingMode="outlined"
-                  className="step-textbox"
-                  height={"56px"}
-                  width={"304px"}
-                  value={formData.zipcode}
-                  onValueChanged={(e) => handleInputChange("zipcode", e.value)}
-                />
-                <TextBox
-                  label="City"
-                  labelMode="static"
-                  stylingMode="outlined"
-                  className="step-textbox"
-                  height={"56px"}
-                  width={"304px"}
-                  value={formData.city}
-                  onValueChanged={(e) => handleInputChange("city", e.value)}
-                />
-                <TextBox
-                  label="State"
-                  labelMode="static"
-                  stylingMode="outlined"
-                  className="step-textbox"
-                  height={"56px"}
-                  width={"304px"}
-                  value={formData.state}
-                  onValueChanged={(e) => handleInputChange("state", e.value)}
-                />
-                <TextBox
-                  label="Country"
-                  labelMode="static"
-                  stylingMode="outlined"
-                  className="step-textbox"
-                  height={"56px"}
-                  width={"304px"}
-                  value={formData.country}
-                  onValueChanged={(e) => handleInputChange("country", e.value)}
-                />
-                <TextBox
-                  label="Phone1"
-                  labelMode="static"
-                  stylingMode="outlined"
-                  className="step-textbox"
-                  height={"56px"}
-                  width={"304px"}
-                  value={formData.phone1}
-                  onValueChanged={(e) => handleInputChange("phone1", e.value)}
-                />
-                <TextBox
-                  label="Phone2"
-                  labelMode="static"
-                  stylingMode="outlined"
-                  className="step-textbox"
-                  height={"56px"}
-                  width={"304px"}
-                  value={formData.phone2}
-                  onValueChanged={(e) => handleInputChange("phone2", e.value)}
-                />
-                <TextBox
-                  label="Website"
-                  labelMode="static"
-                  stylingMode="outlined"
-                  className="step-textbox"
-                  height={"56px"}
-                  width={"304px"}
-                  value={formData.websitelink}
-                  onValueChanged={(e) =>
-                    handleInputChange("websitelink", e.value)
-                  }
-                />
-                <label className="uplaod_btn" htmlFor="file_upload">
-                  <i class="ri-upload-2-fill"></i>
-                  {uploadedFileName ? (
-                    <p>{uploadedFileName}</p>
-                  ) : (
-                    "Upload company logo."
+              <>
+                <div className="profile-section-editor">
+                  <TextBox
+                    label="Business Name"
+                    labelMode="static"
+                    stylingMode="outlined"
+                    className="step-textbox"
+                    height={"56px"}
+                    width={"304px"}
+                    value={formData.bname}
+                    onValueChanged={(e) => handleInputChange("bname", e.value)}
+                    readOnly={!isCmp}
+                  />
+                  <TextBox
+                    label="Business Location"
+                    labelMode="static"
+                    stylingMode="outlined"
+                    className="step-textbox"
+                    height={"56px"}
+                    width={"304px"}
+                    value={formData.blocation}
+                    onValueChanged={(e) =>
+                      handleInputChange("blocation", e.value)
+                    }
+                    readOnly={!isCmp}
+                  />
+                  <TextBox
+                    label="Email Address"
+                    labelMode="static"
+                    stylingMode="outlined"
+                    className="step-textbox"
+                    height={"56px"}
+                    width={"304px"}
+                    readOnly={true}
+                    value={companyData.e_mail}
+                  />
+                </div>
+                <div className="profile-section-editor">
+                  <TextBox
+                    label="Country"
+                    labelMode="static"
+                    stylingMode="outlined"
+                    className="step-textbox"
+                    height={"56px"}
+                    width={"304px"}
+                    value={formData.country}
+                    onValueChanged={(e) =>
+                      handleInputChange("country", e.value)
+                    }
+                    readOnly={!isCmp}
+                  />
+                  <TextBox
+                    label="State"
+                    labelMode="static"
+                    stylingMode="outlined"
+                    className="step-textbox"
+                    height={"56px"}
+                    width={"304px"}
+                    value={formData.state}
+                    onValueChanged={(e) => handleInputChange("state", e.value)}
+                    readOnly={!isCmp}
+                  />
+                  <TextBox
+                    label="City"
+                    labelMode="static"
+                    stylingMode="outlined"
+                    className="step-textbox"
+                    height={"56px"}
+                    width={"304px"}
+                    value={formData.city}
+                    onValueChanged={(e) => handleInputChange("city", e.value)}
+                    readOnly={!isCmp}
+                  />
+                </div>
+                <div className="profile-section-editor">
+                  <TextBox
+                    label="Zipcode"
+                    labelMode="static"
+                    stylingMode="outlined"
+                    className="step-textbox"
+                    height={"56px"}
+                    width={"304px"}
+                    value={formData.zipcode}
+                    onValueChanged={(e) =>
+                      handleInputChange("zipcode", e.value)
+                    }
+                    readOnly={!isCmp}
+                  />
+                  <TextBox
+                    label="Phone1"
+                    labelMode="static"
+                    stylingMode="outlined"
+                    className="step-textbox"
+                    height={"56px"}
+                    width={"304px"}
+                    value={formData.phone1}
+                    onValueChanged={(e) => handleInputChange("phone1", e.value)}
+                    readOnly={!isCmp}
+                  />
+                  <TextBox
+                    label="Phone2"
+                    labelMode="static"
+                    stylingMode="outlined"
+                    className="step-textbox"
+                    height={"56px"}
+                    width={"304px"}
+                    value={formData.phone2}
+                    onValueChanged={(e) => handleInputChange("phone2", e.value)}
+                    readOnly={!isCmp}
+                  />
+                </div>
+                <div className="profile-section-editor">
+                  <TextBox
+                    label="Website"
+                    labelMode="static"
+                    stylingMode="outlined"
+                    className="step-textbox"
+                    height={"56px"}
+                    width={"304px"}
+                    value={formData.websitelink}
+                    onValueChanged={(e) =>
+                      handleInputChange("websitelink", e.value)
+                    }
+                    readOnly={!isCmp}
+                  />
+                  {isCmp && (
+                    <>
+                      <label className="uplaod_btn" htmlFor="file_upload">
+                        <i class="ri-upload-2-fill"></i>
+                        {uploadedFileName ? (
+                          <p>{uploadedFileName}</p>
+                        ) : (
+                          "Upload company logo."
+                        )}
+                      </label>
+                      <input
+                        //disabled={enableOnVerification}
+                        type="file"
+                        id="file_upload"
+                        style={{ display: "none" }}
+                        onChange={handleFileUpload}
+                        accept="image/png, image/jpeg"
+                      />
+                    </>
                   )}
-                </label>
-                <input
-                  //disabled={enableOnVerification}
-                  type="file"
-                  id="file_upload"
-                  style={{ display: "none" }}
-                  onChange={handleFileUpload}
-                  accept="image/png, image/jpeg"
-                />
-              </div>
+                </div>
+              </>
             ) : (
               <></>
             )}
