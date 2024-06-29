@@ -37,7 +37,6 @@ const AddUser = ({ setLoading }) => {
       console.log(response.responseData);
       setDeptData(response.responseData);
       setLoading(false);
-      return toastDisplayer("suceess", "OTP send successfully..!!");
     }
   };
   useEffect(() => {
@@ -59,7 +58,7 @@ const AddUser = ({ setLoading }) => {
       setIsOtpPopupVisible(true);
       setLoading(false);
       // return console.log("OTP send successfully..!!");
-      return toastDisplayer("suceess", "OTP send successfully..!!");
+      return toastDisplayer("success", "OTP send successfully..!!");
     }
   };
 
@@ -305,6 +304,7 @@ const AddUser = ({ setLoading }) => {
         role={"user"}
         isBtnVisible={true}
         setIsOTPVrified={setIsOTPVrified}
+        GenerateOTP={GenerateOTP}
       />
     </>
   );

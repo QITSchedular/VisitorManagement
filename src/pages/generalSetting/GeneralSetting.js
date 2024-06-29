@@ -28,7 +28,7 @@ const GeneralSetting = () => {
   const [activePage, setActivePage] = useState();
   const HeaderTabText = ["Notification", "Profile", "General Settings"];
   const gridRef = useRef(null);
-  const [departmentData, setDepartmentData] = useState(false);
+  const [departmentData, setDepartmentData] = useState([]);
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
 

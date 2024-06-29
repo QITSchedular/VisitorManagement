@@ -17,7 +17,7 @@ export default function ResetPasswordForm() {
       console.log("APPIRESPONSE : ",apiRes);
       if(!apiRes.hasError){
         const data = apiRes.responseData;
-        if(data && data.Role.toUpperCase()=="USER"){
+        if(data && data.Role.toUpperCase()=="USER" || data.Role.toUpperCase()=="ADMIN" ){
           // need to make an page which redirect for request link
         }
         if(data && data.Role.toUpperCase()=="COMPANY"){
@@ -26,7 +26,7 @@ export default function ResetPasswordForm() {
             state: { From: "ResetPassword",Email:email },
           });
         }
-        navigate("/change-password");
+        // navigate("/change-password");
       }
     } catch (error) {
       console.log("Error : ",error);

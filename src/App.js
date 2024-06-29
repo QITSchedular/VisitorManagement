@@ -21,11 +21,9 @@ function App() {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get("VMS/secure");
-        console.log("response ++++++++: ", response.data);
         // setData(response.data);
       } catch (err) {
         // setError(err);
-        console.log("err : ", err);
       }
     };
 
@@ -35,10 +33,8 @@ function App() {
   if (loading) {
     return <LoadPanel visible={true} />;
   }
-  console.log("user value 1 : ", user);
-  console.log("Auth Rule : ", authRuleContext);
   if (user) {
-    console.log("user value : ", user);
+
     return <Content />;
   }
 

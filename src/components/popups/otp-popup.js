@@ -18,6 +18,7 @@ const OtpPopup = ({
   role,
   isBtnVisible,
   setIsOTPVrified,
+  GenerateOTP,
 }) => {
   const [otp, setOtp] = useState(Array(6).fill(""));
   const length = 6;
@@ -170,7 +171,9 @@ const OtpPopup = ({
         </span>
         {timer === 0 && (
           <span className="resend-link">
-            <Link onClick={handleRetryClick}>Click here to resend </Link>
+            <Link onClick={() => GenerateOTP(email, role)}>
+              Click here to resend{" "}
+            </Link>
           </span>
         )}
       </div>
