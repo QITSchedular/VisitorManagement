@@ -22,7 +22,7 @@
       font-size: 16px;
       color: #687787;
       margin-bottom: 8px;
-    }
+    } 
 
     .welcome-text {
       font-family: inter;
@@ -36,6 +36,7 @@
         font-size: 20px;
         font-weight: 500;
         color: #344450;
+        margin-bottom: 6px;
       }
     }
   }
@@ -80,7 +81,7 @@
       background-color: white;
       color: #344450;
       box-shadow: none;
-      border: 1px solid #4e5d6b;
+      border: 1px solid rgba(78, 93, 107, 0.24);
     }
   }
 }

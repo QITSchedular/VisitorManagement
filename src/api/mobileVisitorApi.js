@@ -13,9 +13,12 @@ export const registerVisitorApi = async (payload) => {
     responseBody.responsedata = response.data;
     return responseBody;
   } catch (error) {
+    console.log(error);
+    responseBody.error = 
+      error.response?.data?.StatusMsg ||
+      error.message ||
+      error.response?.data?.errors;
     responseBody.hasError = true;
-    responseBody.error = error;
-
     return responseBody;
   }
 };
@@ -32,9 +35,12 @@ export const checkOutVisitorApi = async(payload)=>{
         responseBody.responsedata = response.data;
         return responseBody;
     } catch (error) {
-        responseBody.hasError = true;
-        responseBody.error = error;
-
-        return responseBody;
+      console.log(error);
+      responseBody.error = 
+        error.response?.data?.StatusMsg ||
+        error.message ||
+        error.response?.data?.errors;
+      responseBody.hasError = true;
+      return responseBody;
     }
 }

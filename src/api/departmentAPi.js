@@ -82,6 +82,7 @@ export const deleteDepartment = async (deptID, compID) => {
   }
 };
 export async function GettingDepratmentdata(company_id) {
+  console.log("company_id : " ,company_id)
   const responsebody = {
     repsonseData: null,
     hasError: false,

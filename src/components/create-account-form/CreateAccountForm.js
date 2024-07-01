@@ -12,6 +12,7 @@ import "./CreateAccountForm.scss";
 import { useRegisterState } from "../../Atoms/customHook";
 import { requestOtp } from "../../api/registorApi";
 import { toast } from "react-toastify";
+import { toastDisplayer } from "../toastDisplayer/toastdisplayer";
 
 export default function CreateAccountForm() {
   const navigate = useNavigate();
@@ -31,6 +32,10 @@ export default function CreateAccountForm() {
   };
 
   const handleSubmit = async () => {
+    if(registerUser.e_mail === ""||registerUser.e_mail === null ){
+      
+      return ;
+    }
     console.log("step 1")
     const userEmail = registerUser.e_mail;
     const role = "company";
@@ -39,9 +44,9 @@ export default function CreateAccountForm() {
     const getOtp = await requestOtp(userEmail, role);
  console.log("step 2")
     console.log("getotp : ", getOtp);
-    if (getOtp.response.Status === 400) {
+    if (getOtp.hasError === true) {
       console.log("error")
-      return console.log("Error in generating Otp");
+      return toastDisplayer("error",`${getOtp.error}`);
     } else {
       console.log("susccess")
       navigate("/otp-verification");
@@ -143,7 +148,7 @@ export default function CreateAccountForm() {
                 width={"100%"}
                 height={"48px"}
                 // stylingMode="default"
-                //useSubmitBehavior={true}
+                useSubmitBehavior={true}
                 onClick={ handleSubmit}
               />
             </div>
