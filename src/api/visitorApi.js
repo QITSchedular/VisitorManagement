@@ -106,7 +106,7 @@ export const getVisitorDetailsApi = async(cmp_id ,visitor_id)=>{
     console.log("this is my payload");
     //return null
     try{
-        const response = await axios.get(`${API_URL}VMS/User/GetById/${cmp_id}/${visitor_id}`);
+        const response = await axios.get(`${API_URL}VMS/Visitor/GetVisitorDetail/${visitor_id}/${cmp_id}`);
         responseBody.responseData = response.data;
         await logToServer(
             "Verify Visitors",
@@ -135,6 +135,33 @@ export const getVisitorDetailsApi = async(cmp_id ,visitor_id)=>{
           );
         return responseBody
     }
+
+}
+
+// Edit Visitor
+export const getVisitorEditedApi =async(payload)=>{
+
+  const responseBody = {
+    responseData: null,
+    hasError: false,
+    error: null,
+  };
+
+  try {
+    const response = await axios.put(
+      `${API_URL}VMS/Visitor/Edit`,payload
+    );
+    responseBody.responseData = response.data;
+    return responseBody;
+  } catch (error) {
+    console.log("error : ", error);
+    responseBody.hasError = true;
+    responseBody.error =
+      error.response?.data?.StatusMsg ||
+      error.message ||
+      error.response?.data?.errors;
+    return responseBody;
+  }
 
 }
 

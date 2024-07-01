@@ -167,6 +167,9 @@ const VisitorMain = () => {
     selectedRowData = e.data;
   };
   const actionTemplate = (cellData, e) => {
+
+    console.log(cellData.data)
+    
     const actionMenuItems = [
       {
         text: "Check Out",

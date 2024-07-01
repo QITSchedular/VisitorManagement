@@ -6,6 +6,7 @@ import { useRegisterVisitor } from "../../Atoms/customHook";
 import { GettingDepratmentdata } from "../../api/departmentAPi";
 import { registerVisitorApi } from "../../api/mobileVisitorApi";
 import { RequiredRule } from "devextreme-react/cjs/data-grid";
+import { toastDisplayer } from "../../components/toastDisplayer/toastdisplayer";
 
 export const Step4 = () => {
   const navigate = useNavigate();
@@ -45,7 +46,8 @@ export const Step4 = () => {
     const registor = await registerVisitorApi(registerVisitor);
 
     if (registor.hasError === true) {
-      return console.log("error: ", registor);
+      console.log("error : " , registor.error)
+      return toastDisplayer("error",`${registor.error}`);
     }
 
     sessionStorage.removeItem("registerVisitor");

@@ -84,11 +84,15 @@ const OtpVerificationForm = () => {
   // };
 
   const onOtpSubmit = async (combinedOtp) => {
-    const email1 = registerUser.e_mail;
+    const email = registerUser.e_mail;
     const role = "company";
     console.log(" otp : ", combinedOtp);
     // Add your logic here after OTP submission
     const verifyMyOtp = await VerifyOtp(email, combinedOtp, role);
+
+    if(verifyMyOtp.hasError === true){
+      return toastDisplayer("error", `${verifyMyOtp.error}`)
+    }
     if (verifyMyOtp.response.Status === 200) {
       console.log("Otp Verified ");
       if(reset){
@@ -138,7 +142,7 @@ const OtpVerificationForm = () => {
                 <span>OTP Verification </span>
               </div>
               <div className="header-sub-title">
-                <div>Sent to {email}</div>
+                <div>Sent to {registerUser.e_mail }</div>
               </div>
             </div>
             <div className="main-container">

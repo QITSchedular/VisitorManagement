@@ -156,39 +156,18 @@ export async function GettingDepratmentdata(company_id) {
     hasError: false,
     error: null,
   };
-  const storedSessionValue = JSON.parse(sessionStorage.getItem("authState"));
 
-  const { access, refresh, user, userAuth, expirationTime } =
-    storedSessionValue;
   try {
     const response = await axios.get(
       `${API_URL}VMS/Department/GetByCid/${company_id}`
     );
     responsebody.repsonseData = response.data;
-    await logToServer(
-      "User Settings",
-      "dept_master",
-      "GetAllDeptByCId",
-      "I",
-      "SuccessFully getting department Data...",
-      JSON.stringify(company_id),
-      user.e_mail,
-      user.cmpid
-    );
+   
     return responsebody;
   } catch (error) {
     responsebody.hasError = false;
     responsebody.error = error;
-    await logToServer(
-      "User Settings",
-      "dept_master",
-      "GetAllDeptByCId",
-      "E",
-      "UnSuccessFully getting department Data...",
-      JSON.stringify(company_id),
-      user.e_mail,
-      user.cmpid
-    );
+   
     return responsebody;
   }
 }

@@ -114,7 +114,7 @@ const VisitorDetail = () => {
       vlocation: "",
       e_mail: "",
       vavatar: "", 
-      vid:parseInt(visitorId)
+      visitor_id:parseInt(visitorId)
     })
 
     setIsLoading(true)
@@ -174,7 +174,9 @@ const VisitorDetail = () => {
     }
 
     setIsPopupVisible(false);
-    return toastDisplayer("success", "Visitor checked Out Successfully");
+
+  toastDisplayer("success", "Visitor checked Out Successfully");
+    return navigate('/Visitors')
   };
 
   const getDepartmentdata = async () => {
