@@ -1,0 +1,14 @@
+.log-report-input {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+
+  .form-input {
+    flex: 1;
+
+    .dx-texteditor-input-container {
+      width: 100%;
+      height: 56px;
+    }
+  }
+}

@@ -10,6 +10,7 @@ import {
   EditVisitorDetails,
   VisitorDetails,
   UserSettingsMain,
+  LogReportMain,
 } from "./pages";
 import { withNavigationWatcher } from "./contexts/navigation";
 import Notification from "./pages/Notification/Notification";
@@ -60,6 +61,10 @@ const routes = [
   {
     path: "/generalsettings",
     element: GeneralSetting,
+  },
+  {
+    path: "/log-report",
+    element: LogReportMain,
   },
 ];
 

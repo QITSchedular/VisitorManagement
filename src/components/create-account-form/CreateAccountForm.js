@@ -38,6 +38,7 @@ export default function CreateAccountForm() {
     }));
   };
 
+
   const handleSubmit = async (e) => {
     console.log("here 1");
     if (!myCheck) {
@@ -64,9 +65,11 @@ export default function CreateAccountForm() {
     }
 
     console.log("mycheck : ", myCheck);
+
     console.log("step 1");
     const userEmail = registerUser.e_mail;
     const role = "company";
+
 
     // return null
     const getOtp = await requestOtp(userEmail, role);
@@ -75,6 +78,7 @@ export default function CreateAccountForm() {
 
     if (getOtp.hasError) {
       return toastDisplayer("error", `${getOtp.error}`);
+
     } else {
       console.log("susccess");
       navigate("/otp-verification");
@@ -168,7 +172,9 @@ export default function CreateAccountForm() {
                 width={"100%"}
                 height={"48px"}
                 // stylingMode="default"
-                useSubmitBehavior={true}
+
+                // useSubmitBehavior={true}
+
                 onClick={handleSubmit}
               />
             </div>
