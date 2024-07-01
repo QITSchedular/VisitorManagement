@@ -20,58 +20,78 @@ export default function CreateAccountForm() {
   const [showpwd, setShowPwd] = useState(false);
   const [passwordMode, setPasswordMode] = useState("password");
   const [password, setpassword] = useState(null);
+  const [myCheck, setMyCheck] = useState("");
 
   const [registerUser, setRegisterUser] = useRegisterState();
 
   const handleChange = (e) => {
+    console.log("e : ", e.target.value);
+
     const { name, value } = e.target;
+    setMyCheck((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
     setRegisterUser((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async () => {
-    if(registerUser.e_mail === ""||registerUser.e_mail === null ){
-      
-      return ;
+  const handleSubmit = async (e) => {
+    console.log("here 1");
+    if (!myCheck) {
+      console.log("no repsonse");
+      return;
     }
-    console.log("step 1")
+    if (!myCheck.e_mail) {
+      console.log("email");
+      return null;
+    }
+    
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (!emailRegex.test(myCheck.e_mail)) {
+      console.log("Invalid email address");
+      toastDisplayer("error" ,"Invalid emial address")
+      return null;
+    }
+    
+    if (!myCheck.password) {
+      console.log("password");
+      return null;
+    }
+
+    console.log("mycheck : ", myCheck);
+    console.log("step 1");
     const userEmail = registerUser.e_mail;
     const role = "company";
 
-  
+    // return null
     const getOtp = await requestOtp(userEmail, role);
- console.log("step 2")
+    console.log("step 2");
     console.log("getotp : ", getOtp);
 
     if (getOtp.hasError) {
-        return toastDisplayer("error",getOtp.errorMessage);
-    } else {  
-      console.log("susccess")
+      return toastDisplayer("error", `${getOtp.error}`);
+    } else {
+      console.log("susccess");
       navigate("/otp-verification");
     }
 
     return navigate("/otp-verification");
   };
 
-  // useEffect(() => {
-  //   console.log("This is my state : ", registerUser.e_mail);
-  // }, [registerUser]);
+  useEffect(() => {
+    console.log("This is my state : ", registerUser.e_mail);
+  }, [registerUser]);
 
   return (
     <div className="login-container">
       <div className="login-container-left">
         <div className="login-form">
-          <form
-            method="post"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                handleSubmit();
-              }
-            }}
-          >
+          <form>
             <div className="header-image">
               <img src={LoginLogo} alt="logo" width={200} height={70} />
             </div>
@@ -130,7 +150,7 @@ export default function CreateAccountForm() {
                       onClick: () => {
                         setShowPwd(!showpwd);
                         setPasswordMode((prevPasswordMode) =>
-                          prevPasswordMode === "text" ? "password" : "text"
+                          prevPasswordMode === "text" ? "password" : "text",
                         );
                       },
                     }}
@@ -149,7 +169,7 @@ export default function CreateAccountForm() {
                 height={"48px"}
                 // stylingMode="default"
                 useSubmitBehavior={true}
-                onClick={ handleSubmit}
+                onClick={handleSubmit}
               />
             </div>
             {/* <div className="or-text">or</div>

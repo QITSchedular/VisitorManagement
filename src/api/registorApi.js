@@ -113,7 +113,7 @@ export const VerifyOtp = async (email, otp, role) => {
     return responseBody;
   } catch (error) {
     responseBody.hasError = true;
-    responseBody.errorMessage =
+    responseBody.error =
       error.response?.data?.StatusMsg ||
       error.response?.data?.errors ||
       error.message;

@@ -3,6 +3,7 @@ import "./checkstatus.scss";
 import { Button, TextBox } from "devextreme-react";
 import { useNavigate } from "react-router-dom";
 import { checkUserStatus } from "../../api/common";
+import { toastDisplayer } from "../../components/toastDisplayer/toastdisplayer";
 const CheckStatus = () => {
   const [email ,setEmail ]= useState("");
   const navigate = useNavigate();
@@ -21,6 +22,9 @@ const CheckStatus = () => {
 
     if(checkStatus.hasError === true){
         return console.log(checkStatus.error);
+      }
+      if(checkStatus.responseData.status === "O"){
+        return toastDisplayer("error" ,"Visitor already Checked out")
       }
       const status = checkStatus.responseData.status;
       console.log('Status : ' ,status)
