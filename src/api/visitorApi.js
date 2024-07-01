@@ -3,6 +3,7 @@ import { logToServer } from "./logger";
 const API_URL = process.env.REACT_APP_API;
 
 // Get all Visitor
+
 export const getVisiotrCompanyWise = async(company_id) =>{
     const storedSessionValue = JSON.parse(sessionStorage.getItem("authState"));
 
@@ -134,4 +135,7 @@ export const getVisitorDetailsApi = async(cmp_id ,visitor_id)=>{
           );
         return responseBody
     }
+
 }
+
+

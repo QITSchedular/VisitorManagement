@@ -13,6 +13,7 @@ import { useRegisterState } from "../../Atoms/customHook";
 import { requestOtp } from "../../api/registorApi";
 import { toast } from "react-toastify";
 import { toastDisplayer } from "../toastDisplayer/toastdisplayer";
+
 export default function CreateAccountForm() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -31,6 +32,10 @@ export default function CreateAccountForm() {
   };
 
   const handleSubmit = async () => {
+    if(registerUser.e_mail === ""||registerUser.e_mail === null ){
+      
+      return ;
+    }
     console.log("step 1")
     const userEmail = registerUser.e_mail;
     const role = "company";
@@ -39,6 +44,7 @@ export default function CreateAccountForm() {
     const getOtp = await requestOtp(userEmail, role);
  console.log("step 2")
     console.log("getotp : ", getOtp);
+
     if (getOtp.hasError) {
         return toastDisplayer("error",getOtp.errorMessage);
     } else {  
@@ -142,7 +148,7 @@ export default function CreateAccountForm() {
                 width={"100%"}
                 height={"48px"}
                 // stylingMode="default"
-                //useSubmitBehavior={true}
+                useSubmitBehavior={true}
                 onClick={ handleSubmit}
               />
             </div>

@@ -4,6 +4,7 @@ import "./checkinotp.scss";
 import { useRegisterVisitor } from "../../Atoms/customHook";
 import { VerifyOtp, requestOtp } from "../../api/registorApi";
 import { toast } from "react-toastify";
+import { toastDisplayer } from "../../components/toastDisplayer/toastdisplayer";
 
 export const CheckInOtp = () => {
   const [otp, setOtp] = useState(Array(6).fill(""));
@@ -94,6 +95,7 @@ export const CheckInOtp = () => {
     console.log("Get the OTP : ",  registerVisitor)
   }, [registerVisitor])
   
+
 
   const minutes = Math.floor(timer / 60);
   const seconds = timer % 60;

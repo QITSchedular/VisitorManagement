@@ -24,6 +24,11 @@ export const registerVisitorApi = async (payload) => {
     );
     return responseBody;
   } catch (error) {
+    console.log(error);
+    responseBody.error = 
+      error.response?.data?.StatusMsg ||
+      error.message ||
+      error.response?.data?.errors;
     responseBody.hasError = true;
     responseBody.error = error;
     await logToServer(
@@ -62,6 +67,7 @@ export const checkOutVisitorApi = async(payload)=>{
         );
         return responseBody;
     } catch (error) {
+
         responseBody.hasError = true;
         responseBody.error = error;
         await logToServer(

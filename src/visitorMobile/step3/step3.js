@@ -93,7 +93,7 @@ export const Step3 = () => {
           <span>Step 3/4</span>
         </div>
         <div className="welcome-text">
-          <span>Click Photo</span> <span>Fill in the details</span>
+          <span>Click Photo</span> <span>Click the picture</span>
         </div>
       </div>
       <div className={`picture ${isCameraOn ? "fullscreen" : ""}`}>
