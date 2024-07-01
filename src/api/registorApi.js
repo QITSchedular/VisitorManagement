@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logToServer } from "./logger";
 const REACT_APP_API = process.env.REACT_APP_API;
 
 export const registerUserApi = async (payload) => {
@@ -12,10 +13,30 @@ export const registerUserApi = async (payload) => {
   try {
     const response = await axios.post(`${REACT_APP_API}VMS/Register`, payload);
     responseBody.response = response.data;
+    await logToServer(
+      "CreateCompany",
+      "company_master",
+      "CreateCompany",
+      "S",
+      "SuccessFully register company Data...",
+      JSON.stringify(payload),
+      "",
+      0
+    );
     return responseBody;
   } catch (error) {
     responseBody.error = error;
     responseBody.hasError = true;
+    await logToServer(
+      "CreateCompany",
+      "company_master",
+      "CreateCompany",
+      "E",
+      "UnSuccessFully register company Data...",
+      JSON.stringify(payload),
+      "",
+      0
+    );
     return responseBody;
   }
 };
@@ -46,6 +67,16 @@ export const requestOtp = async (email, role) => {
       error.message ||
       error.response?.data?.errors;
     responseBody.hasError = true;
+    await logToServer(
+      "GenerateOTP",
+      "common",
+      "GenerateOTP",
+      "E",
+      "UnSuccessFully generate OTP...",
+      JSON.stringify(payload),
+      email,
+      0
+    );
     return responseBody;
   }
 };
@@ -69,7 +100,16 @@ export const VerifyOtp = async (email, otp, role) => {
       responseBody.hasError = true;
       responseBody.errorMessage = response.data.StatusMsg;
     }
-
+    await logToServer(
+      "VerifyOTP",
+      "common",
+      "VerifyOTP",
+      "S",
+      "SuccessFully verify OTP...",
+      JSON.stringify(payload),
+      email,
+      0
+    );
     return responseBody;
   } catch (error) {
     responseBody.hasError = true;
@@ -77,6 +117,16 @@ export const VerifyOtp = async (email, otp, role) => {
       error.response?.data?.StatusMsg ||
       error.response?.data?.errors ||
       error.message;
+      await logToServer(
+        "VerifyOTP",
+        "common",
+        "VerifyOTP",
+        "E",
+        "UnSuccessFully verify OTP...",
+        JSON.stringify(payload),
+        email,
+        0
+      );
     return responseBody;
   }
 };

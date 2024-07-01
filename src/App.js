@@ -25,7 +25,6 @@ function App() {
         // setData(response.data);
       } catch (err) {
         // setError(err);
-
       }
     };
 

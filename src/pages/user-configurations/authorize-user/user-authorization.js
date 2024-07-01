@@ -27,8 +27,9 @@ import {
 } from "../../../api/common";
 import { toastDisplayer } from "../../../components/toastDisplayer/toastdisplayer";
 import { PreSetRule, helpIcon } from "../../../assets";
-const UserAuthorization = () => {
-  const [loading, setLoading] = useState(false);
+
+const UserAuthorization = ({ setLoading }) => {
+  // const [loading, setLoading] = useState(false);
   const [UserData, setUserData] = useState(false);
   const [AuthPopUp, setAuthPopUp] = useState(false);
   const [isModuleTreeVisible, setModuleTreeVisible] = useState(false);
@@ -198,6 +199,9 @@ const UserAuthorization = () => {
   };
 
   const handleClick = async () => {
+    if (!selectedRowKeysOnChangeAuth.length) {
+      return toastDisplayer("error", "Select user..!!");
+    }
     try {
       setLoading(true);
       const finalNavigation = finalObject.map((authItem) => {
@@ -228,7 +232,8 @@ const UserAuthorization = () => {
         // setSelectedRowKeysOnChangeAuth([]);
         // setModuleTreeVisible(false);
         setLoading(false);
-        return toastDisplayer("success", apiResponse.responseData.statusMsg);
+        console.log(apiResponse.responseData.StatusMsg);
+        return toastDisplayer("success", apiResponse.responseData.StatusMsg);
       }
     } catch (error) {
       console.log("error : ", error);
@@ -303,7 +308,7 @@ const UserAuthorization = () => {
 
   return (
     <>
-      {loading && <LoadPanel visible={true} />}
+      {/* {loading && <LoadPanel visible={true} />} */}
       {AuthPopUp && (
         <Popup
           visible={true}

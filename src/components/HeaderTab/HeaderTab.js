@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./HeaderTab.scss";
 import { Tabs } from "devextreme-react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { HeaderText } from "../typographyText/TypograghyText";
 
 const HeaderTab = ({ HeaderTabText, setActivePage, activePageText }) => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const HeaderTab = ({ HeaderTabText, setActivePage, activePageText }) => {
     const path2 = location.pathname.toLowerCase().replace(/^\//, "");
 
     const pageIndex = HeaderTabText.findIndex(
-      (tab) => tab && tab.toLowerCase().replace(" ", "") == path2.toLowerCase(),
+      (tab) => tab && tab.toLowerCase().replace(" ", "") == path2.toLowerCase()
     );
     setSelectedIndex(pageIndex !== -1 ? pageIndex : 0);
   }, [location.pathname, HeaderTabText]);
@@ -29,7 +30,7 @@ const HeaderTab = ({ HeaderTabText, setActivePage, activePageText }) => {
   return (
     <div className="HeaderTab">
       <div className="Active-Header">
-        <span>{HeaderTabText[selectedIndex]}</span>
+        <HeaderText text={HeaderTabText[selectedIndex]} />
       </div>
       <Tabs
         id="withText"

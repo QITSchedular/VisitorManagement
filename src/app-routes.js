@@ -20,10 +20,10 @@ const routes = [
     path: "/profile",
     element: ProfilePage,
   },
-  {
-    path: "/home",
-    element: HomePage,
-  },
+  // {
+  //   path: "/home",
+  //   element: HomePage,
+  // },
   {
     path: "/Visitors",
     element: VisitorMain,
@@ -53,13 +53,10 @@ const routes = [
     path: "/Users-Settings",
     element: UserSettingsMain,
   },
-
-  //Notification
   {
     path: "/notification",
     element: Notification,
   },
-  //General Setting
   {
     path: "/generalsettings",
     element: GeneralSetting,

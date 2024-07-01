@@ -8,6 +8,7 @@ import {
   OtpVerificationForm,
   FillDetailsForm,
   QRCodeForm,
+  ResetLinkPassword,
 } from "./components";
 import { Welcome } from "./visitorMobile/welcome/welcome";
 import { Step1 } from "./visitorMobile/welcomeDetails/step1";
@@ -91,6 +92,7 @@ export default function UnauthenticatedContent() {
       <Route path="/checkstatus" element={<CheckStatus />} />
       <Route path="/Success" element={<AfterApproval />} />
       <Route path="/statusPage" element={<StatusPage />} />
+      <Route path="/reset-pwd-link" element={<ResetLinkPassword />} />
       <Route path="*" element={<Navigate to={"/login"} />}></Route>
     </Routes>
   );

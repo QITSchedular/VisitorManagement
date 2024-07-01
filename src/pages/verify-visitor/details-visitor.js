@@ -8,71 +8,78 @@ import Breadcrumbs from "../../components/breadcrumbs/BreadCrumbs";
 import AllowEntryPopup from "../../components/popups/allow-entry";
 import RejectEntryPopup from "../../components/popups/reject-entry";
 import { useLocation, useParams } from "react-router-dom";
-import { getVisiotrCompanyWise, getVisitorDetailsApi } from "../../api/visitorApi";
+import {
+  getVisiotrCompanyWise,
+  getVisitorDetailsApi,
+} from "../../api/visitorApi";
+import CustomLoader from "../../components/customerloader/CustomLoader";
 
 const VistorsDetails = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [isPopupRejectVisible, setIsPopupRejectVisible] = useState(false);
-  const [singleVisitor , setSingleVisitor] = useState([]);
-  const [allVisitor , setAllVisitor] = useState([]);
-  const [verifyData ,setVerifyData ] = useState(null);
+  const [singleVisitor, setSingleVisitor] = useState([]);
+  const [allVisitor, setAllVisitor] = useState([]);
+  const [verifyData, setVerifyData] = useState(null);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const visitorId = queryParams.get('visitorId');
+  const visitorId = queryParams.get("visitorId");
+  const [loading, setLoading] = useState(true);
   const handleCloseRejectPopup = () => {
     setIsPopupRejectVisible(false);
   };
   const handleOpenRejectPopup = () => {
-
     setIsPopupRejectVisible(true);
-    const authState =JSON.parse( sessionStorage.getItem('authState'));
+    const authState = JSON.parse(sessionStorage.getItem("authState"));
     const company_id = authState.user.cmpid;
 
     setVerifyData({
-      company_id:company_id,
-      visitor_id:visitorId,
-      reason:"",
-      status:"R",
-    })
+      company_id: company_id,
+      visitor_id: visitorId,
+      reason: "",
+      status: "R",
+    });
   };
   const handleClosePopup = () => {
     setIsPopupVisible(false);
   };
   const handleOpenPopup = () => {
     setIsPopupVisible(true);
-    const authState =JSON.parse(sessionStorage.getItem('authState'));
+    const authState = JSON.parse(sessionStorage.getItem("authState"));
     const cmp_id = authState.user.cmpid;
-  console.log("user ID : " , authState.user)
+    console.log("user ID : ", authState.user);
 
     setVerifyData({
-      company_id:cmp_id,
-      visitor_id:visitorId,
-      reason:"",
-      status:"R",
-    })
+      company_id: cmp_id,
+      visitor_id: visitorId,
+      reason: "",
+      status: "R",
+    });
   };
-  const detailedVisitor = async()=>{
-    const authState =JSON.parse( sessionStorage.getItem('authState'));
+  const detailedVisitor = async () => {
+    setLoading(true);
+    const authState = JSON.parse(sessionStorage.getItem("authState"));
     const cmp_id = authState.user.cmpid;
-  console.log("user ID : " , authState.user)
-    //return null
-    const getData = await getVisiotrCompanyWise(cmp_id)
-    console.log("Detailed Data : " ,getData.responseData)
-     setAllVisitor (getData.responseData);
-     const myallVisitor = getData.responseData;
-    const visitor = myallVisitor.find(v => v.id === parseInt(visitorId));
-    console.log("this is my Single Visitor : " , visitor)
-     setSingleVisitor(visitor)
-  }
-  useEffect(()=>{
-    detailedVisitor();
 
-  },[])
-  useEffect(()=>{
-    console.log("SINGLE : " ,singleVisitor)
-  },[singleVisitor])
+    const getData = await getVisiotrCompanyWise(cmp_id);
+    setAllVisitor(getData.responseData);
+    const myallVisitor = getData.responseData;
+    const visitor = myallVisitor.find((v) => v.id === parseInt(visitorId));
+    setSingleVisitor(visitor);
+    setLoading(false);
+  };
+  useEffect(() => {
+    detailedVisitor();
+  }, []);
+  useEffect(() => {
+    console.log("SINGLE : ", singleVisitor);
+  }, [singleVisitor]);
   return (
     <>
+      {loading && (
+        <div className="Myloader">
+          <CustomLoader />
+        </div>
+      )}
       <div className="content-block">
         <div className="navigation-header-main">
           <div className="title-section">
@@ -139,7 +146,9 @@ const VistorsDetails = () => {
         <div className="visitor-personal-detail">
           <div className="visitor-personal-data">
             <div className="visitor-header">Purpose of Visit</div>
-            <div className="visitor-sub-header">{singleVisitor.purposeofvisit}</div>
+            <div className="visitor-sub-header">
+              {singleVisitor.purposeofvisit}
+            </div>
           </div>
           <div className="visitor-personal-data">
             <div className="visitor-header">Time Slot</div>
@@ -149,7 +158,9 @@ const VistorsDetails = () => {
         <div className="visitor-personal-detail">
           <div className="visitor-personal-data">
             <div className="visitor-header">Carrying hardware</div>
-            <div className="visitor-sub-header">Input</div>
+            <div className="visitor-sub-header">
+              {singleVisitor.anyhardware}
+            </div>
           </div>
         </div>
       </div>

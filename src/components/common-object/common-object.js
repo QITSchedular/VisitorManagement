@@ -20,38 +20,38 @@ export const authObject = [
 export const finalObject = [
   {
       "text": "Visitors",
-      "path": "/visitors",
+      "path": "/Visitors",
       "icon": "ri-user-add-line",
       "hasAccess": true
   },
   {
       "text": "Verify Visitors",
-      "path": "/verifyvisitors",
+      "path": "/Verify-Visitors",
       "icon": "ri-user-follow-line",
       "hasAccess": true
   },
   {
       "text": "User Settings",
-      "path": "/usersettings",
+      "path": "/Users-Settings",
       "icon": "ri-user-settings-line",
       "hasAccess": true
   },
   {
       "text": "Notification",
       "path": "/notification",
-      "icon": "bell-icon",
+      "icon": "ri-notification-4-line",
       "hasAccess": true
   },
   {
       "text": "Profile",
       "path": "/profile",
-      "icon": "settings",
+      "icon": "ri-user-line",
       "hasAccess": true
   },
   {
       "text": "General Settings",
       "path": "/settings",
-      "icon": "settings",
+      "icon": "ri-settings-4-line",
       "hasAccess": true
   }
 ]

@@ -19,22 +19,26 @@ import { useRecoilState } from "recoil";
 export default function SideNavigationMenu(props) {
   const { children, selectedItemChanged, openMenu, compactMode, onMenuReady } =
     props;
-  const { signOut } = useAuth();
+  const { signOut,authRuleContext } = useAuth();
   const { isLarge } = useScreenSize();
+  const [authNavigation,setAuthNavigation] = useState([]);
+  const [notificationAtomState, setNotificationAtomState] =
+    useRecoilState(notificationAtom);
 
-  const [notificationAtomState,setNotificationAtomState] = useRecoilState(notificationAtom);
-
-  
-  const [notificationCnt,setNotificationCnt] = useState(0);
-  useEffect(()=>{
-    if(notificationAtom){
-      if(notificationAtomState){
-        console.log("notificationAtomState : ",notificationAtomState)
+  const [notificationCnt, setNotificationCnt] = useState(0);
+  useEffect(() => {
+    if (notificationAtom) {
+      if (notificationAtomState) {
         setNotificationCnt(notificationAtomState.length);
       }
     }
-  },[notificationAtomState])
+  }, [notificationAtomState]);
 
+  useEffect(() => {
+    if (authRuleContext) {
+      setAuthNavigation(authRuleContext);
+    }
+  }, [authRuleContext]);
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -84,12 +88,17 @@ export default function SideNavigationMenu(props) {
       treeView.collapseAll();
     }
   }, [currentPath, compactMode]);
-  
+
   const itemRender = (item) => {
     return (
       <div className="treeview-item-content">
         <i className={`${item.icon} custom-icon`}></i>
-        <span className="custom-text">{item.text} {item.text == "Notification" ?(notificationCnt) :""}</span>
+        <span className="custom-text">
+          {item.text}
+          {item.text === "Notification" && (
+            <span className="notification-badge">{notificationCnt}</span>
+          )}
+        </span>
       </div>
     );
   };
@@ -105,8 +114,6 @@ export default function SideNavigationMenu(props) {
       ? item.text.toLowerCase().includes(searchValue.toLowerCase())
       : true
   );
-
-
 
   return (
     <div
@@ -142,7 +149,8 @@ export default function SideNavigationMenu(props) {
       <div className={"menu-container"}>
         <TreeView
           ref={treeViewRef}
-          items={filteredItems}
+          // items={filteredItems}
+          items={authNavigation}
           keyExpr={"path"}
           selectionMode={"single"}
           focusStateEnabled={false}

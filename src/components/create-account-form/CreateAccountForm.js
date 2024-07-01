@@ -44,10 +44,10 @@ export default function CreateAccountForm() {
     const getOtp = await requestOtp(userEmail, role);
  console.log("step 2")
     console.log("getotp : ", getOtp);
-    if (getOtp.hasError === true) {
-      console.log("error")
-      return toastDisplayer("error",`${getOtp.error}`);
-    } else {
+
+    if (getOtp.hasError) {
+        return toastDisplayer("error",getOtp.errorMessage);
+    } else {  
       console.log("susccess")
       navigate("/otp-verification");
     }

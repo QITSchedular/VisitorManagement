@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { HeaderText } from "../../components/typographyText/TypograghyText";
 import { TabPanel } from "devextreme-react";
 import { Item } from "devextreme-react/cjs/tab-panel";
@@ -7,10 +7,27 @@ import AddUser from "./add-user/add-user";
 import UserAuthorization from "./authorize-user/user-authorization";
 import UserProfile from "./user's-profile/user-profile";
 import NotificationAuthorization from "./notification-authorize/notification-authorization";
+import CustomLoader from "../../components/customerloader/CustomLoader";
 
 const UserSettingsMain = () => {
+  const [loading, setLoading] = useState(false);
+
+  const fetchData = async () => {
+    setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setLoading(false);
+  };
+
+  React.useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <>
+      {loading && (
+        <div className="Myloader">
+          <CustomLoader />
+        </div>
+      )}
       <div className="content-block">
         <div className="navigation-header-main">
           <div className="title-section">
@@ -21,16 +38,16 @@ const UserSettingsMain = () => {
       <div className="content-block tab-panel">
         <TabPanel id="tabPanel" deferRendering={true}>
           <Item title="Add Users" deferRendering={true}>
-            <AddUser />
+            <AddUser setLoading={setLoading} />
           </Item>
           <Item title="User’s Profile" deferRendering={true}>
-            <UserProfile />
+            <UserProfile setLoading={setLoading} />
           </Item>
           <Item title="Authorise User" deferRendering={true}>
-            <UserAuthorization />
+            <UserAuthorization setLoading={setLoading} />
           </Item>
           <Item title="Notification Authorise" deferRendering={true}>
-            <NotificationAuthorization />
+            <NotificationAuthorization setLoading={setLoading} />
           </Item>
         </TabPanel>
       </div>

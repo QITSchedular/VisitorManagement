@@ -21,8 +21,8 @@ const getStatusColor = (status) => {
   return statusColors[status];
 };
 
-const UserProfile = () => {
-  const [loading, setLoading] = useState(false);
+const UserProfile = ({ setLoading }) => {
+  // const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(false);
   const [allowEdit, setAllowEdit] = useState(false);
   const [dataToUpdate, setDataToUpdate] = useState([]);
@@ -30,7 +30,6 @@ const UserProfile = () => {
   const { user } = useAuth();
 
   const getAllUserData = async () => {
-    console.log("here");
     setLoading(true);
     const response = await GetAllUser(user.cmpid);
     if (response.hasError === true) {
@@ -39,7 +38,7 @@ const UserProfile = () => {
     } else {
       setUserData(response.responseData);
       setLoading(false);
-      return toastDisplayer("suceess", "OTP send successfully..!!");
+      // return toastDisplayer("suceess", "OTP send successfully..!!");
     }
   };
 
@@ -167,7 +166,7 @@ const UserProfile = () => {
 
   return (
     <>
-      {loading && <LoadPanel visible={true} shadingColor="rgba(0,0,0,0.4)" />}
+      {/* {loading && <LoadPanel visible={true} shadingColor="rgba(0,0,0,0.4)" />} */}
       <div className="dx-card" style={{ marginTop: "16px" }}>
         <div className="navigation-header-main">
           <div className="title-section">

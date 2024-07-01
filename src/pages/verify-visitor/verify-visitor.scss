@@ -2,7 +2,7 @@
 .box {
   position: relative;
 }
-.title-section-btn {
+.title-section-search {
   i {
     position: absolute;
     margin-left: 10px;
@@ -14,19 +14,18 @@
     color: #687787;
   }
 }
-.title-section-btn {
+.title-section-search {
   .dx-placeholder {
-    margin-left: 15px;
+    margin-left: 20px;
     font-size: 14px;
     color: #687787;
     font-family: Inter;
   }
 }
-.title-section-btn .dx-widget input,
+.title-section-search .dx-widget input,
 .dx-widget textarea {
-  // margin-left: 15px;
+  margin-left: 20px;
 }
-
 .highlight {
   font-weight: 500;
   padding: 0px 1px;
@@ -77,12 +76,14 @@
 }
 
 .Myloader {
-  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  position: absolute;
-  z-index: 999999;
+  height: 100%;
+  background: #3444503c;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #3444503c;
+  z-index: 9999;
 }

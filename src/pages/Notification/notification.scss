@@ -1,51 +1,50 @@
-.notification{
-    .header-container{
-        font-size: 20px;
-        // border-bottom: 1px solid #D9DDE1;
-        padding-bottom: 24px;
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: nowrap;
+.notification {
+  .header-container {
+    font-size: 20px;
+    // border-bottom: 1px solid #D9DDE1;
+    padding-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+  .notifydropdown-body {
+    :hover {
+      background-color: #fcfaff;
+      border-radius: 4px;
     }
-    .notifydropdown-body{
-        :hover {
-            background-color: #FCFAFF;
-            border-radius: 4px;
-        }
-        .notification {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.5rem 0.9rem;
-            border-bottom: 1px solid #D9DDE1;
-            cursor: pointer;
-            
-            .notify-title {
-              margin-bottom: 0.5rem;
-              color: #525252;
-              font-family: Inter;
-              font-size: 14px;
-              font-style: normal;
-              font-weight: 400;
-              line-height: normal;
-            }
-      
-            .notify-time {
-              color: #8d8d8d;
-              font-family: Inter;
-              font-size: 12px;
-              font-style: normal;
-              font-weight: 400;
-              line-height: normal;
-            }
-      
-            .notify-unread {
-              background-color: #6941c6;
-              height: 7px;
-              width: 7px;
-              border-radius: 50%;
-            }
-          }
+    .notification {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 0.9rem;
+      border-bottom: 1px solid #d9dde1;
+      cursor: pointer;
 
+      .notify-title {
+        margin-bottom: 0.5rem;
+        color: #525252;
+        font-family: Inter;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+      }
+
+      .notify-time {
+        color: #8d8d8d;
+        font-family: Inter;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+      }
+
+      .notify-unread {
+        background-color: #6941c6;
+        height: 7px;
+        width: 7px;
+        border-radius: 50%;
+      }
     }
+  }
 }

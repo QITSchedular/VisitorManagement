@@ -26,8 +26,9 @@ import {
   postNotificationRule,
 } from "../../../api/common";
 import { toastDisplayer } from "../../../components/toastDisplayer/toastdisplayer";
-const NotificationAuthorization = () => {
-  const [loading, setLoading] = useState(false);
+
+const NotificationAuthorization = ({ setLoading }) => {
+  // const [loading, setLoading] = useState(false);
   const [UserData, setUserData] = useState(false);
   const [NotificationPopUp, setNotificationPopUp] = useState(false);
   const [isModuleTreeVisible, setModuleTreeVisible] = useState(false);
@@ -201,6 +202,9 @@ const NotificationAuthorization = () => {
   };
 
   const handleClick = async () => {
+    if (!selectedRowKeysOnChangeAuth.length) {
+      return toastDisplayer("error", "Select user..!!");
+    }
     try {
       setLoading(true);
       const finalNavigation = finalObject.map((authItem) => {
@@ -231,7 +235,7 @@ const NotificationAuthorization = () => {
         // setSelectedRowKeysOnChangeAuth([]);
         // setModuleTreeVisible(false);
         setLoading(false);
-        return toastDisplayer("success", apiResponse.responseData.statusMsg);
+        return toastDisplayer("success", apiResponse.responseData.StatusMsg);
       }
     } catch (error) {
       console.log("error : ", error);
@@ -305,7 +309,7 @@ const NotificationAuthorization = () => {
   };
   return (
     <>
-      {loading && <LoadPanel visible={true} />}
+      {/* {loading && <LoadPanel visible={true} />} */}
       {NotificationPopUp && (
         <Popup
           visible={true}

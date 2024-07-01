@@ -52,6 +52,7 @@ const VisitorDetail = () => {
   const [status] = useRecoilState(statusAtom);
   const [state] = useRecoilState(stateAtom);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+
   const [visitorDetailbrief, setVisitorDetailbrief] = useState([]);
   const [visitorEmail, setVisitorEmail] = useState();
   const [placeholderTimeSlot, setPlaceholderTimeSlot] = useState("");
@@ -123,6 +124,9 @@ const VisitorDetail = () => {
   useEffect(() => {
     getVisitorDetails();
   }, []);
+
+  const [loading, setLoading] = useState(true);
+
 
   const handleOpenPopup = () => {
     setIsPopupVisible(true);
