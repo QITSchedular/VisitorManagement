@@ -6,15 +6,35 @@ import { useNavigate, Link } from "react-router-dom";
 import { TextBox } from "devextreme-react/text-box";
 import { useRegisterState } from "../../Atoms/customHook";
 import { registerUserApi } from "../../api/registorApi";
+import { toastDisplayer } from "../toastDisplayer/toastdisplayer";
 
 const FillDetails = () => {
   const navigate = useNavigate();
   const [registerUser, setRegisterUser] = useRegisterState("Empty");
+  const [myCheck , setMyCheck] = useState("");
 
   // 8d2c2f98e4d98ba6a9b06c6a97ece92120cf8693816e0e831105cd8044f3dc0f
   const handleSubmit = async () => {
+
+    console.log("my check  = " ,myCheck)
+    if(!myCheck){
+      console.log("here")
+      return null;
+    }
+    if(!myCheck.blocation){
+      console.log("here 1")
+      return null;
+    }
+    if(!myCheck.bname){
+      console.log("here 2")
+      return null;
+    }
+
     const getUserRegistered = await registerUserApi(registerUser);
     console.log(getUserRegistered);
+    if(getUserRegistered.hasError === true){
+      return toastDisplayer("error ", `${getUserRegistered.error}`)
+    }
     if (
       getUserRegistered.response.status === 200 ||
       getUserRegistered.response.status === 201
@@ -33,6 +53,8 @@ const FillDetails = () => {
           "Email not found or OTP expired..!!"
       ) {
         console.log("yop");
+        sessionStorage.removeItem("registerUser");
+        setRegisterUser("");
         navigate("/create-account");
       }
       return console.log("error : ", getUserRegistered.response.StatusMsg);
@@ -41,6 +63,11 @@ const FillDetails = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    setMyCheck((prev)=>({
+      ...prev,
+      [name]:value
+    }))
     setRegisterUser((prev) => ({
       ...prev,
       [name]: value,
@@ -80,13 +107,13 @@ const FillDetails = () => {
                 }
               >
                 <Validator className="custom-validator">
-                  <RequiredRule message="Business Name is required" />
+                  <RequiredRule message="Company Name is required" />
                 </Validator>
               </TextBox>
             </div>
             <div className="inputField">
               <TextBox
-                label="Business Location"
+                label="Company Location"
                 placeholder="Input text"
                 labelMode="static"
                 height={56}
@@ -99,7 +126,7 @@ const FillDetails = () => {
                 }
               >
                 <Validator>
-                  <RequiredRule message="Business Location is required" />
+                  <RequiredRule message="Company Location is required" />
                 </Validator>
               </TextBox>
             </div>

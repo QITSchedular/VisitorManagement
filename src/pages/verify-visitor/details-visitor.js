@@ -52,7 +52,7 @@ const VistorsDetails = () => {
       company_id: cmp_id,
       visitor_id: visitorId,
       reason: "",
-      status: "R",
+      status: "A",
     });
   };
   const detailedVisitor = async () => {

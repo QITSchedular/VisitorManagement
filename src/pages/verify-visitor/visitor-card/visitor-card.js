@@ -13,19 +13,7 @@ const VisitorCard = ({ visitor, isExpanded, onToggleExpand }) => {
   const [verifyData, setVerifyData] = useState(null);
   const navigate = useNavigate();
 
-  const formatDateTime = (date) => {
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are 0-based
-    const day = String(d.getDate()).padStart(2, "0");
-    const hours = String(d.getHours()).padStart(2, "0");
-    const minutes = String(d.getMinutes()).padStart(2, "0");
-    const seconds = String(d.getSeconds()).padStart(2, "0");
 
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  };
-
-  const date = formatDateTime(visitor.timeslot);
 
   const handleClick = () => {
     console.log("vistor : ", visitor.id);
@@ -92,7 +80,7 @@ const VisitorCard = ({ visitor, isExpanded, onToggleExpand }) => {
             <span className="meeting-with">Will be Meeting to</span>
             {visitor.cnctperson}
           </div>
-          <div className="visitor-time">{date}</div>
+          <div className="visitor-time">{visitor.timeslot}</div>
         </div>
         <div className="visitor-meet-icon">
           <i

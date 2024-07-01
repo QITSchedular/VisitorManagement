@@ -21,6 +21,7 @@ function App() {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get("VMS/secure");
+
         // setData(response.data);
       } catch (err) {
         // setError(err);
@@ -33,8 +34,8 @@ function App() {
   if (loading) {
     return <LoadPanel visible={true} />;
   }
-  if (user) {
 
+  if (user) {
     return <Content />;
   }
 

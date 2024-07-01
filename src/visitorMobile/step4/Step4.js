@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./step4.scss";
-import { Button, SelectBox, TextBox } from "devextreme-react";
+import { Button, SelectBox, TextBox, Validator } from "devextreme-react";
 import { useNavigate } from "react-router-dom";
 import { useRegisterVisitor } from "../../Atoms/customHook";
 import { GettingDepratmentdata } from "../../api/departmentAPi";
 import { registerVisitorApi } from "../../api/mobileVisitorApi";
+import { RequiredRule } from "devextreme-react/cjs/data-grid";
+import { toastDisplayer } from "../../components/toastDisplayer/toastdisplayer";
 
 export const Step4 = () => {
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ export const Step4 = () => {
     if (!registerVisitor.cnctperson) {
       return console.log(
         "Mention person you want to meet:",
-        registerVisitor.cnctperson
+        registerVisitor.cnctperson,
       );
     } else if (!registerVisitor.department_id) {
       return console.log("Select the department");
@@ -44,7 +46,8 @@ export const Step4 = () => {
     const registor = await registerVisitorApi(registerVisitor);
 
     if (registor.hasError === true) {
-      return console.log("error: ", registor);
+      console.log("error : " , registor.error)
+      return toastDisplayer("error",`${registor.error}`);
     }
 
     sessionStorage.removeItem("registerVisitor");
@@ -57,7 +60,7 @@ export const Step4 = () => {
     if (departmentData.hasError === true) {
       return console.log(
         "error while getting the department data",
-        departmentData.error
+        departmentData.error,
       );
     }
     return setDepartmentdataState(departmentData.repsonseData);
@@ -126,6 +129,7 @@ export const Step4 = () => {
 
   return (
     <div className="Step1">
+    <form>
       <div className="backbtn">
         <i
           className="ri-arrow-left-line"
@@ -153,7 +157,11 @@ export const Step4 = () => {
               target: { name: "cnctperson", value: e.value },
             })
           }
-        />
+        >
+          <Validator>
+            <RequiredRule message="Mention the person to meet" />
+          </Validator>
+        </TextBox>
         <SelectBox
           label="Select Department"
           dataSource={departmentdataState}
@@ -169,7 +177,11 @@ export const Step4 = () => {
               target: { name: "department_id", value: e.value },
             })
           }
-        />
+        >
+          <Validator>
+            <RequiredRule message="Select the department" />
+          </Validator>
+        </SelectBox>
         <SelectBox
           label="Time Slot"
           dataSource={timeSlots}
@@ -179,7 +191,11 @@ export const Step4 = () => {
           height={"56px"}
           className="step-textbox"
           onValueChanged={handleInputChange}
-        />
+        >
+          <Validator>
+            <RequiredRule message="Time Slot is required" />
+          </Validator>
+        </SelectBox>
         <TextBox
           label="Any Hardware"
           labelMode="static"
@@ -191,7 +207,9 @@ export const Step4 = () => {
               target: { name: "anyhardware", value: e.value },
             })
           }
-        />
+        >
+
+        </TextBox>
         <TextBox
           label="Purpose of visit"
           labelMode="static"
@@ -203,16 +221,22 @@ export const Step4 = () => {
               target: { name: "purposeofvisit", value: e.value },
             })
           }
-        />
+        >
+          <Validator>
+            <RequiredRule message="Mention the Purpose of visit" />
+          </Validator>
+        </TextBox>
       </div>
       <div className="btn-section">
         <Button
           text="Send For Approval"
           width={"100%"}
           height={"44px"}
+          useSubmitBehavior={true}
           onClick={handleAproval}
         />
       </div>
+      </form>
     </div>
   );
 };

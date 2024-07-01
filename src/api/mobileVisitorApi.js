@@ -12,30 +12,17 @@ export const registerVisitorApi = async (payload) => {
   try {
     const response = await axios.post(`${API_URL}VMS/Visitor/Save`, payload);
     responseBody.responsedata = response.data;
-    await logToServer(
-      "Visitors",
-      "visitor_master",
-      "Save_Visitor",
-      "S",
-      "SuccessFully save visitor Data...",
-      JSON.stringify(payload),
-      "",
-      0
-    );
+  
     return responseBody;
   } catch (error) {
+    console.log(error);
+    responseBody.error = 
+      error.response?.data?.StatusMsg ||
+      error.message ||
+      error.response?.data?.errors;
     responseBody.hasError = true;
-    responseBody.error = error;
-    await logToServer(
-      "Visitors",
-      "visitor_master",
-      "Save_Visitor",
-      "E",
-      "UnSuccessFully save visitor Data...",
-      JSON.stringify(payload),
-      "",
-      0
-    );
+
+   
     return responseBody;
   }
 };
@@ -62,8 +49,9 @@ export const checkOutVisitorApi = async(payload)=>{
         );
         return responseBody;
     } catch (error) {
+
         responseBody.hasError = true;
-        responseBody.error = error;
+        responseBody.error = error.response.data.StatusMsg
         await logToServer(
           "Visitors",
           "visitor_master",

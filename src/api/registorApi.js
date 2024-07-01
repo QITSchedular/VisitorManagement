@@ -55,14 +55,14 @@ export const requestOtp = async (email, role) => {
   try {
     console.log("payload : ", payload);
     const response = await axios.post(
-      `${REACT_APP_API}VMS/GenerateOTP`,
+      `http://192.168.1.98:8000/VMS/GenerateOTP`,
       payload
     );
     responseBody.response = response.data;
     return responseBody;
   } catch (error) {
     console.log(error);
-    responseBody.errorMessage = responseBody.errorMessage =
+    responseBody.error = 
       error.response?.data?.StatusMsg ||
       error.message ||
       error.response?.data?.errors;
@@ -113,7 +113,7 @@ export const VerifyOtp = async (email, otp, role) => {
     return responseBody;
   } catch (error) {
     responseBody.hasError = true;
-    responseBody.errorMessage =
+    responseBody.error =
       error.response?.data?.StatusMsg ||
       error.response?.data?.errors ||
       error.message;

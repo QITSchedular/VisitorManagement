@@ -28,6 +28,10 @@ import { useRecoilState } from "recoil";
 import { addedByAtom, stateAtom, statusAtom } from "../../contexts/atom";
 import { useWebSocket } from "../../contexts/websocket";
 import { useAuth } from "../../contexts/auth";
+import { CleaningServices } from "@mui/icons-material";
+import SendVerification from "../../components/popups/send-verification";
+import { toastDisplayer } from "../../components/toastDisplayer/toastdisplayer";
+import { checkOutVisitorApi } from "../../api/mobileVisitorApi";
 
 const getStatusColor = (status) => {
   const statusColors = {
@@ -54,6 +58,8 @@ const VisitorMain = () => {
   const [status, setStatus] = useRecoilState(statusAtom);
   const [state, setState] = useRecoilState(stateAtom);
   const [addedby, setAddedby] = useRecoilState(addedByAtom);
+  const [checkOutRowData  , setCheckOutRowData ]= useState('');
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const { send, eventEmitter } = useWebSocket();
   const { user } = useAuth();
@@ -75,7 +81,7 @@ const VisitorMain = () => {
       dataGrid.current.instance.columnOption(
         "state",
         "filterValue",
-        filterValue
+        filterValue,
       );
       dataGrid.current.instance.refresh();
     }
@@ -95,121 +101,125 @@ const VisitorMain = () => {
       dataGrid.current.instance.columnOption(
         "status",
         "filterValue",
-        filterValue
+        filterValue,
       );
       dataGrid.current.instance.refresh();
     }
   };
+
+  const handleCheckoutFunction =()=>{
+    
+  }
   useEffect(() => {
-    eventEmitter.on("visitors", (data) => {
+    const onVisitors = (data) => {
       setLoading(true);
-      console.log("visitors :", data.visitors);
       setVisitors(data.visitors);
       setLoading(false);
-    });
-    eventEmitter.on("new_visitor", (data) => {
-      console.log("visitors :", data.visitor);
+    };
+
+    const onNewVisitor = (data) => {
       setVisitors((prevVisitors) => {
         if (
           !prevVisitors.some(
-            (existingVisitor) => existingVisitor.id === data.visitor.id
+            (existingVisitor) => existingVisitor.id === data.visitor.id,
           )
         ) {
           return [data.visitor, ...prevVisitors];
         }
         return prevVisitors;
       });
-    });
+    };
 
-    eventEmitter.on("update_visitor", (data) => {
-      console.log("visitors :", data.visitor);
+    const onUpdateVisitor = (data) => {
       setVisitors((prevVisitors) =>
         prevVisitors.map((visitor) =>
           visitor.id === data.visitor.transid
             ? {
                 ...visitor,
                 state:
-                  data.visitor.status == "R"
+                  data.visitor.status === "R"
                     ? "Rejected"
-                    : data.visitor.status == "A"
+                    : data.visitor.status === "A"
                     ? "Approved"
                     : "",
                 reason: data.visitor.reason,
               }
-            : visitor
-        )
+            : visitor,
+        ),
       );
-      // setVisitors(data.visitors);
-    });
+    };
 
-    // Send a message to the server to request visitor data
+    eventEmitter.on("visitors", onVisitors);
+    eventEmitter.on("new_visitor", onNewVisitor);
+    eventEmitter.on("update_visitor", onUpdateVisitor);
+
     send({ type: "send_visitors", cmpid: user ? user.cmpid : 0 });
 
-    // Cleanup on unmount
     return () => {
-      eventEmitter.off("visitors");
+      eventEmitter.off("visitors", onVisitors);
+      eventEmitter.off("new_visitor", onNewVisitor);
+      eventEmitter.off("update_visitor", onUpdateVisitor);
     };
-  }, [send, eventEmitter]);
+  }, [send, eventEmitter, user]);
 
-  // const handlePopupIconClick = (cellData) => {
-  //   const selectedRow = cellData.row.data;
-  //   setClickedRowData(selectedRow);
-  //   // setIsAdditionalCardVisible(true);
-  //   setStates(selectedRow.state);
-  //   setStatus(selectedRow.status);
-  //   setAddedby(selectedRow.AddedBy);
-  //   if (
-  //     selectedRow.status === "none" &&
-  //     selectedRow.state === "Rejected" &&
-  //     selectedRow.AddedBy === "Company"
-  //   ) {
-  //     navigate("/Visitors/Edit-Visitor-Details");
-  //   } else {
-  //     navigate("/Visitors/Details-of-Visitor");
-  //   }
-  // };
-
-  const handlePopupIconClick = (rowData) => {
-    setClickedRowData(rowData);
-    setState(rowData.state);
-    setStatus(rowData.status);
-    setAddedby(rowData.AddedBy);
+  var selectedRowData = "";
+  const onCloneIconClick = (e) => {
+    selectedRowData = e.data;
   };
+  const actionTemplate = (cellData, e) => {
 
-  const handleMenuClick = (e, rowData) => {
-    handlePopupIconClick(rowData);
-    console.log("row data", rowData);
-    if (e.itemData.text === "View Details") {
-      if (
-        rowData.status === "none" &&
-        rowData.state === "Rejected" &&
-        rowData.AddedBy === "Company"
-      ) {
-        navigate("/Visitors/Edit-Visitor-Details");
-      } else {
-        navigate("/Visitors/Details-of-Visitor");
-      }
-    }
-  };
-
-  const actionTemplate = (cellData) => {
+    console.log(cellData.data)
+    
     const actionMenuItems = [
       {
         text: "Check Out",
+        onClick: () => {
+          handleOpenPopup();
+        },
       },
       {
         text: "View Details",
+        onClick: () => {
+          navigate(`/Visitors/Details-of-Visitor?visitorId=${selectedRowData.id}`)
+        },
       },
     ];
 
     const sanitizedClassName = `actionbtn-${sanitizeClassName(
-      cellData.data.ID
+      cellData.data.ID,
     )}`;
+    
 
+    const actionMenuMode = "context1";
+
+    // const handleMenuClick = (e) => {
+    //   if (e.itemData.text === "View Details") {
+    //     console.log("View Details clicked for row: ", cellData.data);
+    //     // Navigate to the appropriate page
+    //     if (
+    //       cellData.data.status === "none" &&
+    //       cellData.data.state === "Rejected" &&
+    //       cellData.data.AddedBy === "Company"
+    //     ) {
+    //       navigate("/Visitors/Edit-Visitor-Details");
+    //     } else {
+    //       navigate("/Visitors/Details-of-Visitor");
+    //     }
+    //   } else if (e.itemData.text === "Check Out") {
+    //     console.log("Check Out clicked for row: ", cellData.data);
+    //     // Handle check out logic here
+    //   }
+    // };
+
+    
     return (
       <>
         <div className="actionDetails">
-          <Button stylingMode="outlined" className={sanitizedClassName}>
+          <Button
+            stylingMode="outlined"
+            className={sanitizedClassName}
+            onClick={() => onCloneIconClick(cellData)}
+          >
             <MoreHorizOutlinedIcon />
           </Button>
         </div>
@@ -218,12 +228,40 @@ const VisitorMain = () => {
           target={`.${sanitizedClassName}`}
           showEvent={"dxclick"}
           cssClass={"actionMenu"}
-          onItemClick={(e) => handleMenuClick(e, cellData.data)}
+          //onItemClick={handleMenuClick}
         />
       </>
     );
   };
 
+  const handleOpenPopup = () => {
+    setCheckOutRowData(selectedRowData);
+    setIsPopupVisible(true);
+  };
+  const handleClosePopup = () => {
+    setIsPopupVisible(false);
+  };
+  const handleCheckOut = async () => {
+    console.log("selected" ,checkOutRowData)
+    const authState = JSON.parse(sessionStorage.getItem("authState"));
+
+
+    const cmpid = authState.user.cmpid;
+
+    const payload = {
+      e_mail: checkOutRowData.vEmail,
+      company_id: cmpid,
+    };
+    //console.log("Payload : " , payload)
+   // return null
+    const checkOutVisitor = await checkOutVisitorApi(payload);
+    if (checkOutVisitor.hasError === true) {
+      return toastDisplayer("error", `${checkOutVisitor.error}`);
+    }
+
+    setIsPopupVisible(false);
+    return toastDisplayer("success", "Visitor checked Out Successfully");
+  };
   return (
     <>
       {loading ? <LoadPanel visible={true} /> : ""}
@@ -262,6 +300,7 @@ const VisitorMain = () => {
           hoverStateEnabled={true}
           columnAutoWidth={true}
           ref={dataGrid}
+          
           // ref={(ref) => {
           //   dataGrid = ref;
           // }}
@@ -287,7 +326,14 @@ const VisitorMain = () => {
               <MoreHorizOutlinedIcon />
             </ColumnButton>
           </Column> */}
-          <Column cellRender={actionTemplate} allowSorting={false} />
+          <Column
+            dataField="ACTIONS"
+            cellRender={actionTemplate}
+            caption="ACTIONS"
+            allowSorting={false}
+            width={"10%"}
+            allowSearch={false}
+          />
           <Column
             alignment={"center"}
             // width={150}
@@ -372,7 +418,17 @@ const VisitorMain = () => {
           </Toolbar>
         </DataGrid>
       </div>
+      <SendVerification
+        header="Checkout Confirmation"
+        subHeader="Are you sure you want visitor to checkout? "
+        approval="Check Out"
+        discard="Cancel"
+        saveFunction={handleCheckOut}
+        isVisible={isPopupVisible}
+        onHide={handleClosePopup}
+      />
     </>
+    
   );
 };
 
