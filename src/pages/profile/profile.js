@@ -13,7 +13,6 @@ import { useAuth } from "../../contexts/auth";
 import { toastDisplayer } from "../../components/toastDisplayer/toastdisplayer";
 import qrcode from "qrcode";
 import { Button } from "devextreme-react/button";
-import { HeaderText } from "../../components/typographyText/TypograghyText";
 import CustomLoader from "../../components/customerloader/CustomLoader";
 import { RequiredRule, EmailRule, Validator } from "devextreme-react/validator";
 

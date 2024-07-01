@@ -30,4 +30,14 @@ export const navigation = [
     path: "/generalsettings",
     icon: "ri-settings-4-line",
   },
+  {
+    text: "Log Report",
+    path: "/log-report",
+    icon: "ri-line-chart-line",
+  },
+  {
+    text: "Reports",
+    path: "/reports",
+    icon: "ri-file-chart-line",
+  },
 ];
